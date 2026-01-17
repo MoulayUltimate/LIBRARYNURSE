@@ -1,4 +1,6 @@
 import { getProductById, getSuggestedProducts } from "@/lib/store"
+
+export const runtime = "edge"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { notFound } from "next/navigation"

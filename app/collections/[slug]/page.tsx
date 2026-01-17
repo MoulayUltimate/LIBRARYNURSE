@@ -1,4 +1,6 @@
 import { Header } from "@/components/header"
+
+export const runtime = "edge"
 import { Footer } from "@/components/footer"
 import { ProductGrid } from "@/components/product-grid"
 import { getCollectionBySlug, getProductsByCollection, getAllProducts } from "@/lib/store"
