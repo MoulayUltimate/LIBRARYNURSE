@@ -18,18 +18,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 
-export async function generateStaticParams() {
-    const products = getAllProducts()
-    // Get all unique collection slugs
-    const slugs = new Set<string>()
-    products.forEach(product => {
-        product.collections.forEach(slug => slugs.add(slug))
-    })
 
-    return Array.from(slugs).map((slug) => ({
-        slug: slug,
-    }))
-}
 
 const ITEMS_PER_PAGE = 15
 
