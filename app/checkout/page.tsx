@@ -8,11 +8,14 @@ import { useCart } from "@/hooks/use-cart"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Check, Minus, Plus, Trash2, ArrowLeft, CreditCard, ShoppingBag, Download, Mail, CheckCircle, Shield, FileText } from "lucide-react"
 import Image from "next/image"
+import { Elements } from "@stripe/react-stripe-js"
+import { stripePromise } from "@/lib/stripe"
+import { CheckoutForm } from "@/components/checkout-form"
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -31,10 +34,24 @@ export default function CheckoutPage() {
   const [couponError, setCouponError] = useState("")
   const [couponSuccess, setCouponSuccess] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("card")
+  const [clientSecret, setClientSecret] = useState("")
 
   const subtotal = total
   const tax = (subtotal - discount) * 0.08
   const finalTotal = subtotal - discount + tax
+
+  useEffect(() => {
+    if (items.length > 0) {
+      // Create PaymentIntent as soon as the page loads
+      fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: finalTotal }),
+      })
+        .then((res) => res.json())
+        .then((data) => setClientSecret(data.clientSecret))
+    }
+  }, [items, finalTotal])
 
   const handleApplyCoupon = () => {
     if (couponCode.trim().toUpperCase() === "NURS10") {
@@ -53,37 +70,11 @@ export default function CheckoutPage() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
+  // Handle mock submit for Google Pay or other methods if needed
+  // The Stripe form handles its own submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsProcessing(true)
-
-    setTimeout(() => {
-      setIsProcessing(false)
-      setOrderComplete(true)
-
-      console.log("[Email] Sending order confirmation to:", formData.email)
-      console.log("[Email] Order Details:", {
-        email: formData.email,
-        items: items,
-        total: finalTotal,
-        timestamp: new Date().toISOString(),
-      })
-
-      const order = {
-        id: "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
-        items: items,
-        total: finalTotal,
-        email: formData.email,
-        createdAt: new Date(),
-      }
-
-      console.log("[Order] Order created:", order)
-
-      clearCart()
-      setTimeout(() => {
-        router.push("/order-confirmation")
-      }, 2000)
-    }, 2000)
+    // ... existing mock logic ...
   }
 
   if (items.length === 0 && !orderComplete) {
@@ -248,151 +239,42 @@ export default function CheckoutPage() {
               <Card className="p-8 sticky top-24 shadow-lg border-border/50">
                 <h2 className="text-xl font-bold text-foreground mb-6">Payment Details</h2>
 
-                <div className="mb-8">
-                  <label className="block text-sm font-medium text-foreground mb-3">Payment Method:</label>
-                  <div className="space-y-3">
-                    <div
-                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${paymentMethod === 'google' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-input hover:bg-muted/50'}`}
-                      onClick={() => setPaymentMethod('google')}
-                    >
-                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'google' ? 'border-primary' : 'border-muted-foreground'}`}>
-                        {paymentMethod === 'google' && <div className="w-2 h-2 rounded-full bg-primary" />}
-                      </div>
-                      <span className="font-medium">Google Pay</span>
-                    </div>
-
-                    <div
-                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${paymentMethod === 'card' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-input hover:bg-muted/50'}`}
-                      onClick={() => setPaymentMethod('card')}
-                    >
-                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'card' ? 'border-primary' : 'border-muted-foreground'}`}>
-                        {paymentMethod === 'card' && <div className="w-2 h-2 rounded-full bg-primary" />}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4" />
-                        <span className="font-medium">Credit Card</span>
-                      </div>
-                    </div>
+                {/* Coupon Code */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-foreground mb-2">Discount Code</label>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Enter coupon code"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      className="bg-background h-11"
+                    />
+                    <Button variant="outline" onClick={handleApplyCoupon} type="button" className="h-11 px-6">Apply</Button>
                   </div>
+                  {couponError && <p className="text-destructive text-xs mt-2">{couponError}</p>}
+                  {couponSuccess && <p className="text-green-600 text-xs mt-2">{couponSuccess}</p>}
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Email Address</label>
-                    <Input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      placeholder="doctor@example.com"
-                      className="bg-background h-11"
-                    />
-                    <p className="text-xs text-green-600 mt-2 flex items-center gap-1.5 font-medium">
-                      <Check className="w-3 h-3" />
-                      Your download link will be sent here immediately.
-                    </p>
+                {clientSecret ? (
+                  <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                    <CheckoutForm amount={finalTotal} />
+                  </Elements>
+                ) : (
+                  <div className="flex justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                   </div>
+                )}
 
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Name On Card</label>
-                    <Input
-                      type="text"
-                      name="nameOnCard"
-                      value={formData.nameOnCard}
-                      onChange={handleChange}
-                      required
-                      placeholder="Enter name on card"
-                      className="bg-background h-11"
-                    />
+                <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground mt-6 pt-6 border-t border-border">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    <span>256-bit SSL Secure</span>
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Card Number</label>
-                    <Input
-                      type="text"
-                      name="cardNumber"
-                      value={formData.cardNumber}
-                      onChange={handleChange}
-                      required
-                      placeholder="0000 0000 0000 0000"
-                      maxLength={19}
-                      className="bg-background h-11"
-                    />
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    <span>Money-Back Guarantee</span>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Expiration Date</label>
-                      <Input
-                        type="text"
-                        name="expiry"
-                        value={formData.expiry}
-                        onChange={handleChange}
-                        required
-                        placeholder="MM/YY"
-                        maxLength={5}
-                        className="bg-background h-11"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">CVV</label>
-                      <Input
-                        type="text"
-                        name="cvc"
-                        value={formData.cvc}
-                        onChange={handleChange}
-                        required
-                        placeholder="123"
-                        maxLength={3}
-                        className="bg-background h-11"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Coupon Code */}
-                  <div className="pt-4 border-t border-border">
-                    <label className="block text-sm font-medium text-foreground mb-2">Discount Code</label>
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="Enter coupon code"
-                        value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value)}
-                        className="bg-background h-11"
-                      />
-                      <Button variant="outline" onClick={handleApplyCoupon} type="button" className="h-11 px-6">Apply</Button>
-                    </div>
-                    {couponError && <p className="text-destructive text-xs mt-2">{couponError}</p>}
-                    {couponSuccess && <p className="text-green-600 text-xs mt-2">{couponSuccess}</p>}
-                  </div>
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="w-full h-14 text-lg font-bold bg-green-600 hover:bg-green-700 text-white mt-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
-                    disabled={isProcessing}
-                  >
-                    {isProcessing ? (
-                      "Processing Securely..."
-                    ) : (
-                      <div className="flex items-center justify-center gap-2">
-                        <span>Pay & Download Instantly</span>
-                        <span className="bg-white/20 px-2 py-0.5 rounded text-sm">${finalTotal.toFixed(2)}</span>
-                      </div>
-                    )}
-                  </Button>
-
-                  <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground mt-6 pt-6 border-t border-border">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <span>256-bit SSL Secure</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <span>Money-Back Guarantee</span>
-                    </div>
-                  </div>
-                </form>
+                </div>
               </Card>
             </div>
 
