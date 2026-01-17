@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import {
     PaymentElement,
+    LinkAuthenticationElement,
     useStripe,
     useElements
 } from "@stripe/react-stripe-js"
@@ -18,6 +19,7 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
     const stripe = useStripe()
     const elements = useElements()
 
+    const [email, setEmail] = useState('')
     const [message, setMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -68,6 +70,7 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
             confirmParams: {
                 // Make sure to change this to your payment completion page
                 return_url: `${window.location.origin}/order-confirmation`,
+                receipt_email: email,
             },
         })
 
@@ -87,6 +90,10 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
 
     return (
         <form id="payment-form" onSubmit={handleSubmit} className="space-y-6">
+            <LinkAuthenticationElement
+                id="link-authentication-element"
+                onChange={(e) => setEmail(e.value.email)}
+            />
             <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
 
             {/* Show any error or success messages */}
