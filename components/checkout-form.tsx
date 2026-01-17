@@ -90,10 +90,15 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
 
     return (
         <form id="payment-form" onSubmit={handleSubmit} className="space-y-6">
-            <LinkAuthenticationElement
-                id="link-authentication-element"
-                onChange={(e) => setEmail(e.value.email)}
-            />
+            <div>
+                <LinkAuthenticationElement
+                    id="link-authentication-element"
+                    onChange={(e) => setEmail(e.value.email)}
+                />
+                <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                    <span className="text-green-600 font-medium">Important:</span> Your eBook download link will be sent to this email immediately.
+                </p>
+            </div>
             <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
 
             {/* Show any error or success messages */}
