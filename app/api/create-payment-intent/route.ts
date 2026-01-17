@@ -10,22 +10,34 @@ export const runtime = "edge"
 
 export async function POST(req: Request) {
     try {
-        const { amount, currency = "usd" } = await req.json()
+        const { amount, paymentIntentId, currency = "usd" } = await req.json()
 
         if (!amount) {
             return new NextResponse("Amount is required", { status: 400 })
         }
 
-        // Create a PaymentIntent with the specified amount and currency
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: Math.round(amount * 100), // Stripe expects amount in cents
-            currency,
-            automatic_payment_methods: {
-                enabled: true,
-            },
-        })
+        let paymentIntent;
 
-        return NextResponse.json({ clientSecret: paymentIntent.client_secret })
+        if (paymentIntentId) {
+            // Update existing PaymentIntent
+            paymentIntent = await stripe.paymentIntents.update(paymentIntentId, {
+                amount: Math.round(amount * 100),
+            })
+        } else {
+            // Create a new PaymentIntent
+            paymentIntent = await stripe.paymentIntents.create({
+                amount: Math.round(amount * 100),
+                currency,
+                automatic_payment_methods: {
+                    enabled: true,
+                },
+            })
+        }
+
+        return NextResponse.json({
+            clientSecret: paymentIntent.client_secret,
+            paymentIntentId: paymentIntent.id
+        })
     } catch (error) {
         console.error("Internal Error:", error)
         return new NextResponse("Internal Error", { status: 500 })

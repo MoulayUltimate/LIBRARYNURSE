@@ -42,14 +42,25 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (items.length > 0) {
-      // Create PaymentIntent as soon as the page loads
+      // Check if we already have a payment intent for this session
+      const existingPaymentIntentId = sessionStorage.getItem("paymentIntentId")
+
       fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: finalTotal }),
+        body: JSON.stringify({
+          amount: finalTotal,
+          paymentIntentId: existingPaymentIntentId
+        }),
       })
         .then((res) => res.json())
-        .then((data) => setClientSecret(data.clientSecret))
+        .then((data) => {
+          setClientSecret(data.clientSecret)
+          // Store the payment intent ID to reuse it if the user refreshes
+          if (data.paymentIntentId) {
+            sessionStorage.setItem("paymentIntentId", data.paymentIntentId)
+          }
+        })
     }
   }, [items, finalTotal])
 
