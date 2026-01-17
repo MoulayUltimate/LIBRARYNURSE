@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ShoppingCart } from "lucide-react"
+import { ShoppingCart, Menu, X } from "lucide-react"
 import { useCart } from "@/hooks/use-cart"
 import Image from "next/image"
 import { useState } from "react"
@@ -11,18 +11,88 @@ export function Header() {
   const { items } = useCart()
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
     <>
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
+      {/* Mobile Menu Sidebar */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsMobileMenuOpen(false)} aria-hidden="true" />
+      )}
+
+      <div
+        className={`fixed left-0 top-0 bottom-0 w-3/4 sm:w-80 bg-background border-r border-border shadow-xl z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto md:hidden ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+      >
+        <div className="p-6 flex flex-col h-full">
+          <div className="flex items-center justify-between mb-8">
+            <span className="text-xl font-bold text-primary">Menu</span>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
+              aria-label="Close menu"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          <nav className="flex flex-col gap-6">
+            <Link
+              href="/"
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Shop
+            </Link>
+            <Link
+              href="/about"
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              About
+            </Link>
+            <Link
+              href="/contact"
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Contact
+            </Link>
+            <Link
+              href="/returns-refunds"
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Returns & Refunds
+            </Link>
+          </nav>
+        </div>
+      </div>
+
       <header className="border-b border-border bg-card sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-24">
-            <Link href="/" className="flex items-center gap-3">
-              <Image src="/nurslibrary-logo.png" alt="NursLibrary" width={80} height={80} className="w-20 h-20 object-contain" />
-              <span className="text-2xl font-bold text-primary hidden sm:inline">NursLibrary</span>
-            </Link>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="md:hidden p-2 -ml-2 text-foreground hover:bg-muted rounded-lg transition-colors"
+                aria-label="Open menu"
+              >
+                <Menu size={24} />
+              </button>
+              <Link href="/" className="flex items-center gap-3">
+                <Image
+                  src="/nurslibrary-logo.png"
+                  alt="NursLibrary"
+                  width={80}
+                  height={80}
+                  className="w-20 h-20 object-contain"
+                />
+                <span className="text-2xl font-bold text-primary hidden sm:inline">NursLibrary</span>
+              </Link>
+            </div>
 
             <nav className="hidden md:flex gap-8">
               <Link href="/" className="text-foreground hover:text-primary font-medium transition-colors">
