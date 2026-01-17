@@ -111,15 +111,18 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
             <Button
                 disabled={isLoading || !stripe || !elements}
                 id="submit"
-                className="w-full h-12 text-lg font-bold bg-[#ffc439] hover:bg-[#ffc439]/90 text-black"
+                className="w-full h-14 text-lg font-bold bg-green-600 hover:bg-green-700 text-white mt-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
             >
                 {isLoading ? (
                     <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
+                        Processing Securely...
                     </>
                 ) : (
-                    `Pay $${amount.toFixed(2)}`
+                    <div className="flex items-center justify-center gap-2">
+                        <span>Pay & Download Instantly</span>
+                        <span className="bg-white/20 px-2 py-0.5 rounded text-sm">${amount.toFixed(2)}</span>
+                    </div>
                 )}
             </Button>
         </form>
