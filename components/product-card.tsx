@@ -14,48 +14,51 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCart()
-  const [isAdded, setIsAdded] = useState(false)
 
-  const handleAddToCart = () => {
-    addItem(product)
-    setIsAdded(true)
-    setTimeout(() => setIsAdded(false), 2000)
-  }
 
   return (
     <Link href={`/products/${product.id}`}>
-      <Card className="overflow-hidden flex flex-col h-full hover:shadow-lg transition-shadow cursor-pointer">
-        <div className="relative h-48 bg-muted overflow-hidden">
-          <Image src={product.image || "/placeholder.svg"} alt={product.title} fill className="object-cover" />
+      <Card className="group relative flex flex-col h-full overflow-hidden rounded-[1.5rem] border-none bg-white shadow-sm transition-all hover:shadow-md">
+        <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-900">
+          <Image
+            src={product.image || "/placeholder.svg"}
+            alt={product.title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="absolute bottom-3 left-3 rounded-full bg-[#5d405c] px-3 py-1 text-[10px] font-medium text-white shadow-sm">
+            Sale
+          </div>
         </div>
 
-        <div className="flex-1 p-4 flex flex-col">
-          <div className="mb-2">
-            <p className="text-sm text-accent font-semibold">{product.category}</p>
-            <h3 className="text-lg font-bold text-foreground line-clamp-2">{product.title}</h3>
+        <div className="flex flex-1 flex-col items-center p-4 text-center">
+          <h3 className="mb-1 text-sm font-medium text-foreground leading-tight group-hover:underline decoration-primary/50 underline-offset-2" title={product.title}>
+            {product.title}
+          </h3>
+
+          <p className="mb-2 text-xs text-muted-foreground line-clamp-1">
+            {product.author}
+          </p>
+
+          <div className="mb-3 flex items-center justify-center gap-2 text-[10px] text-muted-foreground">
+            <span className="bg-slate-100 px-1.5 py-0.5 rounded-md">
+              {product.pages} pgs
+            </span>
+            <span className="border border-border px-1.5 py-0.5 rounded-md">
+              {product.format}
+            </span>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-3 flex-1">By {product.author}</p>
-
-          <div className="flex gap-4 text-xs text-muted-foreground mb-4">
-            <div className="flex items-center gap-1">
-              <BookOpen size={14} />
-              <span>{product.pages} pages</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-primary font-semibold">{product.format}</span>
-            </div>
+          <div className="mt-auto flex flex-col items-center gap-0.5">
+            <span className="text-xs text-red-400 line-through decoration-red-400/50">
+              ${(product.price * 1.25).toFixed(2)}
+            </span>
+            <span className="text-lg font-bold text-slate-900">
+              ${product.price.toFixed(2)}
+            </span>
           </div>
 
-          <p className="text-sm text-foreground mb-4 line-clamp-2">{product.description}</p>
 
-          <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold text-primary">${product.price.toFixed(2)}</span>
-            <Button onClick={handleAddToCart} className={isAdded ? "bg-accent" : ""} size="sm">
-              {isAdded ? "Added!" : "Add"}
-            </Button>
-          </div>
         </div>
       </Card>
     </Link>

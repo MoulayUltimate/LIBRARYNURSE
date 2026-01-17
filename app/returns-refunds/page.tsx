@@ -17,7 +17,7 @@ export default function ReturnsRefundsPage() {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Overview</h2>
             <p className="text-foreground/80 leading-relaxed">
-              At LibraryNurse, we're committed to customer satisfaction. Our returns and refunds policy ensures you have
+              At NursLibrary, we're committed to customer satisfaction. Our returns and refunds policy ensures you have
               peace of mind when purchasing digital nursing and medical eBooks.
             </p>
           </section>
@@ -35,7 +35,7 @@ export default function ReturnsRefundsPage() {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">How to Request a Return</h2>
             <ol className="list-decimal list-inside text-foreground/80 space-y-2">
-              <li>Contact our support team at contact@librarynurse.com</li>
+              <li>Contact our support team at contact@nurslibrary.com</li>
               <li>Provide your order number and product name</li>
               <li>Explain the reason for your return</li>
               <li>Our team will review and respond within 5 business days</li>
@@ -64,7 +64,7 @@ export default function ReturnsRefundsPage() {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Damaged or Defective Products</h2>
             <p className="text-foreground/80 leading-relaxed">
-              If you receive a damaged or defective eBook, please contact us immediately at contact@librarynurse.com
+              If you receive a damaged or defective eBook, please contact us immediately at contact@nurslibrary.com
               with details and screenshots. We will provide a replacement or full refund at no cost.
             </p>
           </section>
@@ -73,7 +73,7 @@ export default function ReturnsRefundsPage() {
             <h2 className="text-2xl font-bold text-foreground mb-4">Questions?</h2>
             <p className="text-foreground/80 leading-relaxed">
               If you have questions about our returns and refunds policy, please don't hesitate to contact our customer
-              support team at <strong>contact@librarynurse.com</strong> or call during business hours.
+              support team at <strong>contact@nurslibrary.com</strong> or call during business hours.
             </p>
           </section>
         </div>

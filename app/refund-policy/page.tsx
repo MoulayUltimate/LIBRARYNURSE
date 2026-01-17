@@ -1,7 +1,7 @@
 import { Footer } from "@/components/footer"
 
 export const metadata = {
-  title: "Refund Policy - LibraryNurse",
+  title: "Refund Policy - NursLibrary",
   description: "Information about our refund and returns policy for digital eBooks.",
 }
 
@@ -20,7 +20,7 @@ export default function RefundPolicy() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">1. Overview</h2>
               <p className="text-foreground/80 mb-4">
-                We want you to be completely satisfied with your purchase from LibraryNurse. Our refund policy is
+                We want you to be completely satisfied with your purchase from NursLibrary. Our refund policy is
                 designed to ensure a fair and transparent process for all customers.
               </p>
             </section>
@@ -43,7 +43,7 @@ export default function RefundPolicy() {
                 To request a refund, please contact our customer support team at:
               </p>
               <p className="text-foreground/80 mb-4">
-                <strong>Email:</strong> contact@librarynurse.com
+                <strong>Email:</strong> contact@nurslibrary.com
               </p>
               <p className="text-foreground/80 mb-4">
                 Include your order number and the reason for your refund request. Our team will respond within 5-7
@@ -74,7 +74,7 @@ export default function RefundPolicy() {
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">6. Disputes</h2>
               <p className="text-foreground/80 mb-4">
                 If you have a dispute regarding a refund decision, you may appeal to our management team. Contact us at
-                contact@librarynurse.com with detailed information about your case.
+                contact@nurslibrary.com with detailed information about your case.
               </p>
             </section>
 
@@ -83,7 +83,7 @@ export default function RefundPolicy() {
               <p className="text-foreground/80">
                 For questions about our refund policy, please contact us:
                 <br />
-                <strong>Email:</strong> contact@librarynurse.com
+                <strong>Email:</strong> contact@nurslibrary.com
               </p>
             </section>
           </div>

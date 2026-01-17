@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Terms of Service - LibraryNurse",
-  description: "The terms and conditions for using LibraryNurse and purchasing our nursing eBooks.",
+  title: "Terms of Service - NursLibrary",
+  description: "The terms and conditions for using NursLibrary and purchasing our nursing eBooks.",
 }
 
 import { Footer } from "@/components/footer"
@@ -20,7 +20,7 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">1. Agreement to Terms</h2>
               <p className="text-foreground/80 mb-4">
-                By accessing and using LibraryNurse ("Website"), you accept and agree to be bound by the terms and
+                By accessing and using NursLibrary ("Website"), you accept and agree to be bound by the terms and
                 provision of this agreement. If you do not agree to abide by the above, please do not use this service.
               </p>
             </section>
@@ -29,7 +29,7 @@ export default function TermsOfService() {
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">2. Use License</h2>
               <p className="text-foreground/80 mb-4">
                 Permission is granted to temporarily download one copy of the materials (information or software) on
-                LibraryNurse for personal, non-commercial transitory viewing only. This is the grant of a license, not a
+                NursLibrary for personal, non-commercial transitory viewing only. This is the grant of a license, not a
                 transfer of title, and under this license you may not:
               </p>
               <ul className="list-disc list-inside text-foreground/80 mb-4 space-y-2">
@@ -44,7 +44,7 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">3. Disclaimer</h2>
               <p className="text-foreground/80 mb-4">
-                The materials on LibraryNurse are provided on an 'as is' basis. LibraryNurse makes no warranties,
+                The materials on NursLibrary are provided on an 'as is' basis. NursLibrary makes no warranties,
                 expressed or implied, and hereby disclaims and negates all other warranties including, without
                 limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or
                 non-infringement of intellectual property or other violation of rights.
@@ -54,9 +54,9 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">4. Limitations</h2>
               <p className="text-foreground/80 mb-4">
-                In no event shall LibraryNurse or its suppliers be liable for any damages (including, without
+                In no event shall NursLibrary or its suppliers be liable for any damages (including, without
                 limitation, damages for loss of data or profit, or due to business interruption) arising out of the use
-                or inability to use the materials on LibraryNurse, even if LibraryNurse or an authorized representative
+                or inability to use the materials on NursLibrary, even if NursLibrary or an authorized representative
                 has been notified orally or in writing of the possibility of such damage.
               </p>
             </section>
@@ -64,9 +64,9 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">5. Accuracy of Materials</h2>
               <p className="text-foreground/80 mb-4">
-                The materials appearing on LibraryNurse could include technical, typographical, or photographic errors.
-                LibraryNurse does not warrant that any of the materials on our website are accurate, complete, or
-                current. LibraryNurse may make changes to the materials contained on our website at any time without
+                The materials appearing on NursLibrary could include technical, typographical, or photographic errors.
+                NursLibrary does not warrant that any of the materials on our website are accurate, complete, or
+                current. NursLibrary may make changes to the materials contained on our website at any time without
                 notice.
               </p>
             </section>
@@ -74,8 +74,8 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">6. Links</h2>
               <p className="text-foreground/80 mb-4">
-                LibraryNurse has not reviewed all of the sites linked to its website and is not responsible for the
-                contents of any such linked site. The inclusion of any link does not imply endorsement by LibraryNurse
+                NursLibrary has not reviewed all of the sites linked to its website and is not responsible for the
+                contents of any such linked site. The inclusion of any link does not imply endorsement by NursLibrary
                 of the site. Use of any such linked website is at the user's own risk.
               </p>
             </section>
@@ -83,7 +83,7 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">7. Modifications</h2>
               <p className="text-foreground/80 mb-4">
-                LibraryNurse may revise these terms of service for our website at any time without notice. By using this
+                NursLibrary may revise these terms of service for our website at any time without notice. By using this
                 website, you are agreeing to be bound by the then current version of these terms of service.
               </p>
             </section>

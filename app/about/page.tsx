@@ -8,7 +8,7 @@ export default function AboutPage() {
       <Header />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">About LibraryNurse</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-4">About NursLibrary</h1>
           <p className="text-lg text-muted-foreground">
             Providing quality medical education resources for healthcare professionals
           </p>
@@ -34,7 +34,7 @@ export default function AboutPage() {
         </div>
 
         <Card className="p-8 mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Why Choose LibraryNurse?</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-4">Why Choose NursLibrary?</h2>
           <ul className="space-y-4 text-foreground">
             <li className="flex gap-3">
               <span className="text-accent font-bold">✓</span>

@@ -20,8 +20,8 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-24">
             <Link href="/" className="flex items-center gap-3">
-              <Image src="/librarynurse-logo.png" alt="LibraryNurse" width={80} height={80} className="w-20 h-20" />
-              <span className="text-2xl font-bold text-primary hidden sm:inline">LibraryNurse</span>
+              <Image src="/nurslibrary-logo.png" alt="NursLibrary" width={80} height={80} className="w-20 h-20 object-contain" />
+              <span className="text-2xl font-bold text-primary hidden sm:inline">NursLibrary</span>
             </Link>
 
             <nav className="hidden md:flex gap-8">

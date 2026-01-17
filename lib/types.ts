@@ -5,11 +5,20 @@ export type Product = {
   author: string
   category: string
   collection: string
+  collections: string[]
   price: number
   description: string
   image: string
-  pages: number
+  pages: number | string
   format: string
+  isbn?: string
+  authors?: string
+  publisher?: string
+  publicationDate?: string
+  fullDescription?: string
+  editionNumber?: string
+  copyrightYear?: string
+  fileSize?: string
 }
 
 // Cart item type

@@ -5,321 +5,497 @@ import { Footer } from "@/components/footer"
 import { ProductGrid } from "@/components/product-grid"
 import { getAllProducts, getCollections } from "@/lib/store"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
 import {
-  Users,
-  Award,
-  Globe,
-  Download,
-  CheckCircle,
-  Stethoscope,
-  HeartCrack as Heartbeat,
-  ChevronRight,
+    Users,
+    Award,
+    Globe,
+    Download,
+    CheckCircle,
+    Stethoscope,
+    HeartCrack as Heartbeat,
+    ChevronRight,
+    BookOpen,
+    ArrowRight,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { BenefitsTicker } from "@/components/benefits-ticker"
 
 export default function StorePage() {
-  const products = getAllProducts()
-  const collections = getCollections()
-  const [selectedCollection, setSelectedCollection] = useState<string | null>(null)
+    const products = getAllProducts()
+    const collections = getCollections()
 
-  const filteredProducts = selectedCollection ? products.filter((p) => p.collection === selectedCollection) : products
+    // Select specific popular collections to feature on the homepage
+    const featuredCollectionSlugs = [
+        'veterinary-medicine',
+        'animals',
+        'todays-deals',
+        'best-sellers',
+        'anatomia-fisiologia-y-patologia',
+        'diagnostico-y-medicina-interna',
+        'dentistry-1',
+        'dermatology',
+        'aquatic-animals',
+        'ophtalmology-1',
+        'equine',
+        'veterinary-surgery',
+        'veterinary-radiology',
+        'veterinary-epidemiology'
+    ]
+    const featuredCollections = collections.filter(c => featuredCollectionSlugs.includes(c.slug))
 
-  return (
-    <>
-      <Header />
-      <main>
-        <div className="relative w-full h-96 md:h-[500px] bg-cover bg-center overflow-hidden">
-          <Image
-            src="/nurse-hero-banner.png"
-            alt="Professional nursing healthcare professionals"
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* Dark overlay for better text contrast */}
-          <div className="absolute inset-0 bg-black/30"></div>
+    // Fallback if specific slugs aren't found
+    const displayCollections = featuredCollections.length > 0 ? featuredCollections : collections.slice(0, 5)
 
-          <div className="relative z-10 h-full flex items-center justify-center px-4">
-            <div className="text-center max-w-3xl">
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <div className="h-1 w-8 bg-accent"></div>
-                <Heartbeat className="w-6 h-6 text-accent" />
-                <div className="h-1 w-8 bg-accent"></div>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight drop-shadow-lg">
-                Premium Nursing Education Resources
-              </h1>
-              <p className="text-lg md:text-xl text-white/95 mb-8 font-light drop-shadow-md">
-                Access comprehensive evidence-based eBooks from leading nursing experts
-              </p>
-              <Button
-                size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
-              >
-                Explore Collections
-              </Button>
-            </div>
-          </div>
-        </div>
+    return (
+        <>
+            <Header />
+            <main>
+                {/* Hero Section */}
+                <div className="relative w-full min-h-[600px] md:h-[650px] bg-cover bg-center overflow-hidden flex items-center">
+                    <Image
+                        src="/nurse-hero-banner.png"
+                        alt="Professional nursing healthcare professionals"
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
 
-        <BenefitsTicker />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <section className="py-16 mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
-              Why Choose LibraryNurse?
-            </h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="flex flex-col items-center text-center p-8 rounded-xl border border-border hover:border-primary hover:shadow-xl transition-all bg-gradient-to-br from-white to-blue-50">
-                <Stethoscope className="w-14 h-14 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-2">Expert-Written Content</h3>
-                <p className="text-muted-foreground">
-                  All eBooks authored by experienced nursing professionals with extensive clinical practice expertise.
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center p-8 rounded-xl border border-border hover:border-primary hover:shadow-xl transition-all bg-gradient-to-br from-white to-blue-50">
-                <Globe className="w-14 h-14 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-2">Instant Global Access</h3>
-                <p className="text-muted-foreground">
-                  Download your resources instantly and access them anywhere in the world, anytime.
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center p-8 rounded-xl border border-border hover:border-primary hover:shadow-xl transition-all bg-gradient-to-br from-white to-blue-50">
-                <Award className="w-14 h-14 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-2">Latest Evidence</h3>
-                <p className="text-muted-foreground">
-                  Stay current with the latest nursing research and evidence-based clinical practice standards.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="py-16 mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 border-b-2 border-primary pb-3 inline-block">
-              Nursing Specialties
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mt-8">
-              {collections.slice(0, 6).map((collection) => (
-                <Link
-                  key={collection.id}
-                  href={`#collections`}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setSelectedCollection(collection.slug)
-                    document.querySelector("#collections")?.scrollIntoView({ behavior: "smooth" })
-                  }}
-                  className="group relative h-40 md:h-48 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary opacity-70 group-hover:opacity-80 transition-opacity"></div>
-                  <div className="relative h-full flex items-end justify-start p-4">
-                    <div>
-                      <h3 className="font-semibold text-white text-sm md:text-base">{collection.name}</h3>
-                      <div className="flex items-center gap-1 text-white/90 text-xs md:text-sm mt-2">
-                        Browse{" "}
-                        <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
+                    <div className="relative z-10 h-full flex items-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+                        <div className="max-w-2xl text-left">
+                            <div className="flex items-center gap-2 mb-6">
+                                <span className="px-3 py-1 rounded-full bg-accent/20 text-accent border border-accent/30 text-sm font-medium backdrop-blur-sm">
+                                    #1 Medical Resource Library
+                                </span>
+                            </div>
+                            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
+                                Empowering <span className="text-accent">Veterinary</span> & <span className="text-blue-400">Medical</span> Professionals
+                            </h1>
+                            <p className="text-lg md:text-xl text-gray-200 mb-8 font-light leading-relaxed max-w-xl">
+                                Access the world's most comprehensive collection of evidence-based veterinary and medical eBooks. Instant download, anywhere, anytime.
+                            </p>
+                            <div className="flex flex-wrap gap-4">
+                                <Button
+                                    size="lg"
+                                    className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground font-bold px-6 py-4 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-all"
+                                    onClick={() => document.querySelector("#categories")?.scrollIntoView({ behavior: "smooth" })}
+                                >
+                                    Browse Library
+                                </Button>
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    className="w-full sm:w-auto bg-white/20 hover:bg-white/30 text-white border-white/50 px-6 py-4 md:px-8 md:py-6 text-base md:text-lg backdrop-blur-md"
+                                    onClick={() => document.querySelector("#new-arrivals")?.scrollIntoView({ behavior: "smooth" })}
+                                >
+                                    View New Arrivals
+                                </Button>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
+                </div>
 
-          <section className="mb-12" id="collections">
-            <div className="mb-8">
-              <h2 className="text-sm font-semibold text-foreground uppercase tracking-widest mb-6">
-                Browse by Specialty
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant={selectedCollection === null ? "default" : "outline"}
-                  className={selectedCollection === null ? "bg-primary hover:bg-primary/90" : ""}
-                  onClick={() => setSelectedCollection(null)}
-                >
-                  All Collections
-                </Button>
-                {collections.map((collection) => (
-                  <Button
-                    key={collection.id}
-                    variant={selectedCollection === collection.slug ? "default" : "outline"}
-                    className={selectedCollection === collection.slug ? "bg-primary hover:bg-primary/90" : ""}
-                    onClick={() => setSelectedCollection(collection.slug)}
-                  >
-                    {collection.name}
-                  </Button>
-                ))}
-              </div>
-            </div>
+                <BenefitsTicker />
 
-            <div className="mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-                {selectedCollection
-                  ? `${collections.find((c) => c.slug === selectedCollection)?.name} eBooks`
-                  : "Featured Resources"}
-              </h2>
-              <p className="text-muted-foreground">
-                {filteredProducts.length} {filteredProducts.length === 1 ? "resource" : "resources"} available
-              </p>
-            </div>
-            <ProductGrid products={filteredProducts} />
-          </section>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          <section className="py-16 mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 border-b-2 border-accent pb-3 inline-block">
-              Specialty Areas
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mt-8">
-              {collections.slice(6, 12).map((collection) => (
-                <Link
-                  key={collection.id}
-                  href={`#collections`}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setSelectedCollection(collection.slug)
-                    document.querySelector("#collections")?.scrollIntoView({ behavior: "smooth" })
-                  }}
-                  className="group relative h-40 md:h-48 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent to-primary opacity-70 group-hover:opacity-80 transition-opacity"></div>
-                  <div className="relative h-full flex items-end justify-start p-4">
-                    <div>
-                      <h3 className="font-semibold text-white text-sm md:text-base">{collection.name}</h3>
-                      <div className="flex items-center gap-1 text-white/90 text-xs md:text-sm mt-2">
-                        Browse{" "}
-                        <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
+                    {/* Categories Grid */}
+                    <section className="py-16" id="categories">
+                        <div className="mb-12">
+                            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Clinical Science</h2>
+                        </div>
 
-          <section className="py-16 mb-12 bg-gradient-to-r from-accent/10 to-secondary/10 rounded-2xl border border-border p-8 md:p-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Curated Collections</h2>
-            <p className="text-muted-foreground mb-8 max-w-2xl">
-              Explore our hand-picked collections of nursing eBooks, organized by specialty and clinical area of focus.
-            </p>
-            <ProductGrid products={products.slice(0, 3)} />
-          </section>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
+                            <Link href="/collections/anaesthesia" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_anesthesia_1768669710644.png"
+                                        alt="Anesthesia"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Anesthesia <ArrowRight size={14} />
+                                </p>
+                            </Link>
 
-          {/* Why Nurses Trust LibraryNurse */}
-          <section className="py-16 mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
-              Why Nurses Trust LibraryNurse
-            </h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="border border-border rounded-xl p-8 hover:shadow-lg transition-shadow bg-gradient-to-br from-blue-50 to-teal-50 hover:border-primary">
-                <Download className="w-10 h-10 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-3">Instant Digital Access</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Download your eBooks immediately after purchase. No delays, no waiting. Access your resources offline
-                  on any device.
-                </p>
-              </div>
-              <div className="border border-border rounded-xl p-8 hover:shadow-lg transition-shadow bg-gradient-to-br from-blue-50 to-teal-50 hover:border-primary">
-                <CheckCircle className="w-10 h-10 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-3">Verified & Secure</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  All content verified by healthcare professionals. Your data encrypted and transactions secure. Shop
-                  with confidence.
-                </p>
-              </div>
-              <div className="border border-border rounded-xl p-8 hover:shadow-lg transition-shadow bg-gradient-to-br from-blue-50 to-teal-50 hover:border-primary">
-                <Users className="w-10 h-10 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-3">Join Our Community</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Connect with thousands of nurses globally. Access exclusive updates and professional development
-                  resources.
-                </p>
-              </div>
-              <div className="border border-border rounded-xl p-8 hover:shadow-lg transition-shadow bg-gradient-to-br from-blue-50 to-teal-50 hover:border-primary">
-                <Award className="w-10 h-10 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-3">Quality Assured</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Every eBook meets rigorous quality standards for accuracy, completeness, and educational excellence.
-                </p>
-              </div>
-            </div>
-          </section>
+                            <Link href="/collections/animal-behavior" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_animal_behavior_1768669725321.png"
+                                        alt="Animal behavior"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Animal behavior <ArrowRight size={14} />
+                                </p>
+                            </Link>
 
-          <section className="py-12 mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">Popular Resources</h2>
-            <ProductGrid products={products.slice(3, 6)} />
-          </section>
+                            <Link href="/collections/dentistry-1" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_dentistry_1768669739380.png"
+                                        alt="Dentistry"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Dentistry <ArrowRight size={14} />
+                                </p>
+                            </Link>
 
-          {/* About LibraryNurse */}
-          <section className="py-16 mb-12 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 rounded-2xl border border-border p-8 md:p-12">
-            <div className="max-w-3xl mx-auto text-center">
-              <Stethoscope className="w-16 h-16 text-primary mx-auto mb-6" />
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">About LibraryNurse</h2>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                LibraryNurse is a trusted provider of premium nursing education and clinical resources. We're committed
-                to advancing nursing practice through high-quality, evidence-based learning materials.
-              </p>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                Our curated collection spans all major nursing specialties and clinical domains, providing comprehensive
-                resources written by experienced nurses and healthcare educators.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Whether you're a student, practicing nurse, or educator, LibraryNurse supports your professional growth
-                and clinical excellence.
-              </p>
-            </div>
-          </section>
+                            <Link href="/collections/dermatology" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_dermatology_1768669756381.png"
+                                        alt="Dermatology"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Dermatology <ArrowRight size={14} />
+                                </p>
+                            </Link>
 
-          {/* Frequently Asked Questions */}
-          <section className="py-16 mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
-              Frequently Asked Questions
-            </h2>
-            <div className="max-w-3xl mx-auto space-y-4">
-              {[
-                {
-                  q: "How do I access my purchased eBooks?",
-                  a: "After purchase, you'll receive a download link via email. Download immediately and access on any PDF-compatible device.",
-                },
-                {
-                  q: "Can I use eBooks for continuing education credits?",
-                  a: "Check your nursing board requirements. Many eBooks can be used for professional development. Refer to Terms of Service for licensing details.",
-                },
-                {
-                  q: "What devices can I use to read the eBooks?",
-                  a: "eBooks are PDF files compatible with all devices: tablets, phones, computers, and e-readers. Read online or offline.",
-                },
-                {
-                  q: "Is there a money-back guarantee?",
-                  a: "Yes! We offer a 30-day refund guarantee. Contact support if unsatisfied. Full details in our Refund Policy.",
-                },
-                {
-                  q: "How often are resources updated?",
-                  a: "We regularly update our collection with latest nursing research and clinical guidelines to ensure current information.",
-                },
-              ].map((faq, index) => (
-                <details
-                  key={index}
-                  className="group border border-border rounded-lg p-6 cursor-pointer hover:border-primary transition-colors bg-white hover:bg-blue-50"
-                >
-                  <summary className="font-semibold text-foreground flex items-center gap-3 select-none">
-                    <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold group-open:hidden">
-                      +
-                    </span>
-                    <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold hidden group-open:flex">
-                      −
-                    </span>
-                    {faq.q}
-                  </summary>
-                  <p className="text-muted-foreground mt-4 ml-9 leading-relaxed">{faq.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        </div>
-      </main>
-      <Footer />
-    </>
-  )
+                            <Link href="/collections/emergency-and-critical-care" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_emergency_1768669770998.png"
+                                        alt="Emergency and Critical Care"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Emergency and Critical Care <ArrowRight size={14} />
+                                </p>
+                            </Link>
+
+                            <Link href="/collections/veterinary-epidemiology" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_epidemiology_1768669789021.png"
+                                        alt="Epidemiology"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Epidemiology <ArrowRight size={14} />
+                                </p>
+                            </Link>
+
+                            <Link href="/collections/veterinary-medicine" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_internal_medicine_1768669814153.png"
+                                        alt="Internal Medicine"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Internal Medicine <ArrowRight size={14} />
+                                </p>
+                            </Link>
+
+                            <Link href="/collections/pharmacology" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_pharmacology_1768669827844.png"
+                                        alt="Pharmacology"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Pharmacology <ArrowRight size={14} />
+                                </p>
+                            </Link>
+
+                            <Link href="/collections/veterinary-radiology" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_radiology_1768669849328.png"
+                                        alt="Radiology"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Radiology <ArrowRight size={14} />
+                                </p>
+                            </Link>
+
+                            <Link href="/collections/veterinary-surgery" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_surgery_1768669863765.png"
+                                        alt="Surgery"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Surgery <ArrowRight size={14} />
+                                </p>
+                            </Link>
+
+                            <Link href="/collections/veterinary-anatomy" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_physical_exam_1768669876846.png"
+                                        alt="Physical Examinations, Procedures and Techniques"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Physical Examinations, Procedures and Techniques <ArrowRight size={14} />
+                                </p>
+                            </Link>
+
+                            <Link href="/collections/ophtalmology-1" className="group">
+                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
+                                    <Image
+                                        src="/category_ophthalmology_1768669890605.png"
+                                        alt="Ophtalmology"
+                                        width={200}
+                                        height={200}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="text-sm text-foreground flex items-center gap-1">
+                                    Ophtalmology <ArrowRight size={14} />
+                                </p>
+                            </Link>
+                        </div>
+                    </section>
+
+                    {/* New Arrivals Section */}
+                    <section className="py-16 border-t border-border" id="new-arrivals">
+                        <div className="flex flex-col items-center justify-center mb-10 text-center">
+                            <div className="flex items-center gap-2 mb-2 justify-center">
+                                <span className="h-px w-8 bg-accent"></span>
+                                <span className="text-accent font-medium text-sm uppercase tracking-wider">Freshly Added</span>
+                                <span className="h-px w-8 bg-accent"></span>
+                            </div>
+                            <h2 className="text-3xl md:text-4xl font-bold text-foreground">New Arrivals</h2>
+                        </div>
+                        <ProductGrid products={products.slice(0, 6)} />
+
+                        <div className="mt-10 flex justify-center">
+                            <Button asChild variant="outline" className="border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-8 py-6 text-sm font-medium tracking-wide rounded-lg transition-all">
+                                <Link href="/collections/todays-deals">
+                                    View all
+                                </Link>
+                            </Button>
+                        </div>
+                    </section>
+
+                    {/* Featured Collection Sections */}
+                    {displayCollections.map((collection, index) => {
+                        // Get products for this collection, limit to 6
+                        const collectionProducts = products
+                            .filter(p => p.collections.includes(collection.slug))
+                            .slice(0, 6)
+
+                        if (collectionProducts.length === 0) return null
+
+                        return (
+                            <section key={collection.id} className={`py-16 ${index % 2 === 0 ? 'bg-slate-50/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8' : 'border-t border-border'}`}>
+                                <div className="flex flex-col items-center justify-center mb-10 text-center">
+                                    <div className="flex items-center gap-2 mb-2 justify-center">
+                                        <span className="h-px w-8 bg-primary"></span>
+                                        <span className="text-primary font-medium text-sm uppercase tracking-wider">Featured Collection</span>
+                                        <span className="h-px w-8 bg-primary"></span>
+                                    </div>
+                                    <h2 className="text-3xl md:text-4xl font-bold text-foreground">{collection.name}</h2>
+                                </div>
+
+                                <ProductGrid products={collectionProducts} />
+
+                                <div className="mt-10 flex justify-center">
+                                    <Button asChild variant="outline" className="border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-8 py-6 text-sm font-medium tracking-wide rounded-lg transition-all">
+                                        <Link href={`/collections/${collection.slug}`}>
+                                            View all
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </section>
+                        )
+                    })}
+
+                    {/* Why Choose Us */}
+                    <section className="py-20 border-t border-border mt-8">
+                        <div className="grid md:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                                    Trusted by Veterinary Professionals Worldwide
+                                </h2>
+                                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                                    NursLibrary is dedicated to providing the highest quality educational resources for the veterinary and medical community. Our curated library ensures you have access to the latest evidence-based practices and clinical guidelines.
+                                </p>
+
+                                <div className="space-y-6">
+                                    <div className="flex gap-4">
+                                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                            <Download className="w-6 h-6 text-green-600" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-lg mb-1">Instant Digital Delivery</h3>
+                                            <p className="text-muted-foreground">Get immediate access to your eBooks upon purchase. No waiting for shipping.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex gap-4">
+                                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                            <Globe className="w-6 h-6 text-blue-600" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-lg mb-1">Accessible Anywhere</h3>
+                                            <p className="text-muted-foreground">Read on any device - laptop, tablet, or phone. Perfect for busy professionals.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex gap-4">
+                                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                            <Award className="w-6 h-6 text-purple-600" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-lg mb-1">Premium Quality</h3>
+                                            <p className="text-muted-foreground">High-resolution PDFs with searchable text and clear illustrations.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                                <Image
+                                    src="/nurse-hero-banner.png"
+                                    alt="Veterinary professional using tablet"
+                                    fill
+                                    className="object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+                                    <div className="bg-white/95 backdrop-blur-sm p-6 rounded-xl shadow-lg max-w-sm">
+                                        <div className="flex gap-1 text-yellow-500 mb-2">
+                                            {"★".repeat(5)}
+                                        </div>
+                                        <p className="text-foreground font-medium italic mb-4">
+                                            "An incredible resource for my veterinary studies. The quality of the eBooks is outstanding and the instant download is a lifesaver."
+                                        </p>
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden relative">
+                                                {/* Avatar placeholder */}
+                                                <div className="absolute inset-0 flex items-center justify-center bg-primary text-white font-bold">SJ</div>
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-sm">Sarah Jenkins</p>
+                                                <p className="text-xs text-muted-foreground">Veterinary Student</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Explore our flexible eBook solutions */}
+                    <section className="py-24 bg-white border-t border-border overflow-hidden">
+                        <div className="grid md:grid-cols-2 gap-16 items-center">
+                            <div className="relative h-[600px] rounded-[2rem] overflow-hidden shadow-2xl md:order-1">
+                                <Image
+                                    src="/ebook-formats.png"
+                                    alt="Veterinarian using ultrasound with dog"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                            <div className="flex flex-col justify-center md:order-2">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <span className="h-px w-12 bg-primary"></span>
+                                    <span className="text-primary font-bold text-sm uppercase tracking-widest">eBook formats</span>
+                                </div>
+                                <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-8 leading-tight">
+                                    Explore our flexible eBook solutions
+                                </h2>
+                                <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
+                                    One purchase unlocks all eBook formats: EPUB, EPUB3, and PDF. Download instantly, no activation needed. Read on any device – phone, computer, or Kindle – with full search, copy, paste, and print functionality. Your personal watermark ensures secure access.
+                                </p>
+                                <div>
+                                    <Button asChild variant="outline" className="border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-10 py-7 text-base font-medium tracking-wide rounded-lg transition-all">
+                                        <Link href="/collections">
+                                            Browse E-books
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* FAQ Section */}
+                    <section className="py-16 mb-12 border-t border-border">
+                        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
+                            Frequently Asked Questions
+                        </h2>
+                        <div className="max-w-3xl mx-auto space-y-4">
+                            {[
+                                {
+                                    q: "How do I access my purchased eBooks?",
+                                    a: "After purchase, you'll receive a download link via email. Download immediately and access on any PDF-compatible device.",
+                                },
+                                {
+                                    q: "Can I use eBooks for continuing education credits?",
+                                    a: "Check your nursing board requirements. Many eBooks can be used for professional development. Refer to Terms of Service for licensing details.",
+                                },
+                                {
+                                    q: "What devices can I use to read the eBooks?",
+                                    a: "eBooks are PDF files compatible with all devices: tablets, phones, computers, and e-readers. Read online or offline.",
+                                },
+                                {
+                                    q: "Is there a money-back guarantee?",
+                                    a: "Yes! We offer a 30-day refund guarantee. Contact support if unsatisfied. Full details in our Refund Policy.",
+                                },
+                            ].map((faq, index) => (
+                                <details
+                                    key={index}
+                                    className="group border border-border rounded-lg p-6 cursor-pointer hover:border-primary transition-colors bg-white hover:bg-blue-50"
+                                >
+                                    <summary className="font-semibold text-foreground flex items-center gap-3 select-none">
+                                        <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold group-open:hidden">
+                                            +
+                                        </span>
+                                        <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold hidden group-open:flex">
+                                            −
+                                        </span>
+                                        {faq.q}
+                                    </summary>
+                                    <p className="text-muted-foreground mt-4 ml-9 leading-relaxed">{faq.a}</p>
+                                </details>
+                            ))}
+                        </div>
+                    </section>
+                </div>
+            </main>
+            <Footer />
+        </>
+    )
 }

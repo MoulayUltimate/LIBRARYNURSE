@@ -7,9 +7,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h3 className="text-lg font-bold text-foreground mb-4">LibraryNurse</h3>
+            <h3 className="text-lg font-bold text-foreground mb-4">NursLibrary</h3>
             <p className="text-foreground/60 text-sm leading-relaxed">
-              Premium digital nursing and medical eBooks for healthcare professionals worldwide.
+              Premium digital veterinary and medical eBooks for healthcare professionals worldwide.
             </p>
           </div>
 
@@ -86,10 +86,10 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-foreground/60 text-sm">&copy; 2026 LibraryNurse. All rights reserved.</p>
+          <p className="text-foreground/60 text-sm">&copy; 2026 NursLibrary. All rights reserved.</p>
           <div className="text-foreground/60 text-sm mt-4 sm:mt-0 text-center sm:text-right">
-            <p>For support: contact@librarynurse.com</p>
-            <p className="mt-2">Website: www.librarynurse.com</p>
+            <p>For support: contact@nurslibrary.com</p>
+            <p className="mt-2">Website: www.nurslibrary.com</p>
           </div>
         </div>
       </div>

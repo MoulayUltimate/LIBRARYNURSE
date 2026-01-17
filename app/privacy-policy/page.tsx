@@ -1,7 +1,7 @@
 import { Footer } from "@/components/footer"
 
 export const metadata = {
-  title: "Privacy Policy - LibraryNurse",
+  title: "Privacy Policy - NursLibrary",
   description: "Our privacy policy explaining how we collect and protect your data.",
 }
 
@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">1. Introduction</h2>
               <p className="text-foreground/80 mb-4">
-                LibraryNurse ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy
+                NursLibrary ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy
                 explains how we collect, use, disclose, and safeguard your information when you visit our website and
                 purchase our digital medical eBooks.
               </p>
@@ -89,7 +89,7 @@ export default function PrivacyPolicy() {
               <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">7. Your Rights</h2>
               <p className="text-foreground/80 mb-4">
                 Depending on your location, you may have the right to access, correct, or delete your personal data. To
-                exercise these rights, please contact us at contact@librarynurse.com.
+                exercise these rights, please contact us at contact@nurslibrary.com.
               </p>
             </section>
 
@@ -98,7 +98,7 @@ export default function PrivacyPolicy() {
               <p className="text-foreground/80">
                 If you have questions about this Privacy Policy, please contact us at:
                 <br />
-                <strong>Email:</strong> contact@librarynurse.com
+                <strong>Email:</strong> contact@nurslibrary.com
               </p>
             </section>
           </div>
