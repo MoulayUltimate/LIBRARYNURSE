@@ -27,13 +27,30 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Database not available" }, { status: 500 })
         }
 
-        // Get customer email from Payment Intent (receipt_email)
-        const email = paymentIntent.receipt_email
+        // Get customer email from Payment Intent
+        // Try multiple sources: receipt_email, charges data, or customer
+        let email = paymentIntent.receipt_email
+
+        // If no receipt_email, try to get from the charge
+        if (!email && paymentIntent.latest_charge) {
+            const charge = await stripe.charges.retrieve(paymentIntent.latest_charge as string)
+            email = charge.billing_details?.email || charge.receipt_email
+        }
+
+        // If still no email, try customer object
+        if (!email && paymentIntent.customer) {
+            const customer = await stripe.customers.retrieve(paymentIntent.customer as string)
+            if (customer && !customer.deleted) {
+                email = customer.email
+            }
+        }
+
+        console.log("Captured email for order:", email)
 
         // Update order status and email
         await db.prepare(
             "UPDATE Orders SET status = 'succeeded', customer_email = ?, updated_at = CURRENT_TIMESTAMP WHERE stripe_payment_intent_id = ?"
-        ).bind(email, paymentIntentId).run()
+        ).bind(email || 'No email provided', paymentIntentId).run()
 
         return NextResponse.json({ success: true })
 
