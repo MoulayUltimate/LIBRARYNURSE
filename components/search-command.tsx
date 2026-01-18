@@ -12,7 +12,6 @@ import {
     CommandList,
 } from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
-import { getAllProducts } from "@/lib/store"
 import type { Product } from "@/lib/types"
 
 export function SearchCommand() {
@@ -30,8 +29,15 @@ export function SearchCommand() {
 
         document.addEventListener("keydown", down)
 
-        // Load products on mount
-        setProducts(getAllProducts())
+        // Load products from API
+        fetch('/api/products')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setProducts(data)
+                }
+            })
+            .catch(err => console.error("Failed to load products for search", err))
 
         return () => document.removeEventListener("keydown", down)
     }, [])

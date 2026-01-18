@@ -1,13 +1,32 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ProductGrid } from "@/components/product-grid"
-import { getAllProducts, getCollections } from "@/lib/store"
+import { getCollections } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ChevronRight, BookOpen } from "lucide-react"
 
-export default function AllCollectionsPage() {
-    const products = getAllProducts()
+export const runtime = "edge"
+
+async function getProducts() {
+    try {
+        const db = process.env.DB as any
+        if (!db) return []
+
+        const { results } = await db.prepare("SELECT * FROM Products").all()
+        return results.map((p: any) => ({
+            ...p,
+            collections: p.collections ? JSON.parse(p.collections) : [],
+            price: Number(p.price)
+        }))
+    } catch (error) {
+        console.error("Failed to fetch products:", error)
+        return []
+    }
+}
+
+export default async function AllCollectionsPage() {
+    const products = await getProducts()
     const collections = getCollections()
 
     return (
@@ -54,7 +73,7 @@ export default function AllCollectionsPage() {
                     <div className="space-y-20">
                         {collections.map((collection) => {
                             const collectionProducts = products
-                                .filter(p => p.collections.includes(collection.slug))
+                                .filter((p: any) => p.collections.includes(collection.slug))
                                 .slice(0, 6)
 
                             if (collectionProducts.length === 0) return null

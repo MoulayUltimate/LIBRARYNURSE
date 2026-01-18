@@ -1,0 +1,9 @@
+name = "medical-readers"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".next"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "medical-readers-db"
+database_id = "0412b0ef-b139-44db-a74d-604d9da43fec"

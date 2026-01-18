@@ -37,6 +37,14 @@ function OrderConfirmationContent() {
           case "succeeded":
             setStatus("success")
             setOrderId(paymentIntent.id.slice(-9).toUpperCase())
+
+            // Confirm order in backend
+            fetch("/api/orders/confirm", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentIntentId: paymentIntent.id })
+            }).catch(err => console.error("Failed to confirm order", err))
+
             break
           case "processing":
             setStatus("processing")

@@ -4,6 +4,8 @@ import { Poppins } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { CartProvider } from "@/hooks/use-cart"
 import { RecentSalesPopup } from "@/components/recent-sales-popup"
+import { AnalyticsTracker } from "@/components/analytics-tracker"
+import { Suspense } from "react"
 import "./globals.css"
 
 const poppins = Poppins({
@@ -46,6 +48,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} font-sans antialiased`}>
         <CartProvider>
+          <Suspense fallback={null}>
+            <AnalyticsTracker />
+          </Suspense>
           {children}
           <RecentSalesPopup />
           <Analytics />

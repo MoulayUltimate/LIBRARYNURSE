@@ -3,7 +3,7 @@ import { Header } from "@/components/header"
 export const runtime = "edge"
 import { Footer } from "@/components/footer"
 import { ProductGrid } from "@/components/product-grid"
-import { getCollectionBySlug, getProductsByCollection, getAllProducts } from "@/lib/store"
+import { getCollectionBySlug } from "@/lib/store"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -18,7 +18,27 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 
+async function getProducts(slug: string) {
+    try {
+        const db = process.env.DB as any
+        if (!db) return []
 
+        // Use LIKE for simple JSON array matching: ["slug1", "slug2"]
+        // We search for "slug" (with quotes) to ensure exact match
+        const { results } = await db.prepare(
+            "SELECT * FROM Products WHERE collections LIKE ?"
+        ).bind(`%"${slug}"%`).all()
+
+        return results.map((p: any) => ({
+            ...p,
+            collections: p.collections ? JSON.parse(p.collections) : [],
+            price: Number(p.price)
+        }))
+    } catch (error) {
+        console.error("Failed to fetch products for collection:", error)
+        return []
+    }
+}
 
 const ITEMS_PER_PAGE = 15
 
@@ -33,7 +53,7 @@ export default async function CollectionPage({
     const { page } = await searchParams
 
     const collection = getCollectionBySlug(slug)
-    const allProducts = getProductsByCollection(slug)
+    const allProducts = await getProducts(slug)
 
     if (!collection) {
         return notFound()

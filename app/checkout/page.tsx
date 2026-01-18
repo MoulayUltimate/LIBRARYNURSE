@@ -50,7 +50,14 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: finalTotal,
-          paymentIntentId: existingPaymentIntentId
+          paymentIntentId: existingPaymentIntentId,
+          items: items.map(item => ({
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image
+          }))
         }),
       })
         .then((res) => res.json())
