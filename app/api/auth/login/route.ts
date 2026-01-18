@@ -10,6 +10,13 @@ export async function POST(req: Request) {
         const adminEmail = process.env.ADMIN_EMAIL || "admin@nurslibrary.com"
         const adminPassword = process.env.ADMIN_PASSWORD
 
+        // Debug logging (remove in production)
+        console.log("Environment check:", {
+            hasAdminEmail: !!process.env.ADMIN_EMAIL,
+            hasAdminPassword: !!process.env.ADMIN_PASSWORD,
+            nodeEnv: process.env.NODE_ENV
+        })
+
         if (!adminPassword) {
             return NextResponse.json(
                 { message: "Server misconfiguration: ADMIN_PASSWORD not set" },
