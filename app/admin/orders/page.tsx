@@ -22,18 +22,33 @@ interface Order {
 export default function OrdersPage() {
     const [orders, setOrders] = useState<Order[]>([])
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
     const [searchTerm, setSearchTerm] = useState("")
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
+                setError(null)
                 const res = await fetch("/api/orders")
                 if (res.ok) {
                     const data = await res.json()
-                    setOrders(data)
+                    // Ensure we have a valid array
+                    if (Array.isArray(data)) {
+                        setOrders(data)
+                    } else {
+                        console.warn("Orders API returned non-array data:", data)
+                        setOrders([])
+                        setError("Invalid data received from server")
+                    }
+                } else {
+                    console.error("Failed to fetch orders, status:", res.status)
+                    setOrders([])
+                    setError(`Failed to load orders (Status: ${res.status})`)
                 }
             } catch (error) {
                 console.error("Failed to fetch orders", error)
+                setOrders([])
+                setError("Failed to connect to server")
             } finally {
                 setLoading(false)
             }
@@ -42,10 +57,10 @@ export default function OrdersPage() {
         fetchOrders()
     }, [])
 
-    const filteredOrders = orders.filter(order =>
-        order.customer_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.id.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    const filteredOrders = Array.isArray(orders) ? orders.filter(order =>
+        order?.customer_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order?.id?.toLowerCase().includes(searchTerm.toLowerCase())
+    ) : []
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -91,6 +106,15 @@ export default function OrdersPage() {
                                 <TableRow>
                                     <TableCell colSpan={6} className="text-center py-8">
                                         <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+                                    </TableCell>
+                                </TableRow>
+                            ) : error ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="text-center py-8">
+                                        <div className="text-destructive">
+                                            <p className="font-semibold mb-2">Error loading orders</p>
+                                            <p className="text-sm text-muted-foreground">{error}</p>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ) : filteredOrders.length === 0 ? (
