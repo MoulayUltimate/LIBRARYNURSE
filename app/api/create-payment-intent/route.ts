@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server"
 import Stripe from "stripe"
 
-// Initialize Stripe with the secret key
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    typescript: true,
-})
-
 export const runtime = "edge"
 
 export async function POST(req: Request) {
     try {
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+            typescript: true,
+        })
+
         const { amount, paymentIntentId, items, currency = "usd" } = await req.json()
 
         if (!amount) {
