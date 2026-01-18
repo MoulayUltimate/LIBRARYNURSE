@@ -3,6 +3,10 @@ import Stripe from "stripe"
 
 export const runtime = "edge"
 
+/**
+ * Creates or updates a Stripe Payment Intent for checkout
+ * Also saves pending order to D1 database
+ */
 export async function POST(req: Request) {
     try {
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
