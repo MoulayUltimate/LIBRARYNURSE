@@ -32,7 +32,8 @@ async function getProducts(slug: string) {
         return results.map((p: any) => ({
             ...p,
             collections: p.collections ? JSON.parse(p.collections) : [],
-            price: Number(p.price)
+            price: Number(p.price),
+            pages: p.pages ? Number(p.pages) : 0
         }))
     } catch (error) {
         console.error("Failed to fetch products for collection:", error)

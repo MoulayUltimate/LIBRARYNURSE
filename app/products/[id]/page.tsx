@@ -18,7 +18,8 @@ async function getProduct(id: string) {
     return {
       ...product,
       collections: product.collections ? JSON.parse(product.collections) : [],
-      price: Number(product.price)
+      price: Number(product.price),
+      pages: product.pages ? Number(product.pages) : 0
     }
   } catch (e) {
     console.error("Error fetching product:", e)
@@ -43,14 +44,16 @@ async function getSuggested(category: string, currentId: string) {
       return random.map((p: any) => ({
         ...p,
         collections: p.collections ? JSON.parse(p.collections) : [],
-        price: Number(p.price)
+        price: Number(p.price),
+        pages: p.pages ? Number(p.pages) : 0
       }))
     }
 
     return results.map((p: any) => ({
       ...p,
       collections: p.collections ? JSON.parse(p.collections) : [],
-      price: Number(p.price)
+      price: Number(p.price),
+      pages: p.pages ? Number(p.pages) : 0
     }))
   } catch (e) {
     return []
