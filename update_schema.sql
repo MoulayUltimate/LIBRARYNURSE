@@ -1,0 +1,13 @@
+-- Add missing columns to Products table
+ALTER TABLE Products ADD COLUMN author TEXT;
+ALTER TABLE Products ADD COLUMN pages INTEGER;
+ALTER TABLE Products ADD COLUMN format TEXT;
+ALTER TABLE Products ADD COLUMN isbn TEXT;
+ALTER TABLE Products ADD COLUMN authors TEXT;
+ALTER TABLE Products ADD COLUMN publisher TEXT;
+ALTER TABLE Products ADD COLUMN publicationDate TEXT;
+ALTER TABLE Products ADD COLUMN fullDescription TEXT;
+ALTER TABLE Products ADD COLUMN editionNumber TEXT;
+ALTER TABLE Products ADD COLUMN copyrightYear TEXT;
+ALTER TABLE Products ADD COLUMN fileSize TEXT;
+ALTER TABLE Products ADD COLUMN handle TEXT;

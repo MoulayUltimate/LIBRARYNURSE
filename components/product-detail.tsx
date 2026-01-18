@@ -87,7 +87,7 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3 leading-tight">
                                 {product.title}
                             </h1>
-                            <p className="text-base text-muted-foreground mb-4">By {product.author}</p>
+                            <p className="text-base text-muted-foreground mb-4">By {product.authors || product.author}</p>
 
                             {/* Star Rating */}
                             <div className="flex items-center gap-2 mb-6">
@@ -339,7 +339,7 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                                     <ul className="space-y-1 text-muted-foreground text-xs">
                                         <li><span className="font-semibold text-foreground">Format:</span> {product.format}</li>
                                         <li><span className="font-semibold text-foreground">Pages:</span> {product.pages}</li>
-                                        <li><span className="font-semibold text-foreground">Author:</span> {product.author}</li>
+                                        <li><span className="font-semibold text-foreground">Author:</span> {product.authors || product.author}</li>
                                     </ul>
                                 </Card>
 
@@ -450,7 +450,7 @@ function SuggestedProductCard({ product }: { product: any }) {
                     <h3 className="font-semibold text-foreground text-sm line-clamp-2 mb-2 group-hover:text-primary transition-colors">
                         {product.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground mb-2">By {product.author}</p>
+                    <p className="text-xs text-muted-foreground mb-2">By {product.authors || product.author}</p>
                     <div className="mt-auto flex items-center justify-between">
                         <span className="font-bold text-primary">${product.price.toFixed(2)}</span>
 
