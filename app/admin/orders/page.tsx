@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Loader2, Eye, Search } from "lucide-react"
+import { Loader2, Eye, Search, Mail } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -94,7 +94,7 @@ export default function OrdersPage() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Order ID</TableHead>
-                                <TableHead>Customer</TableHead>
+                                <TableHead>Customer Email</TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Amount</TableHead>
                                 <TableHead>Status</TableHead>
@@ -127,7 +127,12 @@ export default function OrdersPage() {
                                 filteredOrders.map((order) => (
                                     <TableRow key={order.id}>
                                         <TableCell className="font-mono text-xs">{order.id?.substring(0, 8) || 'N/A'}...</TableCell>
-                                        <TableCell>{order.customer_email || 'N/A'}</TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
+                                                <Mail className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                                                <span className="text-sm">{order.customer_email || 'No email'}</span>
+                                            </div>
+                                        </TableCell>
                                         <TableCell>
                                             {order.created_at ? format(new Date(order.created_at), "MMM d, yyyy") : 'N/A'}
                                         </TableCell>
