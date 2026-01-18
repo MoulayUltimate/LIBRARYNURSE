@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { CartProvider } from "@/hooks/use-cart"
 import { RecentSalesPopup } from "@/components/recent-sales-popup"
 import { AnalyticsTracker } from "@/components/analytics-tracker"
+import { MetaPixel } from "@/components/meta-pixel"
 import { Suspense } from "react"
 import "./globals.css"
 
@@ -47,6 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} font-sans antialiased`}>
+        <MetaPixel />
         <CartProvider>
           <Suspense fallback={null}>
             <AnalyticsTracker />
