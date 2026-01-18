@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS Orders (
     amount REAL NOT NULL,
     status TEXT NOT NULL, -- 'succeeded', 'processing', 'failed', 'pending'
     items JSON, -- Store items as a JSON string for simplicity
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Analytics Table (Page Views)
