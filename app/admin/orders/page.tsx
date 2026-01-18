@@ -102,10 +102,12 @@ export default function OrdersPage() {
                             ) : (
                                 filteredOrders.map((order) => (
                                     <TableRow key={order.id}>
-                                        <TableCell className="font-mono text-xs">{order.id.substring(0, 8)}...</TableCell>
-                                        <TableCell>{order.customer_email}</TableCell>
-                                        <TableCell>{format(new Date(order.created_at), "MMM d, yyyy")}</TableCell>
-                                        <TableCell>${order.amount.toFixed(2)}</TableCell>
+                                        <TableCell className="font-mono text-xs">{order.id?.substring(0, 8) || 'N/A'}...</TableCell>
+                                        <TableCell>{order.customer_email || 'N/A'}</TableCell>
+                                        <TableCell>
+                                            {order.created_at ? format(new Date(order.created_at), "MMM d, yyyy") : 'N/A'}
+                                        </TableCell>
+                                        <TableCell>${(order.amount || 0).toFixed(2)}</TableCell>
                                         <TableCell>
                                             <Badge className={getStatusColor(order.status)}>
                                                 {order.status}

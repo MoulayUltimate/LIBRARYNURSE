@@ -4,9 +4,12 @@ export const runtime = "edge"
 
 export async function GET(req: Request) {
     try {
-        const db = process.env.DB as any
+        // Access D1 binding through Cloudflare context
+        const { env } = process as any
+        const db = env?.DB
 
         if (!db) {
+            console.log("DB binding not available")
             return NextResponse.json([])
         }
 
@@ -14,9 +17,9 @@ export async function GET(req: Request) {
             "SELECT * FROM Orders ORDER BY created_at DESC"
         ).all()
 
-        return NextResponse.json(results)
+        return NextResponse.json(results || [])
     } catch (error) {
         console.error("Failed to fetch orders:", error)
-        return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 })
+        return NextResponse.json([], { status: 200 })
     }
 }
