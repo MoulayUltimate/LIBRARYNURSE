@@ -9,6 +9,7 @@ import { CheckCircle, Download, Mail, XCircle, Loader2 } from "lucide-react"
 import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { stripePromise } from "@/lib/stripe"
+import { trackEvent } from "@/components/analytics-tracker"
 
 function OrderConfirmationContent() {
   const searchParams = useSearchParams()
@@ -37,6 +38,13 @@ function OrderConfirmationContent() {
           case "succeeded":
             setStatus("success")
             setOrderId(paymentIntent.id.slice(-9).toUpperCase())
+
+            // Track purchase event
+            trackEvent("purchase", {
+              amount: paymentIntent.amount,
+              currency: paymentIntent.currency,
+              paymentIntentId: paymentIntent.id
+            })
 
             // Confirm order in backend
             fetch("/api/orders/confirm", {

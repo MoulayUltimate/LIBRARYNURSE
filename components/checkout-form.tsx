@@ -9,6 +9,7 @@ import {
 } from "@stripe/react-stripe-js"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { trackEvent } from "@/components/analytics-tracker"
 
 interface CheckoutFormProps {
     amount: number
@@ -22,6 +23,11 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        // Track checkout start
+        trackEvent("checkout_start", { amount })
+    }, [amount])
 
     useEffect(() => {
         if (!stripe) {

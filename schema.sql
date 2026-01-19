@@ -24,12 +24,15 @@ CREATE TABLE IF NOT EXISTS Orders (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Analytics Table (Page Views)
+-- Analytics Table (Page Views & Events)
 CREATE TABLE IF NOT EXISTS Analytics (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     visitor_id TEXT NOT NULL,
     path TEXT NOT NULL,
-    event_type TEXT DEFAULT 'page_view', -- 'page_view', 'add_to_cart', 'checkout_start'
+    event_type TEXT DEFAULT 'page_view', -- 'page_view', 'add_to_cart', 'checkout_start', 'purchase'
+    country TEXT, -- ISO country code (e.g., 'US', 'GB', 'DE')
+    referrer_source TEXT, -- 'facebook', 'google', 'organic', 'direct'
+    referrer_url TEXT, -- Full referrer URL
     metadata JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

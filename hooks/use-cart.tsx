@@ -2,6 +2,7 @@
 
 import type { CartItem, Product } from "@/lib/types"
 import { createContext, useContext, useState, type ReactNode, useEffect } from "react"
+import { trackEvent } from "@/components/analytics-tracker"
 
 interface CartContextType {
   items: CartItem[]
@@ -46,6 +47,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
         )
       }
       return [...prevItems, { ...product, quantity }]
+    })
+
+    // Track add to cart event
+    trackEvent("add_to_cart", {
+      productId: product.id,
+      productTitle: product.title,
+      price: product.price,
+      quantity
     })
   }
 
