@@ -68,6 +68,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/refund-policy" className="text-foreground/60 hover:text-primary transition-colors text-sm">
+                  Refund Policy
+                </Link>
+              </li>
+              <li>
                 <Link href="/shipping-policy" className="text-foreground/60 hover:text-primary transition-colors text-sm">
                   Shipping Policy
                 </Link>
