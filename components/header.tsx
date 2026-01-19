@@ -61,11 +61,11 @@ export function Header() {
               Contact
             </Link>
             <Link
-              href="/returns-refunds"
+              href="/shipping-policy"
               className="text-lg font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Returns & Refunds
+              Shipping Policy
             </Link>
           </nav>
         </div>
@@ -105,10 +105,10 @@ export function Header() {
                 Contact
               </Link>
               <Link
-                href="/returns-refunds"
+                href="/shipping-policy"
                 className="text-foreground hover:text-primary font-medium transition-colors"
               >
-                Returns & Refunds
+                Shipping Policy
               </Link>
             </nav>
 
