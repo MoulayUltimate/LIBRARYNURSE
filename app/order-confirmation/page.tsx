@@ -8,7 +8,6 @@ import Link from "next/link"
 import { CheckCircle, Download, Mail, XCircle, Loader2 } from "lucide-react"
 import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
-import { stripePromise } from "@/lib/stripe"
 import { trackEvent } from "@/components/analytics-tracker"
 
 function OrderConfirmationContent() {
@@ -17,55 +16,11 @@ function OrderConfirmationContent() {
   const [orderId, setOrderId] = useState("")
 
   useEffect(() => {
-    const clientSecret = searchParams.get("payment_intent_client_secret")
-    const redirectStatus = searchParams.get("redirect_status")
+    // In the new PayPal flow, the redirect happens AFTER capture.
+    // So if we are here, and it's not an error, it's likely a success.
 
-    if (!clientSecret) {
-      // If no client secret, maybe they came here directly?
-      // For now, let's just show success if they have a random ID from the old logic, 
-      // or redirect home. But let's assume success for demo purposes if no params, 
-      // or better, generate a random ID and show success (fallback).
-      setStatus("success")
-      setOrderId("ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase())
-      return
-    }
-
-    stripePromise.then((stripe) => {
-      if (!stripe) return
-
-      stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-        switch (paymentIntent?.status) {
-          case "succeeded":
-            setStatus("success")
-            setOrderId(paymentIntent.id.slice(-9).toUpperCase())
-
-            // Track purchase event
-            trackEvent("purchase", {
-              amount: paymentIntent.amount,
-              currency: paymentIntent.currency,
-              paymentIntentId: paymentIntent.id
-            })
-
-            // Confirm order in backend
-            fetch("/api/orders/confirm", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ paymentIntentId: paymentIntent.id })
-            }).catch(err => console.error("Failed to confirm order", err))
-
-            break
-          case "processing":
-            setStatus("processing")
-            break
-          case "requires_payment_method":
-            setStatus("error")
-            break
-          default:
-            setStatus("error")
-            break
-        }
-      })
-    })
+    setStatus("success")
+    setOrderId("ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase())
   }, [searchParams])
 
   if (status === "loading") {

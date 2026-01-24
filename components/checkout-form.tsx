@@ -1,15 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import {
-    PaymentElement,
-    LinkAuthenticationElement,
-    useStripe,
-    useElements
-} from "@stripe/react-stripe-js"
+import { useState } from "react"
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { trackEvent } from "@/components/analytics-tracker"
+import { useCart } from "@/hooks/use-cart"
+import { useRouter } from "next/navigation"
 
 interface CheckoutFormProps {
     amount: number
@@ -17,120 +14,125 @@ interface CheckoutFormProps {
 }
 
 export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
-    const stripe = useStripe()
-    const elements = useElements()
-
-    const [email, setEmail] = useState('')
     const [message, setMessage] = useState<string | null>(null)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isProcessing, setIsProcessing] = useState(false)
+    const router = useRouter()
+    const { items, clearCart } = useCart()
 
-    useEffect(() => {
-        // Track checkout start
-        trackEvent("checkout_start", { amount })
-    }, [amount])
-
-    useEffect(() => {
-        if (!stripe) {
-            return
-        }
-
-        const clientSecret = new URLSearchParams(window.location.search).get(
-            "payment_intent_client_secret"
-        )
-
-        if (!clientSecret) {
-            return
-        }
-
-        stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-            switch (paymentIntent?.status) {
-                case "succeeded":
-                    setMessage("Payment succeeded!")
-                    break
-                case "processing":
-                    setMessage("Your payment is processing.")
-                    break
-                case "requires_payment_method":
-                    setMessage("Your payment was not successful, please try again.")
-                    break
-                default:
-                    setMessage("Something went wrong.")
-                    break
-            }
-        })
-    }, [stripe])
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
-        if (!stripe || !elements) {
-            // Stripe.js has not yet loaded.
-            // Make sure to disable form submission until Stripe.js has loaded.
-            return
-        }
-
-        setIsLoading(true)
-
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                // Make sure to change this to your payment completion page
-                return_url: `${window.location.origin}/order-confirmation`,
-                receipt_email: email,
-            },
-        })
-
-        // This point will only be reached if there is an immediate error when
-        // confirming the payment. Otherwise, your customer will be redirected to
-        // your `return_url`. For some payment methods like iDEAL, your customer will
-        // be redirected to an intermediate site first to authorize the payment, then
-        // redirected to the `return_url`.
-        if (error.type === "card_error" || error.type === "validation_error") {
-            setMessage(error.message || "An unexpected error occurred.")
-        } else {
-            setMessage("An unexpected error occurred.")
-        }
-
-        setIsLoading(false)
-    }
+    const initialOptions = {
+        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "sb", // sb = sandbox default
+        currency: "USD",
+        intent: "capture",
+    };
 
     return (
-        <form id="payment-form" onSubmit={handleSubmit} className="space-y-6">
-            <div>
-                <LinkAuthenticationElement
-                    id="link-authentication-element"
-                    onChange={(e) => setEmail(e.value.email)}
-                />
-                <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-                    <span className="text-green-600 font-medium">Important:</span> Your eBook download link will be sent to this email immediately.
-                </p>
-            </div>
-            <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
+        <PayPalScriptProvider options={initialOptions}>
+            <div className="space-y-6">
+                <div>
+                    <h3 className="text-sm font-medium mb-4 text-center text-muted-foreground">Pay with PayPal or Credit/Debit Card</h3>
 
-            {/* Show any error or success messages */}
-            {message && (
-                <div id="payment-message" className="text-sm text-destructive font-medium">
-                    {message}
+                    <PayPalButtons
+                        style={{
+                            layout: "vertical",
+                            color: "blue",
+                            shape: "rect",
+                            label: "pay"
+                        }}
+                        createOrder={async (data, actions) => {
+                            try {
+                                setIsProcessing(true);
+                                const response = await fetch("/api/paypal/create-order", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        amount: amount,
+                                        items: items.map(item => ({
+                                            id: item.id,
+                                            title: item.title,
+                                            price: item.price,
+                                            quantity: item.quantity,
+                                        })),
+                                    }),
+                                });
+
+                                const orderData = await response.json();
+
+                                if (orderData.id) {
+                                    return orderData.id;
+                                } else {
+                                    const errorDetail = orderData?.details?.[0];
+                                    const errorMessage = errorDetail
+                                        ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                                        : JSON.stringify(orderData);
+
+                                    throw new Error(errorMessage);
+                                }
+                            } catch (error) {
+                                console.error(error);
+                                setMessage(`Could not initiate PayPal Checkout: ${error}`);
+                            } finally {
+                                setIsProcessing(false);
+                            }
+                        }}
+                        onApprove={async (data, actions) => {
+                            try {
+                                setIsProcessing(true);
+                                const response = await fetch("/api/paypal/capture-order", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        orderID: data.orderID
+                                    }),
+                                });
+
+                                const orderData = await response.json();
+                                const errorDetail = orderData?.details?.[0];
+
+                                if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+                                    return actions.restart();
+                                } else if (errorDetail) {
+                                    throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
+                                } else {
+                                    // Successful capture!
+                                    console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
+                                    trackEvent("purchase", {
+                                        transaction_id: orderData.id,
+                                        value: amount,
+                                        currency: "USD"
+                                    });
+                                    setMessage("Payment successful!");
+                                    clearCart();
+                                    router.push("/order-confirmation");
+                                }
+                            } catch (error) {
+                                console.error(error);
+                                setMessage(`Sorry, your transaction could not be processed... ${error}`);
+                            } finally {
+                                setIsProcessing(false);
+                            }
+                        }}
+                        onError={(err) => {
+                            console.error("PayPal Checkout onError", err);
+                            setMessage("An error occurred with PayPal checkout");
+                        }}
+                    />
                 </div>
-            )}
 
-            <Button
-                disabled={isLoading || !stripe || !elements}
-                id="submit"
-                className="w-full h-14 text-lg font-bold bg-green-600 hover:bg-green-700 text-white mt-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
-            >
-                {isLoading ? (
-                    <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing Securely...
-                    </>
-                ) : (
-                    <div className="flex items-center justify-center gap-2">
-                        <span>Pay & Download Instantly</span>
-                        <span className="bg-white/20 px-2 py-0.5 rounded text-sm">${amount.toFixed(2)}</span>
+                {/* Show any error or success messages */}
+                {message && (
+                    <div id="payment-message" className="text-sm text-destructive font-medium text-center">
+                        {message}
                     </div>
                 )}
-            </Button>
-        </form>
+
+                <p className="text-xs text-muted-foreground mt-4 text-center">
+                    By continuing, you agree to PayPal's terms of service.
+                </p>
+            </div>
+        </PayPalScriptProvider>
     )
 }

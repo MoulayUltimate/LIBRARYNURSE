@@ -13,8 +13,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Check, Minus, Plus, Trash2, ArrowLeft, CreditCard, ShoppingBag, Download, Mail, CheckCircle, Shield, FileText } from "lucide-react"
 import Image from "next/image"
-import { Elements } from "@stripe/react-stripe-js"
-import { stripePromise } from "@/lib/stripe"
 import { CheckoutForm } from "@/components/checkout-form"
 
 export default function CheckoutPage() {
@@ -40,35 +38,9 @@ export default function CheckoutPage() {
   const tax = (subtotal - discount) * 0.08
   const finalTotal = subtotal - discount + tax
 
+  // Payment intent creation moved to manual trigger
   useEffect(() => {
-    if (items.length > 0) {
-      // Check if we already have a payment intent for this session
-      const existingPaymentIntentId = sessionStorage.getItem("paymentIntentId")
-
-      fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: finalTotal,
-          paymentIntentId: existingPaymentIntentId,
-          items: items.map(item => ({
-            id: item.id,
-            title: item.title,
-            price: item.price,
-            quantity: item.quantity,
-            image: item.image
-          }))
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setClientSecret(data.clientSecret)
-          // Store the payment intent ID to reuse it if the user refreshes
-          if (data.paymentIntentId) {
-            sessionStorage.setItem("paymentIntentId", data.paymentIntentId)
-          }
-        })
-    }
+    // Only update total if needed, but don't call API automatically
   }, [items, finalTotal])
 
   const handleApplyCoupon = () => {
@@ -273,15 +245,9 @@ export default function CheckoutPage() {
                   {couponSuccess && <p className="text-green-600 text-xs mt-2">{couponSuccess}</p>}
                 </div>
 
-                {clientSecret ? (
-                  <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
-                    <CheckoutForm amount={finalTotal} />
-                  </Elements>
-                ) : (
-                  <div className="flex justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                  </div>
-                )}
+
+                {/* Simplified Payment Section for PayPal */}
+                <CheckoutForm amount={finalTotal} />
 
                 <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground mt-6 pt-6 border-t border-border">
                   <div className="flex items-center gap-1.5">

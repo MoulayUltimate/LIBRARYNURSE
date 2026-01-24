@@ -21,7 +21,8 @@ interface OrderItem {
 
 interface Order {
     id: string
-    stripe_payment_intent_id: string
+    stripe_payment_intent_id?: string
+    paypal_order_id?: string
     customer_email: string
     amount: number
     status: string
@@ -99,8 +100,8 @@ export default function OrderDetailsPage() {
                             <span className="font-mono text-sm">{order.id}</span>
                         </div>
                         <div className="flex justify-between border-b pb-2">
-                            <span className="text-muted-foreground">Payment Intent</span>
-                            <span className="font-mono text-sm">{order.stripe_payment_intent_id}</span>
+                            <span className="text-muted-foreground">{order.paypal_order_id ? "PayPal Order ID" : "Payment Intent"}</span>
+                            <span className="font-mono text-sm">{order.paypal_order_id || order.stripe_payment_intent_id || "N/A"}</span>
                         </div>
                         <div className="flex justify-between border-b pb-2">
                             <span className="text-muted-foreground">Status</span>
