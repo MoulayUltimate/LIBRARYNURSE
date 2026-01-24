@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-const PAYPAL_API_BASE = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID?.startsWith("Ab") // Sandbox usually starts with A? Actually usually different. Better to use env var for mode.
-    ? "https://api-m.sandbox.paypal.com"
-    : "https://api-m.paypal.com";
+const PAYPAL_API_BASE = process.env.NEXT_PUBLIC_PAYPAL_MODE === "live"
+    ? "https://api-m.paypal.com"
+    : "https://api-m.sandbox.paypal.com";
 
 // Helper to get access token
 async function getAccessToken() {
