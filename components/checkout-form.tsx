@@ -62,6 +62,10 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
 
                                 const orderData = await response.json();
 
+                                if (orderData.error) {
+                                    throw new Error(`${orderData.error}: ${orderData.details || ""}`);
+                                }
+
                                 if (orderData.id) {
                                     return orderData.id;
                                 } else {
@@ -90,6 +94,11 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
                                 });
 
                                 const orderData = await response.json();
+
+                                if (orderData.error) {
+                                    throw new Error(`${orderData.error}: ${orderData.details || ""}`);
+                                }
+
                                 const errorDetail = orderData?.details?.[0];
 
                                 if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
