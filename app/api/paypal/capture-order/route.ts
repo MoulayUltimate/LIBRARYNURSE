@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-const PAYPAL_API_BASE = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID?.includes("sandbox")
-    || !process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID?.startsWith("A") // Heuristic check, can be improved. Assuming Sandbox if explicitly set or credentials imply it.
+const PAYPAL_API_BASE = process.env.NEXT_PUBLIC_PAYPAL_MODE === "sandbox"
     ? "https://api-m.sandbox.paypal.com"
     : "https://api-m.paypal.com";
 

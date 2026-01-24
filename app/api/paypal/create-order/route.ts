@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-const PAYPAL_API_BASE = process.env.NEXT_PUBLIC_PAYPAL_MODE === "live"
-    ? "https://api-m.paypal.com"
-    : "https://api-m.sandbox.paypal.com";
+const PAYPAL_API_BASE = process.env.NEXT_PUBLIC_PAYPAL_MODE === "sandbox"
+    ? "https://api-m.sandbox.paypal.com"
+    : "https://api-m.paypal.com";
 
 // Helper to get access token
 async function getAccessToken() {
