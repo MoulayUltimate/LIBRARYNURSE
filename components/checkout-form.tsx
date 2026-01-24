@@ -39,8 +39,11 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
                             label: "pay"
                         }}
                         createOrder={async (data, actions) => {
+                            setIsProcessing(true);
+                            // Reset message
+                            setMessage(null);
+
                             try {
-                                setIsProcessing(true);
                                 const response = await fetch("/api/paypal/create-order", {
                                     method: "POST",
                                     headers: {
@@ -69,9 +72,6 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
 
                                     throw new Error(errorMessage);
                                 }
-                            } catch (error) {
-                                console.error(error);
-                                setMessage(`Could not initiate PayPal Checkout: ${error}`);
                             } finally {
                                 setIsProcessing(false);
                             }
