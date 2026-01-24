@@ -45,7 +45,13 @@ export async function POST(req: Request) {
         // Ideally, recalculate amount from server-side product data to prevent tampering
         // For now, we will trust the amount passed but in production verify against DB
 
-        const accessToken = await getAccessToken();
+        let accessToken;
+        try {
+            accessToken = await getAccessToken();
+        } catch (authError) {
+            console.error("PayPal Auth Error:", authError);
+            return NextResponse.json({ error: "PayPal Authentication Failed. Check server logs." }, { status: 401 });
+        }
 
         const response = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders`, {
             method: "POST",
