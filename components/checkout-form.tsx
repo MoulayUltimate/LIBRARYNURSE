@@ -15,6 +15,7 @@ interface CheckoutFormProps {
 
 export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
     const [message, setMessage] = useState<string | null>(null)
+    const [email, setEmail] = useState("")
     const [isProcessing, setIsProcessing] = useState(false)
     const router = useRouter()
     const { items, clearCart } = useCart()
@@ -31,6 +32,28 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
                 <div>
                     <h3 className="text-sm font-medium mb-4 text-center text-muted-foreground">Pay with PayPal or Credit/Debit Card</h3>
 
+                    <div className="mb-4">
+                        <label htmlFor="email" className="block text-sm font-medium mb-1 pl-1">
+                            Email Address <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email to receive files"
+                            className="w-full p-2 border rounded-md text-sm"
+                            value={email}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                if (message === "Please enter your email address first.") {
+                                    setMessage(null);
+                                }
+                            }}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1 pl-1">
+                            We'll send your download link to this email.
+                        </p>
+                    </div>
+
                     <PayPalButtons
                         style={{
                             layout: "vertical",
@@ -41,6 +64,13 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
                         onCancel={() => {
                             setIsProcessing(false);
                             setMessage("Payment cancelled.");
+                        }}
+                        onClick={(data, actions) => {
+                            if (!email || !email.includes('@')) {
+                                setMessage("Please enter a valid email address first.");
+                                return actions.reject();
+                            }
+                            return actions.resolve();
                         }}
                         createOrder={async (data, actions) => {
                             setIsProcessing(true);
@@ -55,6 +85,7 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
                                     },
                                     body: JSON.stringify({
                                         amount: amount,
+                                        email: email,
                                         items: items.map(item => ({
                                             id: item.id,
                                             title: item.title,
@@ -138,7 +169,8 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
 
                 {/* Show any error or success messages */}
                 {message && (
-                    <div id="payment-message" className="text-sm text-destructive font-bold text-center p-4 bg-destructive/10 rounded-md">
+                    <div id="payment-message" className={`text-sm font-bold text-center p-4 rounded-md ${message === "Payment successful!" ? "text-green-600 bg-green-100" : "text-destructive bg-destructive/10"
+                        }`}>
                         {message}
                     </div>
                 )}

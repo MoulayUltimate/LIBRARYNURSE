@@ -37,7 +37,7 @@ async function getAccessToken() {
 
 export async function POST(req: Request) {
     try {
-        const { items, amount } = await req.json();
+        const { items, amount, email } = await req.json();
 
         if (!items || !amount) {
             return new NextResponse("Missing items or amount", { status: 400 });
@@ -85,8 +85,8 @@ export async function POST(req: Request) {
             // Insert into Orders with paypal_order_id
             // Note: stripe_payment_intent_id is now optional/null
             await db.prepare(
-                "INSERT INTO Orders (id, paypal_order_id, amount, status, items) VALUES (?, ?, ?, 'pending', ?)"
-            ).bind(orderId, order.id, amount, itemsJson).run();
+                "INSERT INTO Orders (id, paypal_order_id, customer_email, amount, status, items) VALUES (?, ?, ?, ?, 'pending', ?)"
+            ).bind(orderId, order.id, email || null, amount, itemsJson).run();
         }
 
         return NextResponse.json(order);
