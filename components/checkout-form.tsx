@@ -117,14 +117,15 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
                         }}
                         onError={(err) => {
                             console.error("PayPal Checkout onError", err);
-                            setMessage("An error occurred with PayPal checkout");
+                            const errString = err?.toString() || JSON.stringify(err);
+                            setMessage(`Error: ${errString}. Check console for details.`);
                         }}
                     />
                 </div>
 
                 {/* Show any error or success messages */}
                 {message && (
-                    <div id="payment-message" className="text-sm text-destructive font-medium text-center">
+                    <div id="payment-message" className="text-sm text-destructive font-bold text-center p-4 bg-destructive/10 rounded-md">
                         {message}
                     </div>
                 )}
