@@ -34,9 +34,13 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
                     <PayPalButtons
                         style={{
                             layout: "vertical",
-                            color: "blue",
+                            color: "gold",
                             shape: "rect",
-                            label: "pay"
+                            label: "paypal"
+                        }}
+                        onCancel={() => {
+                            setIsProcessing(false);
+                            setMessage("Payment cancelled.");
                         }}
                         createOrder={async (data, actions) => {
                             setIsProcessing(true);
