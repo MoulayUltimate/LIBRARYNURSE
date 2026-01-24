@@ -15,7 +15,8 @@ async function getAccessToken() {
         throw new Error("Missing PayPal credentials");
     }
 
-    const auth = Buffer.from(clientId + ":" + clientSecret).toString("base64");
+    // Use btoa for Edge runtime compatibility instead of Buffer
+    const auth = btoa(clientId + ":" + clientSecret);
     const response = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
         method: "POST",
         body: "grant_type=client_credentials",
