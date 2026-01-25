@@ -1,7 +1,5 @@
 "use client"
 
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { CartSummary } from "@/components/cart-summary"
 import { useCart } from "@/hooks/use-cart"
 import { Button } from "@/components/ui/button"
@@ -24,7 +22,6 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <>
-        <Header />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen">
           <h1 className="text-3xl font-bold text-foreground mb-8">Shopping Cart</h1>
           <Card className="p-12 text-center">
@@ -34,14 +31,12 @@ export default function CartPage() {
             </Link>
           </Card>
         </main>
-        <Footer />
       </>
     )
   }
 
   return (
     <>
-      <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-3xl font-bold text-foreground mb-8">Shopping Cart</h1>
 
@@ -95,7 +90,6 @@ export default function CartPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   )
 }

@@ -1,5 +1,3 @@
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 
 export const metadata = {
     title: "Shipping Policy - NursLibrary",
@@ -9,7 +7,6 @@ export const metadata = {
 export default function ShippingPolicy() {
     return (
         <>
-            <Header />
             <main className="min-h-screen bg-gradient-to-b from-background to-background/50">
                 <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
                     <div className="prose prose-invert max-w-none">
@@ -74,7 +71,6 @@ export default function ShippingPolicy() {
                     </div>
                 </div>
             </main>
-            <Footer />
         </>
     )
 }

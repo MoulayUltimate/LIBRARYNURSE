@@ -1,5 +1,3 @@
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { ProductGrid } from "@/components/product-grid"
 import { getCollections } from "@/lib/store"
 import { Button } from "@/components/ui/button"
@@ -32,7 +30,6 @@ export default async function AllCollectionsPage() {
 
     return (
         <>
-            <Header />
             <main className="min-h-screen bg-gray-50/50">
                 <div className="bg-white border-b">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
@@ -103,7 +100,6 @@ export default async function AllCollectionsPage() {
 
                 </div>
             </main>
-            <Footer />
         </>
     )
 }

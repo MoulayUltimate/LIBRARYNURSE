@@ -1,7 +1,5 @@
-import { Header } from "@/components/header"
 
 export const runtime = "edge"
-import { Footer } from "@/components/footer"
 import { ProductGrid } from "@/components/product-grid"
 import { getCollectionBySlug } from "@/lib/store"
 import { notFound } from "next/navigation"
@@ -77,7 +75,6 @@ export default async function CollectionPage({
 
     return (
         <>
-            <Header />
             <main className="min-h-screen bg-gray-50/50">
                 {/* Collection Header */}
                 <div className="bg-white border-b">
@@ -181,7 +178,6 @@ export default async function CollectionPage({
                     )}
                 </div>
             </main>
-            <Footer />
         </>
     )
 }

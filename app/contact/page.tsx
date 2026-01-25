@@ -1,8 +1,6 @@
 "use client"
 
 import type React from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { useState } from "react"
 
 export default function Contact() {
@@ -34,7 +32,6 @@ export default function Contact() {
 
   return (
     <>
-      <Header />
       <main className="min-h-screen bg-gradient-to-b from-background to-background/50">
         <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-12">
@@ -174,7 +171,6 @@ export default function Contact() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   )
 }

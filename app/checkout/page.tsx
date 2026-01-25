@@ -2,8 +2,6 @@
 
 import type React from "react"
 
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { useCart } from "@/hooks/use-cart"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -70,7 +68,6 @@ export default function CheckoutPage() {
   if (items.length === 0 && !orderComplete) {
     return (
       <>
-        <Header />
         <main className="min-h-screen bg-background">
           <div className="max-w-7xl mx-auto px-4 py-12">
             <Card className="p-12 text-center">
@@ -81,7 +78,6 @@ export default function CheckoutPage() {
             </Card>
           </div>
         </main>
-        <Footer />
       </>
     )
   }
@@ -89,7 +85,6 @@ export default function CheckoutPage() {
   if (orderComplete) {
     return (
       <>
-        <Header />
         <main className="min-h-screen bg-background">
           <div className="max-w-3xl mx-auto px-4 py-12">
             <Card className="p-12 text-center">
@@ -103,14 +98,12 @@ export default function CheckoutPage() {
             </Card>
           </div>
         </main>
-        <Footer />
       </>
     )
   }
 
   return (
     <>
-      <Header />
       <main className="min-h-screen bg-background py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
@@ -339,7 +332,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   )
 }

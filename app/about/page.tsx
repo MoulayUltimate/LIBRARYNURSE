@@ -1,11 +1,8 @@
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { Card } from "@/components/ui/card"
 
 export default function AboutPage() {
   return (
     <>
-      <Header />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-12">
           <h1 className="text-4xl font-bold text-foreground mb-4">About NursLibrary</h1>
@@ -59,7 +56,6 @@ export default function AboutPage() {
           </ul>
         </Card>
       </main>
-      <Footer />
     </>
   )
 }
