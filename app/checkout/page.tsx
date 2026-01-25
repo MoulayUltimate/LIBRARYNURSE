@@ -33,8 +33,7 @@ export default function CheckoutPage() {
   const [clientSecret, setClientSecret] = useState("")
 
   const subtotal = total
-  const tax = (subtotal - discount) * 0.08
-  const finalTotal = subtotal - discount + tax
+  const finalTotal = subtotal - discount
 
   // Payment intent creation moved to manual trigger
   useEffect(() => {
