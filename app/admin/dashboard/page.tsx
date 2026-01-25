@@ -57,11 +57,43 @@ export default function AdminDashboardPage() {
     const fetchStats = async () => {
         try {
             setLoading(true)
-            const res = await fetch(`/api/admin/stats?period=${period}`)
-            if (res.ok) {
-                const data = await res.json()
-                setStats(data)
+
+            // Parallel fetch: Local DB Stats (Orders/Sales) + GA4 Stats (Traffic)
+            // Local DB is critical for financial accuracy. GA4 is better for visitors/countries.
+            const [localRes, gaRes] = await Promise.all([
+                fetch(`/api/admin/stats?period=${period}`),
+                fetch(`/api/admin/ga-stats?period=${period}`)
+            ])
+
+            let localData = EmptyStats
+            let gaData = null
+
+            if (localRes.ok) {
+                localData = await localRes.json()
             }
+
+            if (gaRes.ok) {
+                const json = await gaRes.json()
+                if (json.configured) {
+                    gaData = json
+                }
+            }
+
+            // Merge Strategy:
+            // 1. Start with Local Data (has orders, carts coverage etc.)
+            // 2. Overwrite Traffic Metrics with GA4 data IF it exists
+            const mergedStats = {
+                ...localData,
+                ...(gaData ? {
+                    totalVisitors: gaData.totalVisitors,
+                    pageViews: gaData.pageViews,
+                    countryStats: gaData.countryStats,
+                    trafficSources: gaData.trafficSources,
+                    topPages: gaData.topPages.length > 0 ? gaData.topPages : localData.topPages, // Prefer GA pages if available
+                } : {})
+            }
+
+            setStats(mergedStats)
         } catch (error) {
             console.error("Failed to fetch stats", error)
         } finally {
