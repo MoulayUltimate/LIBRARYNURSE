@@ -48,14 +48,12 @@ export default async function StorePage() {
         'best-sellers',
         'anatomia-fisiologia-y-patologia',
         'diagnostico-y-medicina-interna',
-        'dentistry-1',
+
         'dermatology',
         'aquatic-animals',
-        'ophtalmology-1',
+
         'equine',
-        'veterinary-surgery',
-        'veterinary-radiology',
-        'veterinary-epidemiology'
+
     ]
     const featuredCollections = collections.filter(c => featuredCollectionSlugs.includes(c.slug))
 
@@ -109,20 +107,7 @@ export default async function StorePage() {
                                 </p>
                             </Link>
 
-                            <Link href="/collections/dentistry-1" className="group">
-                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
-                                    <Image
-                                        src="/category_dentistry_1768669739380.png"
-                                        alt="Dentistry"
-                                        width={200}
-                                        height={200}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                                <p className="text-sm text-foreground flex items-center gap-1">
-                                    Dentistry <ArrowRight size={14} />
-                                </p>
-                            </Link>
+
 
                             <Link href="/collections/dermatology" className="group">
                                 <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
@@ -154,20 +139,7 @@ export default async function StorePage() {
                                 </p>
                             </Link>
 
-                            <Link href="/collections/veterinary-epidemiology" className="group">
-                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
-                                    <Image
-                                        src="/category_epidemiology_1768669789021.png"
-                                        alt="Epidemiology"
-                                        width={200}
-                                        height={200}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                                <p className="text-sm text-foreground flex items-center gap-1">
-                                    Epidemiology <ArrowRight size={14} />
-                                </p>
-                            </Link>
+
 
                             <Link href="/collections/veterinary-medicine" className="group">
                                 <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
@@ -184,50 +156,11 @@ export default async function StorePage() {
                                 </p>
                             </Link>
 
-                            <Link href="/collections/pharmacology" className="group">
-                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
-                                    <Image
-                                        src="/category_pharmacology_1768669827844.png"
-                                        alt="Pharmacology"
-                                        width={200}
-                                        height={200}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                                <p className="text-sm text-foreground flex items-center gap-1">
-                                    Pharmacology <ArrowRight size={14} />
-                                </p>
-                            </Link>
 
-                            <Link href="/collections/veterinary-radiology" className="group">
-                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
-                                    <Image
-                                        src="/category_radiology_1768669849328.png"
-                                        alt="Radiology"
-                                        width={200}
-                                        height={200}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                                <p className="text-sm text-foreground flex items-center gap-1">
-                                    Radiology <ArrowRight size={14} />
-                                </p>
-                            </Link>
 
-                            <Link href="/collections/veterinary-surgery" className="group">
-                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
-                                    <Image
-                                        src="/category_surgery_1768669863765.png"
-                                        alt="Surgery"
-                                        width={200}
-                                        height={200}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                                <p className="text-sm text-foreground flex items-center gap-1">
-                                    Surgery <ArrowRight size={14} />
-                                </p>
-                            </Link>
+
+
+
 
                             <Link href="/collections/veterinary-anatomy" className="group">
                                 <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
@@ -244,20 +177,7 @@ export default async function StorePage() {
                                 </p>
                             </Link>
 
-                            <Link href="/collections/ophtalmology-1" className="group">
-                                <div className="rounded-2xl overflow-hidden bg-slate-100 mb-3 aspect-square">
-                                    <Image
-                                        src="/category_ophthalmology_1768669890605.png"
-                                        alt="Ophtalmology"
-                                        width={200}
-                                        height={200}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                                <p className="text-sm text-foreground flex items-center gap-1">
-                                    Ophtalmology <ArrowRight size={14} />
-                                </p>
-                            </Link>
+
                         </div>
                     </section>
 

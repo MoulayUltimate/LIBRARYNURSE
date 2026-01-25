@@ -26,6 +26,7 @@ for (const product of products) {
     };
 
     sql += `UPDATE Products SET 
+  collections = ${escapeSql(JSON.stringify(product.collections))},
   author = ${escapeSql(product.author)},
   pages = ${product.pages || 'NULL'},
   format = ${escapeSql(product.format)},
@@ -40,5 +41,5 @@ for (const product of products) {
 WHERE id = '${product.id}';\n\n`;
 }
 
-fs.writeFileSync('update_products_data.sql', sql);
-console.log('✅ Generated update_products_data.sql');
+fs.writeFileSync('update_collections.sql', sql);
+console.log('✅ Generated update_collections.sql');

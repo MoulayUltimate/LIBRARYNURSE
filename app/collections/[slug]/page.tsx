@@ -21,13 +21,19 @@ import {
 async function getProducts(slug: string) {
     try {
         const db = process.env.DB as any
-        if (!db) return []
+        if (!db) {
+            console.log("[DEBUG] DB is undefined")
+            return []
+        }
 
         // Use LIKE for simple JSON array matching: ["slug1", "slug2"]
         // We search for "slug" (with quotes) to ensure exact match
-        const { results } = await db.prepare(
-            "SELECT * FROM Products WHERE collections LIKE ?"
-        ).bind(`%"${slug}"%`).all()
+        console.log(`[DEBUG] Fetching products for slug: ${slug}`)
+        const query = "SELECT * FROM Products WHERE collections LIKE ?"
+        console.log(`[DEBUG] Query: ${query} with param %"${slug}"%`)
+
+        const { results } = await db.prepare(query).bind(`%"${slug}"%`).all()
+        console.log(`[DEBUG] Found ${results.length} products`)
 
         return results.map((p: any) => ({
             ...p,
