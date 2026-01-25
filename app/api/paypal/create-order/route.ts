@@ -91,9 +91,13 @@ export async function POST(req: Request) {
             // Send Telegram Notification (Fire and forget, don't block)
             const message = `🚀 *New Checkout Started!*\n\n📧 *Email:* \`${email || "Unknown"}\`\n💰 *Amount:* $${amount.toFixed(2)}\n📦 *Items:* ${items.length}\n\n_Waiting for payment..._`
 
-            // We await it here but catch errors so it doesn't fail the request
-            // Ideally use ctx.waitUntil if available, but here just simple async
-            sendTelegramMessage(message).catch((err: any) => console.error("Telegram Error", err))
+            // We await it here to ensure it sends before the Edge function typically terminates
+            // (Standard fetch without waitUntil can be cancelled if response returns early)
+            try {
+                await sendTelegramMessage(message)
+            } catch (err) {
+                console.error("Telegram Error", err)
+            }
         }
 
         return NextResponse.json(order);
