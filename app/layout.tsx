@@ -7,6 +7,7 @@ import { RecentSalesPopup } from "@/components/recent-sales-popup"
 import { AnalyticsTracker } from "@/components/analytics-tracker"
 import { MetaPixel } from "@/components/meta-pixel"
 import { Suspense } from "react"
+import { GoogleAnalytics } from "@/components/google-analytics"
 import "./globals.css"
 
 const poppins = Poppins({
@@ -37,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} font-sans antialiased`}>
+        <GoogleAnalytics />
         <MetaPixel />
         <CartProvider>
           <Suspense fallback={null}>
