@@ -341,10 +341,6 @@ export default async function StorePage() {
                         </div>
                     </section>
 
-                    {/* Trust Reviews Section */}
-                    <div className="-mx-4 sm:-mx-6 lg:-mx-8">
-                        <TrustReviews />
-                    </div>
 
                     {/* FAQ Section */}
                     <section className="py-16 mb-12 border-t border-border">
