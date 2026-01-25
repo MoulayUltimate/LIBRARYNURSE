@@ -10,8 +10,7 @@ export function CartSummary() {
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
   const subtotal = total
-  const tax = subtotal * 0.08 // 8% tax
-  const finalTotal = subtotal + tax
+  const finalTotal = subtotal
 
   return (
     <Card className="p-6 bg-card">
@@ -23,10 +22,6 @@ export function CartSummary() {
             {itemCount} item{itemCount !== 1 ? "s" : ""}
           </span>
           <span>${subtotal.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between text-muted-foreground">
-          <span>Estimated Tax</span>
-          <span>${tax.toFixed(2)}</span>
         </div>
         <div className="border-t border-border pt-2 flex justify-between font-bold text-lg">
           <span>Total</span>

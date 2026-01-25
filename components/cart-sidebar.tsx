@@ -22,8 +22,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
   const subtotal = total
-  const tax = subtotal * 0.08
-  const finalTotal = subtotal + tax
+  const finalTotal = subtotal
 
   if (!mounted) return null
 
@@ -106,10 +105,6 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="text-foreground">${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Estimated Tax</span>
-                  <span className="text-foreground">${tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
