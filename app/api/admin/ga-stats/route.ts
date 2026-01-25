@@ -122,6 +122,17 @@ export async function GET(req: Request) {
         }
 
         // Parse Sources
+        // Final Fallback: If we have live visitors but NO country data (GA4 hasn't resolved geo yet),
+        // show "Unknown" with the total live count so the widget isn't empty.
+        if (countryStats.length === 0 && liveVisitors > 0) {
+            countryStats.push({
+                country: "XX",
+                name: "Unknown Location",
+                visitors: liveVisitors
+            })
+        }
+
+        // Parse Sources
         const trafficSources = (sourcesReport?.rows || []).map((row: any) => ({
             source: row.dimensionValues[0].value,
             visitors: parseInt(row.metricValues[0].value)
