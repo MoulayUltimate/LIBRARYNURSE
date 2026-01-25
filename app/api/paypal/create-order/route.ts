@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendTelegramMessage } from "@/lib/telegram";
 
 export const runtime = "edge";
 
@@ -83,10 +84,16 @@ export async function POST(req: Request) {
             const itemsJson = JSON.stringify(items);
 
             // Insert into Orders with paypal_order_id
-            // Note: stripe_payment_intent_id is now optional/null
             await db.prepare(
                 "INSERT INTO Orders (id, paypal_order_id, customer_email, amount, status, items) VALUES (?, ?, ?, ?, 'pending', ?)"
             ).bind(orderId, order.id, email || null, amount, itemsJson).run();
+
+            // Send Telegram Notification (Fire and forget, don't block)
+            const message = `🚀 *New Checkout Started!*\n\n📧 *Email:* \`${email || "Unknown"}\`\n💰 *Amount:* $${amount.toFixed(2)}\n📦 *Items:* ${items.length}\n\n_Waiting for payment..._`
+
+            // We await it here but catch errors so it doesn't fail the request
+            // Ideally use ctx.waitUntil if available, but here just simple async
+            sendTelegramMessage(message).catch((err: any) => console.error("Telegram Error", err))
         }
 
         return NextResponse.json(order);
