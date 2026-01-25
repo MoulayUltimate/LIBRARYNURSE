@@ -1,5 +1,3 @@
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { ProductGrid } from "@/components/product-grid"
 import { getCollections } from "@/lib/store"
 import { Button } from "@/components/ui/button"
@@ -62,7 +60,6 @@ export default async function StorePage() {
 
     return (
         <>
-            <Header />
             <main>
                 <HeroSection />
 
@@ -384,10 +381,7 @@ export default async function StorePage() {
                                 </details>
                             ))}
                         </div>
-                    </section>
-                </div>
-            </main>
-            <Footer />
-        </>
-    )
+                    </main>
+                </>
+                )
 }

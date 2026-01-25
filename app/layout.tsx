@@ -8,6 +8,8 @@ import { AnalyticsTracker } from "@/components/analytics-tracker"
 import { MetaPixel } from "@/components/meta-pixel"
 import { Suspense } from "react"
 import { GoogleAnalytics } from "@/components/google-analytics"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 import "./globals.css"
 
 const poppins = Poppins({
@@ -48,7 +50,9 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <AnalyticsTracker />
           </Suspense>
+          <Header />
           {children}
+          <Footer />
           <RecentSalesPopup />
           <Analytics />
           <ChatWidget />
