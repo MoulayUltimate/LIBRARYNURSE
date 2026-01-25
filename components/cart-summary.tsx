@@ -23,6 +23,10 @@ export function CartSummary() {
           </span>
           <span>${subtotal.toFixed(2)}</span>
         </div>
+        <div className="flex justify-between text-foreground">
+          <span>Shipping</span>
+          <span>Free (Digital Delivery)</span>
+        </div>
         <div className="border-t border-border pt-2 flex justify-between font-bold text-lg">
           <span>Total</span>
           <span>${finalTotal.toFixed(2)}</span>

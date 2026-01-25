@@ -106,6 +106,10 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="text-foreground">${subtotal.toFixed(2)}</span>
                 </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Shipping</span>
+                  <span className="text-foreground">Free (Digital Delivery)</span>
+                </div>
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
                   <span className="text-primary">${finalTotal.toFixed(2)}</span>
