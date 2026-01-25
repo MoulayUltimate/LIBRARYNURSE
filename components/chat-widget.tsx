@@ -27,8 +27,8 @@ export function ChatWidget() {
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const pathname = usePathname()
 
-    // Don't render on admin routes
-    if (pathname?.startsWith("/admin")) return null
+    // Don't render on admin routes or checkout
+    if (pathname?.startsWith("/admin") || pathname?.startsWith("/checkout")) return null
 
     // Load session from localStorage
     useEffect(() => {
