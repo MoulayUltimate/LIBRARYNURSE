@@ -44,9 +44,15 @@ export async function GET(req: Request) {
             7
         )
 
-        // 5. Realtime Users (Last 30 min usually, but 'activeUsers' in realtime report is active now)
+        // 5. Realtime Users (Last 30 min)
         const realtimeReport = await getRealtimeReport(
             [], // No dimensions = total active users
+            [{ name: "activeUsers" }]
+        )
+
+        // 6. Realtime Country (Fallback for new properties)
+        const realtimeCountryReport = await getRealtimeReport(
+            [{ name: "country" }], // Realtime doesn't support countryId cleanly in all cases, use name
             [{ name: "activeUsers" }]
         )
 
@@ -69,25 +75,36 @@ export async function GET(req: Request) {
         const pageViews = parseInt(totalRow?.metricValues?.[1]?.value || "0")
 
         // Parse Realtime
-        // Realtime report rows might be empty if 0 users
         const liveVisitors = parseInt(realtimeReport?.rows?.[0]?.metricValues?.[0]?.value || "0")
 
         // Parse Countries
-        // GA return: Country Name in dim 0
-        // We need code? GA returns name like "United States". 
-        // We might need to map manual names or request 'countryId' (ISO)? 
-        // GA dim 'country' is Name. 'countryId' is usually ISO. Let's try to map or use name.
-        // Actually, let's keep it simple. If we want flags, we need codes.
-        // Let's rely on the dashboard's name mapping or just use names for now.
-        // Parse Countries
-        // Dimensions requested: [{ name: "country" }, { name: "countryId" }]
-        // row.dimensionValues[0] = Country Name (e.g. "United States")
-        // row.dimensionValues[1] = Country ISO Code (e.g. "US")
-        const countryStats = (countriesReport?.rows || []).map((row: any) => ({
-            country: row.dimensionValues[1]?.value || "XX", // ISO Code for flag
-            name: row.dimensionValues[0]?.value || "Unknown", // Full Name for label
+        let countryStats = (countriesReport?.rows || []).map((row: any) => ({
+            country: row.dimensionValues[1]?.value || "XX", // ISO Code
+            name: row.dimensionValues[0]?.value || "Unknown",
             visitors: parseInt(row.metricValues[0].value)
         }))
+
+        // Fallback: If standard report is empty (new property), use Realtime data
+        if (countryStats.length === 0 && realtimeCountryReport?.rows?.length > 0) {
+            countryStats = realtimeCountryReport.rows.map((row: any) => {
+                const name = row.dimensionValues[0].value
+                // Simple Mapping for common countries since Realtime might not give ISO easily
+                // Or we accept the name and let Frontend handle it (likely needs ISO for Flag)
+                // Let's try to map keys used in frontend (Names -> ISO)
+                const nameMap: Record<string, string> = {
+                    "United States": "US", "United Kingdom": "GB", "Canada": "CA",
+                    "Australia": "AU", "Germany": "DE", "France": "FR", "Brazil": "BR",
+                    "India": "IN", "China": "CN", "Spain": "ES", "Italy": "IT", "Netherlands": "NL"
+                }
+                const code = nameMap[name] || name.substring(0, 2).toUpperCase()
+
+                return {
+                    country: code,
+                    name: name,
+                    visitors: parseInt(row.metricValues[0].value)
+                }
+            })
+        }
 
         // Parse Sources
         const trafficSources = (sourcesReport?.rows || []).map((row: any) => ({
