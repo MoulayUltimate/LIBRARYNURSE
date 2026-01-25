@@ -41,7 +41,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} font-sans antialiased`}>
         <GoogleAnalytics />
-        <MetaPixel />
+        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <MetaPixel />
+        </Suspense>
         <CartProvider>
           <Suspense fallback={null}>
             <AnalyticsTracker />

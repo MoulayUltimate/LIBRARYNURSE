@@ -79,11 +79,13 @@ export async function GET(req: Request) {
         // GA dim 'country' is Name. 'countryId' is usually ISO. Let's try to map or use name.
         // Actually, let's keep it simple. If we want flags, we need codes.
         // Let's rely on the dashboard's name mapping or just use names for now.
+        // Parse Countries
+        // Dimensions requested: [{ name: "country" }, { name: "countryId" }]
+        // row.dimensionValues[0] = Country Name (e.g. "United States")
+        // row.dimensionValues[1] = Country ISO Code (e.g. "US")
         const countryStats = (countriesReport?.rows || []).map((row: any) => ({
-            country: row.dimensionValues[0].value === "United States" ? "US" :
-                row.dimensionValues[0].value === "United Kingdom" ? "GB" :
-                    row.dimensionValues[0].value.substring(0, 2).toUpperCase(), // Fallback hack, better to use countryId if supported or map later
-            name: row.dimensionValues[0].value,
+            country: row.dimensionValues[1]?.value || "XX", // ISO Code for flag
+            name: row.dimensionValues[0]?.value || "Unknown", // Full Name for label
             visitors: parseInt(row.metricValues[0].value)
         }))
 
