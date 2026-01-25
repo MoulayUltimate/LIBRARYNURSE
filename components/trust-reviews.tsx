@@ -44,12 +44,12 @@ export function TrustReviews() {
                 <div className="text-center mb-10">
                     <h2 className="text-3xl font-bold text-foreground mb-4">Trusted by Professionals</h2>
                     <div className="flex items-center justify-center gap-2 mb-2">
-                        <div className="bg-green-500 text-white px-2 py-1 rounded text-sm font-bold flex items-center gap-1">
-                            ExamplePilot <Star size={12} fill="currentColor" />
+                        <div className="bg-[#00b67a] text-white px-2 py-1 rounded-sm text-sm font-bold flex items-center gap-1">
+                            Trustpilot <Star size={12} fill="currentColor" className="text-white fill-white" />
                         </div>
                         <div className="flex gap-1">
                             {[1, 2, 3, 4, 5].map((s) => (
-                                <div key={s} className="bg-green-500 p-1 rounded-sm">
+                                <div key={s} className="bg-[#00b67a] p-1 rounded-sm">
                                     <Star size={16} className="text-white fill-white" />
                                 </div>
                             ))}
