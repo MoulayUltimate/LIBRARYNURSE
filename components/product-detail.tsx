@@ -156,7 +156,7 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                                     +
                                 </button>
                             </div>
-                            <Button onClick={handleAddToCart} className="flex-1 text-sm py-2 h-auto" variant="outline">
+                            <Button onClick={handleAddToCart} className="flex-1 text-sm py-2 h-auto text-white">
                                 {isAdded ? "✓ Added" : "Add to Cart"}
                             </Button>
                             <Button variant="outline" className="w-10 h-auto py-2 bg-transparent">
@@ -168,7 +168,7 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                         </div>
 
                         {/* PayPal Express Checkout */}
-                        <div className="-mt-1">
+                        <div className="mt-4">
                             <PayPalExpressButton product={product} quantity={quantity} />
                         </div>
 
