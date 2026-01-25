@@ -27,18 +27,6 @@ export function ChatWidget() {
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const pathname = usePathname()
 
-    // Don't render on admin routes or checkout
-    if (pathname?.startsWith("/admin") || pathname?.startsWith("/checkout")) return null
-
-    // Load session from localStorage
-    useEffect(() => {
-        const savedSession = localStorage.getItem("chat_session_id")
-        if (savedSession) {
-            setSessionId(savedSession)
-            setStep('chat')
-        }
-    }, [])
-
     // Poll for messages
     useEffect(() => {
         if (!sessionId || !isOpen || isMinimized) return
@@ -64,6 +52,10 @@ export function ChatWidget() {
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [messages])
+
+    // Don't render on admin routes or checkout
+    // MOVED CHECK HERE to avoid Rules of Hooks violation
+    if (pathname?.startsWith("/admin") || pathname?.startsWith("/checkout")) return null
 
     const startChat = async (e: React.FormEvent) => {
         e.preventDefault()

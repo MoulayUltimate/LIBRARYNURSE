@@ -37,8 +37,6 @@ export function RecentSalesPopup() {
     const [isVisible, setIsVisible] = useState(false)
     const [sale, setSale] = useState({ name: "", location: "", product: "" })
 
-    if (pathname?.startsWith("/admin")) return null
-
     useEffect(() => {
         // Initial delay before first popup
         const initialTimeout = setTimeout(() => {
@@ -67,6 +65,9 @@ export function RecentSalesPopup() {
         }, 6000)
     }
 
+    // MOVED CHECK HERE to avoid Rules of Hooks violation (must be after hooks)
+    // Also check if valid popup state
+    if (pathname?.startsWith("/admin")) return null
     if (!isVisible) return null
 
     return (
