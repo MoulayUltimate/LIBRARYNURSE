@@ -35,11 +35,14 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
     const [quantity, setQuantity] = useState(1)
 
     const handleAddToCart = () => {
-        for (let i = 0; i < quantity; i++) {
-            addItem(product)
-        }
+        addItem(product, quantity)
         setIsAdded(true)
         setTimeout(() => setIsAdded(false), 2000)
+    }
+
+    const handleBuyNow = () => {
+        addItem(product, quantity)
+        router.push("/checkout")
     }
 
     return (
@@ -155,8 +158,11 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                                     +
                                 </button>
                             </div>
-                            <Button onClick={handleAddToCart} className="flex-1 text-sm py-2 h-auto">
-                                {isAdded ? "✓ Added to Cart" : "Add to Cart"}
+                            <Button onClick={handleAddToCart} className="flex-1 text-sm py-2 h-auto" variant="outline">
+                                {isAdded ? "✓ Added" : "Add to Cart"}
+                            </Button>
+                            <Button onClick={handleBuyNow} className="flex-1 text-sm py-2 h-auto bg-green-600 hover:bg-green-700 text-white shadow-md">
+                                Buy Now
                             </Button>
                             <Button variant="outline" className="w-10 h-auto py-2 bg-transparent">
                                 <Heart size={18} />
