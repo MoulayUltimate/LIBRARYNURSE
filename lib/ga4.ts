@@ -127,3 +127,47 @@ export async function getGA4Report(
         return null
     }
 }
+
+// Realtime Stats
+export async function getRealtimeReport(
+    dimensions: { name: string }[] = [],
+    metrics: { name: string }[] = [],
+    limit = 10
+) {
+    const clientEmail = process.env.GA_CLIENT_EMAIL
+    const privateKey = process.env.GA_PRIVATE_KEY
+
+    if (!clientEmail || !privateKey) return null
+
+    const accessToken = await getAccessToken(clientEmail, privateKey)
+    if (!accessToken) return null
+
+    // Endpoint for realtime: properties/[ID]:runRealtimeReport
+    const RT_URL = `https://analyticsdata.googleapis.com/v1beta/properties/${GA_PROPERTY_ID}:runRealtimeReport`
+
+    try {
+        const response = await fetch(RT_URL, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                dimensions,
+                metrics,
+                limit
+            }),
+        })
+
+        if (!response.ok) {
+            console.error("GA4 Realtime Error", await response.text())
+            // If 403, might be permissions (even if standard report works, check real-time specific if any)
+            return null
+        }
+
+        return await response.json()
+    } catch (e) {
+        console.error("GA4 RT Network Error", e)
+        return null
+    }
+}

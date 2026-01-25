@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getGA4Report } from "@/lib/ga4"
+import { getGA4Report, getRealtimeReport } from "@/lib/ga4"
 
 export const runtime = "edge"
 
@@ -44,12 +44,19 @@ export async function GET(req: Request) {
             7
         )
 
+        // 5. Realtime Users (Last 30 min usually, but 'activeUsers' in realtime report is active now)
+        const realtimeReport = await getRealtimeReport(
+            [], // No dimensions = total active users
+            [{ name: "activeUsers" }]
+        )
+
         // If no data (e.g. no keys), return distinct "not configured" response
         if (!totalsReport) {
             return NextResponse.json({
                 configured: false,
                 totalVisitors: 0,
                 pageViews: 0,
+                liveVisitors: 0,
                 countryStats: [],
                 trafficSources: [],
                 topPages: []
@@ -60,6 +67,10 @@ export async function GET(req: Request) {
         const totalRow = totalsReport.rows?.[0]
         const totalVisitors = parseInt(totalRow?.metricValues?.[0]?.value || "0")
         const pageViews = parseInt(totalRow?.metricValues?.[1]?.value || "0")
+
+        // Parse Realtime
+        // Realtime report rows might be empty if 0 users
+        const liveVisitors = parseInt(realtimeReport?.rows?.[0]?.metricValues?.[0]?.value || "0")
 
         // Parse Countries
         // GA return: Country Name in dim 0
@@ -92,6 +103,7 @@ export async function GET(req: Request) {
             configured: true,
             totalVisitors,
             pageViews,
+            liveVisitors, // New realtime metric
             countryStats,
             trafficSources,
             topPages

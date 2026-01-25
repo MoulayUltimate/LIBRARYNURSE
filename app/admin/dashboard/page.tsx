@@ -87,6 +87,7 @@ export default function AdminDashboardPage() {
                 ...(gaData ? {
                     totalVisitors: gaData.totalVisitors,
                     pageViews: gaData.pageViews,
+                    liveVisitors: gaData.liveVisitors, // Use Realtime GA data if available
                     countryStats: gaData.countryStats,
                     trafficSources: gaData.trafficSources,
                     topPages: gaData.topPages.length > 0 ? gaData.topPages : localData.topPages, // Prefer GA pages if available
