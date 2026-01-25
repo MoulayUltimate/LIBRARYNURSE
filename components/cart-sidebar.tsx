@@ -31,7 +31,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
       {isOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={onClose} aria-hidden="true" />}
 
       <div
-        className={`fixed right-0 top-0 bottom-0 w-full sm:w-96 bg-background border-l border-border shadow-xl z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto ${isOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed right-0 top-0 bottom-0 w-full sm:w-96 bg-background border-l border-border shadow-xl z-[100] transform transition-transform duration-300 ease-in-out overflow-y-auto ${isOpen ? "translate-x-0" : "translate-x-full"
           }`}
       >
         {/* Header */}

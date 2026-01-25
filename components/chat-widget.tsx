@@ -107,7 +107,7 @@ export function ChatWidget() {
         return (
             <Button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50 bg-teal-600 hover:bg-teal-700"
+                className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-40 bg-teal-600 hover:bg-teal-700"
             >
                 <MessageCircle className="h-7 w-7 text-white" />
             </Button>
@@ -118,7 +118,7 @@ export function ChatWidget() {
         return (
             <Button
                 onClick={() => setIsMinimized(false)}
-                className="fixed bottom-4 right-4 h-14 w-auto px-6 rounded-full shadow-lg z-50 bg-teal-600 hover:bg-teal-700"
+                className="fixed bottom-4 right-4 h-14 w-auto px-6 rounded-full shadow-lg z-40 bg-teal-600 hover:bg-teal-700"
             >
                 <MessageCircle className="h-6 w-6 mr-2 text-white" />
                 <span className="text-white text-lg">Chat</span>
@@ -127,7 +127,7 @@ export function ChatWidget() {
     }
 
     return (
-        <Card className="fixed bottom-4 right-4 w-[350px] shadow-xl z-50 animate-in slide-in-from-bottom-10 fade-in duration-300">
+        <Card className="fixed bottom-4 right-4 w-[350px] shadow-xl z-40 animate-in slide-in-from-bottom-10 fade-in duration-300">
             <CardHeader className="flex flex-row items-center justify-between py-3 px-4 bg-teal-600 text-white rounded-t-lg">
                 <CardTitle className="text-base font-medium flex items-center gap-2">
                     <MessageCircle className="h-5 w-5" />
