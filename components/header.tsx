@@ -8,9 +8,8 @@ import { useState } from "react"
 import { CartSidebar } from "@/components/cart-sidebar"
 
 export function Header() {
-  const { items } = useCart()
+  const { items, isCartOpen, setIsCartOpen } = useCart()
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
-  const [isCartOpen, setIsCartOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (

@@ -7,6 +7,8 @@ import { trackEvent } from "@/components/analytics-tracker"
 interface CartContextType {
   items: CartItem[]
   total: number
+  isCartOpen: boolean
+  setIsCartOpen: (isOpen: boolean) => void
   addItem: (product: Product, quantity?: number) => void
   removeItem: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
@@ -19,6 +21,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
   const [total, setTotal] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -56,6 +59,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       price: product.price,
       quantity
     })
+
+    // Auto-open cart
+    setIsCartOpen(true)
   }
 
   const removeItem = (productId: string) => {
@@ -79,6 +85,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       value={{
         items,
         total,
+        isCartOpen,
+        setIsCartOpen,
         addItem,
         removeItem,
         updateQuantity,
