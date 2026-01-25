@@ -12,6 +12,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { BenefitsTicker } from "@/components/benefits-ticker"
 import { HeroSection } from "@/components/hero-section"
+import { TrustReviews } from "@/components/trust-reviews"
 
 export const runtime = "edge"
 
@@ -339,6 +340,11 @@ export default async function StorePage() {
                             </div>
                         </div>
                     </section>
+
+                    {/* Trust Reviews Section */}
+                    <div className="-mx-4 sm:-mx-6 lg:-mx-8">
+                        <TrustReviews />
+                    </div>
 
                     {/* FAQ Section */}
                     <section className="py-16 mb-12 border-t border-border">

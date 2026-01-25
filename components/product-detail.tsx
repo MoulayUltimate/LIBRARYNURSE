@@ -1,6 +1,7 @@
 "use client"
 
 import { PayPalExpressButton } from "@/components/paypal-express-button"
+import { TrustReviews } from "@/components/trust-reviews"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -362,6 +363,10 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div className="border-t border-border">
+                <TrustReviews />
             </div>
 
             <div className="max-w-7xl mx-auto px-4 py-8 border-t border-border">
