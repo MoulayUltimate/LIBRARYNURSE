@@ -88,15 +88,30 @@ export async function GET(req: Request) {
         if (countryStats.length === 0 && realtimeCountryReport?.rows?.length > 0) {
             countryStats = realtimeCountryReport.rows.map((row: any) => {
                 const name = row.dimensionValues[0].value
-                // Simple Mapping for common countries since Realtime might not give ISO easily
-                // Or we accept the name and let Frontend handle it (likely needs ISO for Flag)
-                // Let's try to map keys used in frontend (Names -> ISO)
+
+                // Enhanced Mapping for common countries to ISO codes
                 const nameMap: Record<string, string> = {
                     "United States": "US", "United Kingdom": "GB", "Canada": "CA",
                     "Australia": "AU", "Germany": "DE", "France": "FR", "Brazil": "BR",
-                    "India": "IN", "China": "CN", "Spain": "ES", "Italy": "IT", "Netherlands": "NL"
+                    "India": "IN", "China": "CN", "Spain": "ES", "Italy": "IT",
+                    "Netherlands": "NL", "Japan": "JP", "South Korea": "KR", "Russia": "RU",
+                    "Mexico": "MX", "Indonesia": "ID", "Turkey": "TR", "Saudi Arabia": "SA",
+                    "Switzerland": "CH", "Sweden": "SE", "Poland": "PL", "Belgium": "BE",
+                    "Austria": "AT", "Norway": "NO", "Denmark": "DK", "Finland": "FI",
+                    "Ireland": "IE", "New Zealand": "NZ", "Singapore": "SG", "Portugal": "PT",
+                    "Greece": "GR", "Czechia": "CZ", "Hungary": "HU", "Romania": "RO",
+                    "Thailand": "TH", "Vietnam": "VN", "Philippines": "PH", "Malaysia": "MY",
+                    "Egypt": "EG", "South Africa": "ZA", "Israel": "IL", "United Arab Emirates": "AE",
+                    "Argentina": "AR", "Chile": "CL", "Colombia": "CO", "Peru": "PE"
                 }
-                const code = nameMap[name] || name.substring(0, 2).toUpperCase()
+
+                // Try map first, then check if it looks like an ISO code (2 chars), else take first 2 chars
+                // This is a heuristic fallback.
+                let code = nameMap[name]
+                if (!code) {
+                    if (name.length === 2) code = name.toUpperCase()
+                    else code = name.substring(0, 2).toUpperCase()
+                }
 
                 return {
                     country: code,
