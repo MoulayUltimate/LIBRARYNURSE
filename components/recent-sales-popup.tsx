@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { X, CheckCircle, ShoppingBag } from "lucide-react"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { Card } from "@/components/ui/card"
 
 // Sample data for social proof
@@ -32,8 +33,11 @@ const PRODUCTS = [
 ]
 
 export function RecentSalesPopup() {
+    const pathname = usePathname()
     const [isVisible, setIsVisible] = useState(false)
     const [sale, setSale] = useState({ name: "", location: "", product: "" })
+
+    if (pathname?.startsWith("/admin")) return null
 
     useEffect(() => {
         // Initial delay before first popup

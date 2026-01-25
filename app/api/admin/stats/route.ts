@@ -77,12 +77,25 @@ export async function GET(req: Request) {
             : period === "7d" ? "updated_at >= date('now', '-7 days')"
                 : "updated_at >= date('now', '-1 day')" // default definition
 
-        const abandonedCheckouts = await db.prepare(
+        const abandonedCarts = await db.prepare(
             `SELECT COUNT(*) as count FROM Carts 
              WHERE email IS NOT NULL 
              AND ${cartsDateFilter}
              AND email NOT IN (SELECT customer_email FROM Orders WHERE status = 'succeeded')`
         ).first()
+
+        // Also count "pending" orders as abandoned if they are older than 30 mins
+        // (User considers pending orders as abandoned checkouts)
+        const pendingOrdersAsAbandoned = await db.prepare(
+            `SELECT COUNT(*) as count FROM Orders 
+             WHERE status = 'pending' 
+             AND ${ordersDateFilter}
+             AND created_at < datetime('now', '-30 minutes')`
+        ).first()
+
+        const abandonedCheckouts = {
+            count: (abandonedCarts?.count || 0) + (pendingOrdersAsAbandoned?.count || 0)
+        }
 
         // 5. Active Carts (Live metric)
         const activeCartsConfig = await db.prepare(

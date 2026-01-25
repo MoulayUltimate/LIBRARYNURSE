@@ -39,8 +39,43 @@ export async function GET(req: Request) {
 
             // Note: In a real app we'd fully parse items to get amount, here we just return list
             return NextResponse.json(results || [])
+        } else if (type === "abandoned") {
+            // Fetch Abandoned Checkouts
+            // 1. Carts with email
+            const { results: carts } = await db.prepare(
+                `SELECT 
+                    id, 
+                    email as customer_email, 
+                    updated_at as created_at, 
+                    'abandoned_cart' as status, 
+                    items, 
+                    0 as amount 
+                 FROM Carts 
+                 WHERE email IS NOT NULL 
+                 AND updated_at > datetime('now', '-7 days')
+                 ORDER BY updated_at DESC`
+            ).all()
+
+            // 2. Pending Orders (older than 30m)
+            const { results: pendingOrders } = await db.prepare(
+                `SELECT * FROM Orders 
+                 WHERE status = 'pending' 
+                 AND created_at > datetime('now', '-7 days')
+                 AND created_at < datetime('now', '-30 minutes')
+                 ORDER BY created_at DESC`
+            ).all()
+
+            // Combine
+            const results = [...(pendingOrders || []), ...(carts || [])].sort((a, b) =>
+                new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            )
+
+            return NextResponse.json(results)
         } else {
-            // Default: Fetch Completed Orders
+            // Default: Fetch All Orders (excluding the strictly abandoned ones from the main view if desired, 
+            // but usually main view shows everything. User said "they show as pending". 
+            // We can keep showing them here, or filter them out?)
+            // Let's keep showing all actual ORDERS here.
             const { results } = await db.prepare(
                 "SELECT * FROM Orders ORDER BY created_at DESC LIMIT 100"
             ).all()

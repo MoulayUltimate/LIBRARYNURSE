@@ -133,7 +133,9 @@ export function AdminChatInterface() {
                                 <button
                                     key={session.id}
                                     onClick={() => setSelectedSession(session)}
-                                    className={`w-full text-left p-4 hover:bg-secondary/50 transition-colors ${selectedSession?.id === session.id ? "bg-secondary" : ""
+                                    className={`w-full text-left p-4 hover:bg-muted/50 transition-colors border-l-4 ${selectedSession?.id === session.id
+                                        ? "bg-teal-50 border-teal-600 dark:bg-teal-950/30"
+                                        : "border-transparent"
                                         }`}
                                 >
                                     <div className="flex justify-between items-start mb-1">
@@ -188,8 +190,8 @@ export function AdminChatInterface() {
                                         >
                                             <div
                                                 className={`max-w-[80%] px-4 py-2 rounded-lg text-sm ${msg.sender === 'admin'
-                                                        ? 'bg-blue-600 text-white rounded-tr-none'
-                                                        : 'bg-secondary text-foreground rounded-tl-none'
+                                                    ? 'bg-teal-600 text-white rounded-tr-none'
+                                                    : 'bg-muted text-foreground rounded-tl-none border'
                                                     }`}
                                             >
                                                 {msg.message}

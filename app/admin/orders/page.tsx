@@ -61,10 +61,12 @@ export default function OrdersPage() {
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case "succeeded": return "bg-green-500 hover:bg-green-600"
+            case "succeeded": return "bg-teal-500 hover:bg-teal-600"
             case "processing": return "bg-blue-500 hover:bg-blue-600"
             case "failed": return "bg-red-500 hover:bg-red-600"
-            case "abandoned": return "bg-amber-500 hover:bg-amber-600"
+            case "abandoned":
+            case "abandoned_cart": return "bg-amber-500 hover:bg-amber-600"
+            case "pending": return "bg-amber-400 hover:bg-amber-500 text-amber-900"
             default: return "bg-gray-500 hover:bg-gray-600"
         }
     }
@@ -161,8 +163,8 @@ export default function OrdersPage() {
                                                 ${(order.amount || 0).toFixed(2)}
                                             </TableCell>
                                             <TableCell>
-                                                <Badge className={`${getStatusColor(order.status)} capitalize shadow-none`}>
-                                                    {order.status}
+                                                <Badge className={`${getStatusColor(order.status)} capitalize shadow-none border-0`}>
+                                                    {order.status === 'abandoned_cart' ? 'Abandoned Cart' : order.status}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell className="text-right">

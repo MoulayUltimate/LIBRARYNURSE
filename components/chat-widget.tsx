@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { usePathname } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MessageCircle, X, Send, Minus } from "lucide-react"
 
@@ -24,6 +25,10 @@ export function ChatWidget() {
     const [input, setInput] = useState("")
     const [loading, setLoading] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
+    const pathname = usePathname()
+
+    // Don't render on admin routes
+    if (pathname?.startsWith("/admin")) return null
 
     // Load session from localStorage
     useEffect(() => {
@@ -110,9 +115,9 @@ export function ChatWidget() {
         return (
             <Button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-4 right-4 h-12 w-12 rounded-full shadow-lg z-50 bg-blue-600 hover:bg-blue-700"
+                className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50 bg-teal-600 hover:bg-teal-700"
             >
-                <MessageCircle className="h-6 w-6 text-white" />
+                <MessageCircle className="h-7 w-7 text-white" />
             </Button>
         )
     }
@@ -121,23 +126,23 @@ export function ChatWidget() {
         return (
             <Button
                 onClick={() => setIsMinimized(false)}
-                className="fixed bottom-4 right-4 h-12 w-auto px-4 rounded-full shadow-lg z-50 bg-blue-600 hover:bg-blue-700"
+                className="fixed bottom-4 right-4 h-14 w-auto px-6 rounded-full shadow-lg z-50 bg-teal-600 hover:bg-teal-700"
             >
-                <MessageCircle className="h-5 w-5 mr-2 text-white" />
-                <span className="text-white">Chat</span>
+                <MessageCircle className="h-6 w-6 mr-2 text-white" />
+                <span className="text-white text-lg">Chat</span>
             </Button>
         )
     }
 
     return (
         <Card className="fixed bottom-4 right-4 w-[350px] shadow-xl z-50 animate-in slide-in-from-bottom-10 fade-in duration-300">
-            <CardHeader className="flex flex-row items-center justify-between py-3 px-4 bg-blue-600 text-white rounded-t-lg">
+            <CardHeader className="flex flex-row items-center justify-between py-3 px-4 bg-teal-600 text-white rounded-t-lg">
                 <CardTitle className="text-base font-medium flex items-center gap-2">
-                    <MessageCircle className="h-4 w-4" />
+                    <MessageCircle className="h-5 w-5" />
                     Support
                 </CardTitle>
                 <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-6 w-6 text-white hover:bg-blue-700" onClick={() => setIsMinimized(true)}>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 text-white hover:bg-teal-700" onClick={() => setIsMinimized(true)}>
                         <Minus className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon" className="h-6 w-6 text-white hover:bg-blue-700" onClick={() => setIsOpen(false)}>
@@ -156,7 +161,7 @@ export function ChatWidget() {
                             <Input placeholder="Your Name" value={name} onChange={e => setName(e.target.value)} required />
                             <Input placeholder="Your Email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
                         </div>
-                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
+                        <Button type="submit" className="w-full bg-teal-600 hover:bg-teal-700" disabled={loading}>
                             {loading ? "Starting..." : "Start Chat"}
                         </Button>
                     </form>
@@ -170,8 +175,8 @@ export function ChatWidget() {
                                 >
                                     <div
                                         className={`max-w-[80%] px-3 py-2 rounded-lg text-sm ${msg.sender === 'customer'
-                                                ? 'bg-blue-600 text-white rounded-tr-none'
-                                                : 'bg-muted text-foreground rounded-tl-none'
+                                            ? 'bg-teal-600 text-white rounded-tr-none'
+                                            : 'bg-muted text-foreground rounded-tl-none'
                                             }`}
                                     >
                                         {msg.message}
@@ -187,7 +192,7 @@ export function ChatWidget() {
                                 onChange={e => setInput(e.target.value)}
                                 className="flex-1"
                             />
-                            <Button type="submit" size="icon" className="bg-blue-600 hover:bg-blue-700">
+                            <Button type="submit" size="icon" className="bg-teal-600 hover:bg-teal-700">
                                 <Send className="h-4 w-4" />
                             </Button>
                         </form>

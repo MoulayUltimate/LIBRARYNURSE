@@ -25,11 +25,21 @@ const countryNames: Record<string, string> = {
     XX: "Unknown"
 }
 
+// Helper to convert country code to flag emoji
+const getFlagEmoji = (countryCode: string) => {
+    if (!countryCode || countryCode === 'XX') return '🌍'
+    const codePoints = countryCode
+        .toUpperCase()
+        .split('')
+        .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+}
+
 export function CountryStats({ stats }: CountryStatsProps) {
     const data = stats.map(s => ({
-        name: countryNames[s.country] || s.country,
+        name: `${getFlagEmoji(s.country)} ${countryNames[s.country] || s.country}`,
         visitors: s.visitors,
-        fullCountry: s.country // keep code for flag if needed
+        fullCountry: s.country
     })).slice(0, 5) // Show top 5 in chart to save space
 
     return (
