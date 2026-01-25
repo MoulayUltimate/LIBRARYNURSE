@@ -41,7 +41,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} font-sans antialiased`}>
         <GoogleAnalytics />
-        <GoogleAnalytics />
         <Suspense fallback={null}>
           <MetaPixel />
         </Suspense>
