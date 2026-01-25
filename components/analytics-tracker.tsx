@@ -6,9 +6,9 @@ import { usePathname, useSearchParams } from "next/navigation"
 // Categorize referrer into traffic source
 function categorizeReferrer(referrer: string): string {
     if (!referrer) return "direct"
-    
+
     const lowerRef = referrer.toLowerCase()
-    
+
     if (lowerRef.includes("facebook.com") || lowerRef.includes("fb.com") || lowerRef.includes("m.facebook.com")) {
         return "facebook"
     }
@@ -21,8 +21,21 @@ function categorizeReferrer(referrer: string): string {
     if (lowerRef.includes("instagram.com") || lowerRef.includes("twitter.com") || lowerRef.includes("linkedin.com")) {
         return "social"
     }
-    
+
     return "organic"
+}
+
+// Simple device detection
+function getDeviceType(): string {
+    if (typeof window === 'undefined') return 'unknown'
+    const ua = navigator.userAgent.toLowerCase()
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+        return "tablet"
+    }
+    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+        return "mobile"
+    }
+    return "desktop"
 }
 
 export function AnalyticsTracker() {
@@ -45,11 +58,13 @@ export function AnalyticsTracker() {
         // Get or set referrer source (persist for session)
         let referrerSource = sessionStorage.getItem("referrer_source")
         const referrerUrl = document.referrer
-        
+
         if (!referrerSource) {
             referrerSource = categorizeReferrer(referrerUrl)
             sessionStorage.setItem("referrer_source", referrerSource)
         }
+
+        const deviceType = getDeviceType()
 
         // Track the page view
         const trackPageView = async () => {
@@ -63,6 +78,7 @@ export function AnalyticsTracker() {
                         eventType: "page_view",
                         referrerSource,
                         referrerUrl: referrerUrl || null,
+                        deviceType,
                         metadata: {
                             search: searchParams.toString(),
                             userAgent: navigator.userAgent
@@ -84,7 +100,7 @@ export function AnalyticsTracker() {
 // Utility function to track custom events
 export async function trackEvent(eventType: string, metadata?: any) {
     // Don't track if on admin route
-    if (window.location.pathname.startsWith("/admin")) {
+    if (typeof window !== 'undefined' && window.location.pathname.startsWith("/admin")) {
         return
     }
 
@@ -92,6 +108,7 @@ export async function trackEvent(eventType: string, metadata?: any) {
     if (!visitorId) return
 
     const referrerSource = sessionStorage.getItem("referrer_source") || "direct"
+    const deviceType = getDeviceType()
 
     try {
         await fetch("/api/analytics/track", {
@@ -103,6 +120,7 @@ export async function trackEvent(eventType: string, metadata?: any) {
                 eventType,
                 referrerSource,
                 referrerUrl: null,
+                deviceType,
                 metadata: metadata || {}
             }),
         })
@@ -110,4 +128,3 @@ export async function trackEvent(eventType: string, metadata?: any) {
         console.error("Analytics event failed", err)
     }
 }
-

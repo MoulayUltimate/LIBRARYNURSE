@@ -1,90 +1,127 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, ShoppingBag, ShoppingCart, MessageSquare, LogOut, Settings, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Home, LineChart, Mail, Menu, Package, Settings, ShoppingCart, MessageSquare } from "lucide-react"
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
     const pathname = usePathname()
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-    const navItems = [
-        { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
-        { href: "/admin/products", label: "Products", icon: ShoppingBag },
-        { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
-        { href: "/admin/messages", label: "Messages", icon: MessageSquare },
-    ]
 
     return (
-        <div className="min-h-screen bg-muted/20 flex flex-col md:flex-row">
-            {/* Mobile Header */}
-            <header className="md:hidden bg-card border-b border-border p-4 flex items-center justify-between sticky top-0 z-20">
-                <h1 className="text-lg font-bold text-primary">NursLibrary Admin</h1>
-                <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </Button>
-            </header>
-
-            {/* Mobile Sidebar Overlay */}
-            {isMobileMenuOpen && (
-                <div
-                    className="fixed inset-0 bg-black/50 z-30 md:hidden"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                />
-            )}
-
-            {/* Sidebar (Desktop & Mobile) */}
-            <aside className={`
-                fixed inset-y-0 left-0 z-40 w-64 bg-card border-r border-border transform transition-transform duration-200 ease-in-out
-                md:translate-x-0 md:static md:flex md:flex-col
-                ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
-            `}>
-                <div className="p-6 border-b border-border flex justify-between items-center">
-                    <div>
-                        <h1 className="text-xl font-bold text-primary">NursLibrary</h1>
-                        <p className="text-xs text-muted-foreground">Admin Panel</p>
+        <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+            <div className="hidden border-r bg-muted/40 md:block">
+                <div className="flex h-full max-h-screen flex-col gap-2">
+                    <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                        <Link href="/" className="flex items-center gap-2 font-semibold">
+                            <Package className="h-6 w-6" />
+                            <span className="">NursLibrary Admin</span>
+                        </Link>
                     </div>
-                    <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
-                        <X size={20} />
-                    </Button>
-                </div>
-
-                <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-                    {navItems.map((item) => {
-                        const Icon = item.icon
-                        const isActive = pathname === item.href
-                        return (
-                            <Link key={item.href} href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
-                                <Button
-                                    variant={isActive ? "secondary" : "ghost"}
-                                    className={`w-full justify-start gap-3 ${isActive ? "bg-primary/10 text-primary hover:bg-primary/20" : ""}`}
-                                >
-                                    <Icon size={18} />
-                                    {item.label}
-                                </Button>
+                    <div className="flex-1">
+                        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                            <Link
+                                href="/admin/dashboard"
+                                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${pathname === '/admin/dashboard' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+                            >
+                                <Home className="h-4 w-4" />
+                                Overview
                             </Link>
-                        )
-                    })}
-                </nav>
-
-                <div className="p-4 border-t border-border">
-                    <Link href="/admin/login">
-                        <Button variant="ghost" className="w-full justify-start gap-3 text-destructive hover:text-destructive hover:bg-destructive/10">
-                            <LogOut size={18} />
-                            Sign Out
-                        </Button>
-                    </Link>
+                            <Link
+                                href="/admin/orders"
+                                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${pathname?.startsWith('/admin/orders') ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+                            >
+                                <ShoppingCart className="h-4 w-4" />
+                                Orders
+                            </Link>
+                            <Link
+                                href="/admin/products"
+                                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${pathname?.startsWith('/admin/products') ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+                            >
+                                <Package className="h-4 w-4" />
+                                Products
+                            </Link>
+                            <Link
+                                href="/admin/chat"
+                                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${pathname?.startsWith('/admin/chat') ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+                            >
+                                <MessageSquare className="h-4 w-4" />
+                                Live Chat
+                            </Link>
+                            <Link
+                                href="/admin/messages"
+                                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${pathname?.startsWith('/admin/messages') ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+                            >
+                                <Mail className="h-4 w-4" />
+                                Messages
+                            </Link>
+                        </nav>
+                    </div>
                 </div>
-            </aside>
-
-            {/* Main Content */}
-            <main className="flex-1 overflow-y-auto h-[calc(100vh-64px)] md:h-screen">
-                <div className="p-4 md:p-8">
+            </div>
+            <div className="flex flex-col">
+                <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+                                <Menu className="h-5 w-5" />
+                                <span className="sr-only">Toggle navigation menu</span>
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="flex flex-col">
+                            <nav className="grid gap-2 text-lg font-medium">
+                                <Link
+                                    href="/admin/dashboard"
+                                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                                >
+                                    <Home className="h-5 w-5" />
+                                    Overview
+                                </Link>
+                                <Link
+                                    href="/admin/orders"
+                                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                                >
+                                    <ShoppingCart className="h-5 w-5" />
+                                    Orders
+                                </Link>
+                                <Link
+                                    href="/admin/products"
+                                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                                >
+                                    <Package className="h-5 w-5" />
+                                    Products
+                                </Link>
+                                <Link
+                                    href="/admin/chat"
+                                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                                >
+                                    <MessageSquare className="h-5 w-5" />
+                                    Live Chat
+                                </Link>
+                                <Link
+                                    href="/admin/messages"
+                                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                                >
+                                    <Mail className="h-5 w-5" />
+                                    Messages
+                                </Link>
+                            </nav>
+                        </SheetContent>
+                    </Sheet>
+                    <div className="w-full flex-1">
+                        {/* Search could go here */}
+                    </div>
+                    {/* User nav could go here */}
+                </header>
+                <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
                     {children}
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
     )
 }

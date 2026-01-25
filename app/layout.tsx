@@ -30,6 +30,8 @@ export const metadata: Metadata = {
   },
 }
 
+import { ChatWidget } from "@/components/chat-widget"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -47,6 +49,7 @@ export default function RootLayout({
           {children}
           <RecentSalesPopup />
           <Analytics />
+          <ChatWidget />
         </CartProvider>
       </body>
     </html>

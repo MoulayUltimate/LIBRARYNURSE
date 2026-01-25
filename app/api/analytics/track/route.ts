@@ -4,7 +4,7 @@ export const runtime = "edge"
 
 export async function POST(req: Request) {
     try {
-        const { path, visitorId, eventType = "page_view", referrerSource, referrerUrl, metadata } = await req.json()
+        const { path, visitorId, eventType = "page_view", referrerSource, referrerUrl, metadata, deviceType } = await req.json()
 
         // Extract country from Cloudflare headers
         // @ts-ignore - Cloudflare specific property
@@ -15,15 +15,16 @@ export async function POST(req: Request) {
 
         if (!db) {
             // If running locally without wrangler dev, just log
-            console.log("[Analytics]", { path, visitorId, eventType, country, referrerSource })
+            console.log("[Analytics]", { path, visitorId, eventType, country, referrerSource, deviceType })
             return NextResponse.json({ success: true, mocked: true })
         }
 
         // Insert into D1 with new fields
+        // Note: device_type column was added in update_analytics_schema.sql
         const stmt = db.prepare(
             `INSERT INTO Analytics 
-            (visitor_id, path, event_type, country, referrer_source, referrer_url, metadata) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)`
+            (visitor_id, path, event_type, country, referrer_source, referrer_url, metadata, device_type) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
         ).bind(
             visitorId,
             path,
@@ -31,7 +32,8 @@ export async function POST(req: Request) {
             country,
             referrerSource || "direct",
             referrerUrl || null,
-            JSON.stringify(metadata || {})
+            JSON.stringify(metadata || {}),
+            deviceType || "unknown"
         )
 
         await stmt.run()
