@@ -7,10 +7,18 @@ import Image from "next/image"
 import { useState } from "react"
 import { CartSidebar } from "@/components/cart-sidebar"
 
+import { usePathname } from "next/navigation"
+
 export function Header() {
   const { items, isCartOpen, setIsCartOpen } = useCart()
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  // Don't show header on admin pages or login
+  if (pathname?.startsWith("/admin")) {
+    return null
+  }
 
   return (
     <>
