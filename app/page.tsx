@@ -381,7 +381,9 @@ export default async function StorePage() {
                                 </details>
                             ))}
                         </div>
-                    </main>
-                </>
-                )
+                    </section>
+                </div>
+            </main>
+        </>
+    )
 }
