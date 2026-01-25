@@ -1,5 +1,3 @@
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { notFound } from "next/navigation"
 import { ProductDetail } from "@/components/product-detail"
 
@@ -72,9 +70,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
-      <Header />
       <ProductDetail product={product} suggestedProducts={suggestedProducts} />
-      <Footer />
     </>
   )
 }
