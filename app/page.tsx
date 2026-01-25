@@ -200,6 +200,11 @@ export default async function StorePage() {
                         </div>
                     </section>
 
+                    {/* Trust Reviews Section */}
+                    <div className="-mx-4 sm:-mx-6 lg:-mx-8">
+                        <TrustReviews />
+                    </div>
+
                     {/* Featured Collection Sections */}
                     {displayCollections.map((collection, index) => {
                         // Get products for this collection, limit to 6

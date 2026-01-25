@@ -63,7 +63,7 @@ export function TrustReviews() {
                         <div key={i} className="bg-white p-6 rounded-lg shadow-sm border border-slate-100 flex flex-col h-full">
                             <div className="flex items-center gap-1 mb-3">
                                 {[...Array(5)].map((_, i) => (
-                                    <div key={i} className="bg-green-500 p-0.5 rounded-[1px]">
+                                    <div key={i} className="bg-[#00b67a] p-0.5 rounded-[1px]">
                                         <Star size={12} className="text-white fill-white" />
                                     </div>
                                 ))}
