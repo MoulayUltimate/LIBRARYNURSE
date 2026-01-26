@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const INPUT_IMAGE = "/Users/user/.gemini/antigravity/brain/01a573c0-6aa2-4200-89a3-c3b664c7becc/uploaded_image_1769362641273.png";
 const PUBLIC_DIR = "/Users/user/.gemini/antigravity/playground/infinite-oort/nurslibrary/public";
-const PADDING_FACTOR = 0.25; // 25% padding
+const PADDING_FACTOR = 0.1; // 10% padding - Balancing zoom out and visibility
 
 async function generate() {
     try {

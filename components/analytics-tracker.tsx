@@ -104,6 +104,32 @@ export async function trackEvent(eventType: string, metadata?: any) {
         return
     }
 
+    // Facebook Pixel Tracking
+    try {
+        if (typeof window.fbq !== 'undefined') {
+            if (eventType === 'purchase') {
+                window.fbq('track', 'Purchase', {
+                    value: metadata?.value || 0,
+                    currency: metadata?.currency || 'USD',
+                    transaction_id: metadata?.transaction_id
+                })
+            } else if (eventType === 'add_to_cart') {
+                window.fbq('track', 'AddToCart', {
+                    content_name: metadata?.productTitle,
+                    content_ids: [metadata?.productId],
+                    content_type: 'product',
+                    value: metadata?.price,
+                    currency: 'USD'
+                })
+            } else {
+                // Track other custom events
+                window.fbq('trackCustom', eventType, metadata)
+            }
+        }
+    } catch (e) {
+        console.error("FB Pixel Error", e)
+    }
+
     const visitorId = localStorage.getItem("visitor_id")
     if (!visitorId) return
 
