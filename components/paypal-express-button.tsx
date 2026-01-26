@@ -24,7 +24,7 @@ export function PayPalExpressButton({ product, quantity = 1 }: PayPalExpressButt
     }
 
     return (
-        <div className="w-full">
+        <div className="w-full relative z-0">
             <PayPalScriptProvider options={initialOptions}>
                 {error && (
                     <div className="text-destructive text-sm text-center mb-2 bg-destructive/10 p-2 rounded">
