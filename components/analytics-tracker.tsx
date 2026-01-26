@@ -121,6 +121,15 @@ export async function trackEvent(eventType: string, metadata?: any) {
                     value: metadata?.price,
                     currency: 'USD'
                 })
+            } else if (eventType === 'view_item') {
+                window.fbq('track', 'ViewContent', {
+                    content_name: metadata?.productTitle,
+                    content_ids: [metadata?.productId],
+                    content_category: 'books',
+                    content_type: 'product',
+                    value: metadata?.price,
+                    currency: 'USD'
+                })
             } else {
                 // Track other custom events
                 window.fbq('trackCustom', eventType, metadata)

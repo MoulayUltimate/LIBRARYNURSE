@@ -2,8 +2,9 @@
 
 import { PayPalExpressButton } from "@/components/paypal-express-button"
 import { TrustReviews } from "@/components/trust-reviews"
+import { trackEvent } from "@/components/analytics-tracker"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -42,6 +43,16 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
         setIsAdded(true)
         setTimeout(() => setIsAdded(false), 2000)
     }
+
+    // Track Product View on Mount
+    useEffect(() => {
+        trackEvent('view_item', {
+            productId: product.id,
+            productTitle: product.title,
+            price: product.price,
+            currency: 'USD'
+        })
+    }, [product])
 
 
     return (
