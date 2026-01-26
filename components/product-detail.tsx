@@ -169,7 +169,7 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                         </div>
 
                         {/* PayPal Express Checkout */}
-                        <div className="mt-4">
+                        <div className="mt-8">
                             <PayPalExpressButton product={product} quantity={quantity} />
                         </div>
 
