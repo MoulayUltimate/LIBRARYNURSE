@@ -88,7 +88,7 @@ export function PayPalExpressButton({ product, quantity = 1 }: PayPalExpressButt
 
                             if (orderData.status === "COMPLETED") {
                                 trackEvent("purchase", {
-                                    transaction_id: orderData.id,
+                                    transaction_id: String(orderData.id), // Ensure string
                                     value: product.price * quantity,
                                     currency: "USD"
                                 })

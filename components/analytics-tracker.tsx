@@ -105,39 +105,49 @@ export async function trackEvent(eventType: string, metadata?: any) {
     }
 
     // Facebook Pixel Tracking
-    try {
-        if (typeof window.fbq !== 'undefined') {
-            if (eventType === 'purchase') {
-                window.fbq('track', 'Purchase', {
-                    value: metadata?.value || 0,
-                    currency: metadata?.currency || 'USD',
-                    transaction_id: metadata?.transaction_id
-                })
-            } else if (eventType === 'add_to_cart') {
-                window.fbq('track', 'AddToCart', {
-                    content_name: metadata?.productTitle,
-                    content_ids: [metadata?.productId],
-                    content_type: 'product',
-                    value: metadata?.price,
-                    currency: 'USD'
-                })
-            } else if (eventType === 'view_item') {
-                window.fbq('track', 'ViewContent', {
-                    content_name: metadata?.productTitle,
-                    content_ids: [metadata?.productId],
-                    content_category: 'books',
-                    content_type: 'product',
-                    value: metadata?.price,
-                    currency: 'USD'
-                })
+    const trackPixel = () => {
+        try {
+            if (typeof window.fbq !== 'undefined') {
+                if (eventType === 'purchase') {
+                    window.fbq('track', 'Purchase', {
+                        value: metadata?.value || 0,
+                        currency: metadata?.currency || 'USD',
+                        transaction_id: metadata?.transaction_id
+                    })
+                } else if (eventType === 'add_to_cart') {
+                    window.fbq('track', 'AddToCart', {
+                        content_name: metadata?.productTitle,
+                        content_ids: [String(metadata?.productId)],
+                        content_type: 'product',
+                        value: metadata?.price,
+                        currency: 'USD'
+                    })
+                } else if (eventType === 'view_item') {
+                    window.fbq('track', 'ViewContent', {
+                        content_name: metadata?.productTitle,
+                        content_ids: [String(metadata?.productId)], // Ensure ID is a string
+                        content_category: 'books',
+                        content_type: 'product',
+                        value: metadata?.price,
+                        currency: 'USD'
+                    })
+                } else {
+                    window.fbq('trackCustom', eventType, metadata)
+                }
             } else {
-                // Track other custom events
-                window.fbq('trackCustom', eventType, metadata)
+                // Retry once after a short delay if fbq is not yet loaded (race condition with Script)
+                setTimeout(() => {
+                    if (typeof window.fbq !== 'undefined') {
+                        trackPixel()
+                    }
+                }, 500)
             }
+        } catch (e) {
+            console.error("FB Pixel Error", e)
         }
-    } catch (e) {
-        console.error("FB Pixel Error", e)
     }
+
+    trackPixel()
 
     const visitorId = localStorage.getItem("visitor_id")
     if (!visitorId) return
