@@ -14,11 +14,44 @@ function OrderConfirmationContent() {
   const [orderId, setOrderId] = useState("")
 
   useEffect(() => {
-    // In the new PayPal flow, the redirect happens AFTER capture.
-    // So if we are here, and it's not an error, it's likely a success.
+    const paymentIntentId = searchParams.get("payment_intent")
+    const redirectStatus = searchParams.get("redirect_status")
 
-    setStatus("success")
-    setOrderId("ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase())
+    // PayPal flow: capture happens before redirect; just show success
+    if (!paymentIntentId) {
+      setStatus("success")
+      setOrderId("ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase())
+      return
+    }
+
+    // Stripe flow: verify the PaymentIntent server-side and persist the order
+    if (redirectStatus && redirectStatus !== "succeeded") {
+      setStatus("error")
+      return
+    }
+
+    fetch("/api/orders/confirm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paymentIntentId }),
+    })
+      .then(async (r) => {
+        const data = await r.json()
+        if (!r.ok) throw new Error(data?.error || "Confirmation failed")
+        return data
+      })
+      .then(() => {
+        trackEvent("purchase", {
+          transaction_id: paymentIntentId,
+          currency: "USD",
+        })
+        setStatus("success")
+        setOrderId(paymentIntentId.slice(-10).toUpperCase())
+      })
+      .catch((err) => {
+        console.error("Order confirmation failed:", err)
+        setStatus("error")
+      })
   }, [searchParams])
 
   if (status === "loading") {

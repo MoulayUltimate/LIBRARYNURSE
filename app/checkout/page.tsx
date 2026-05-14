@@ -13,6 +13,13 @@ import { Check, Minus, Plus, Trash2, ArrowLeft, CreditCard, ShoppingBag, Downloa
 import Image from "next/image"
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
 import { trackEvent } from "@/components/analytics-tracker"
+import { Elements } from "@stripe/react-stripe-js"
+import { loadStripe } from "@stripe/stripe-js"
+import { CheckoutForm } from "@/components/checkout-form"
+
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -30,8 +37,10 @@ export default function CheckoutPage() {
   const [discount, setDiscount] = useState(0)
   const [couponError, setCouponError] = useState("")
   const [couponSuccess, setCouponSuccess] = useState("")
-  const [paymentMethod, setPaymentMethod] = useState("card")
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal">("card")
   const [payError, setPayError] = useState<string | null>(null)
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [stripeLoading, setStripeLoading] = useState(false)
 
   const subtotal = total
   const finalTotal = subtotal - discount
@@ -41,6 +50,57 @@ export default function CheckoutPage() {
     currency: "USD",
     intent: "capture",
   }
+
+  // Fetch a Stripe PaymentIntent whenever the card path is active and the amount changes
+  useEffect(() => {
+    if (paymentMethod !== "card") return
+    if (!stripePromise) return
+    if (items.length === 0 || finalTotal <= 0) {
+      setClientSecret(null)
+      return
+    }
+
+    let cancelled = false
+    setStripeLoading(true)
+    setPayError(null)
+
+    fetch("/api/stripe/create-payment-intent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: Number(finalTotal.toFixed(2)),
+        items: items.map((it) => ({
+          id: it.id,
+          title: it.title,
+          price: it.price,
+          quantity: it.quantity,
+        })),
+        email: null,
+      }),
+    })
+      .then(async (r) => {
+        const data = await r.json()
+        if (!r.ok) throw new Error(data?.error || "Failed to initialize payment")
+        return data
+      })
+      .then((data) => {
+        if (cancelled) return
+        setClientSecret(data.clientSecret)
+      })
+      .catch((err) => {
+        if (cancelled) return
+        console.error("Stripe init error:", err)
+        setPayError("Could not initialize card payment. Please try PayPal or refresh.")
+        setClientSecret(null)
+      })
+      .finally(() => {
+        if (!cancelled) setStripeLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [paymentMethod, finalTotal, items.length])
 
   const handleApplyCoupon = () => {
     if (couponCode.trim().toUpperCase() === "NURS10") {
@@ -240,14 +300,75 @@ export default function CheckoutPage() {
                 </div>
 
 
-                {/* PayPal Checkout */}
+                {/* Payment method toggle */}
+                <div className="grid grid-cols-2 gap-2 mb-5 p-1 bg-[#f2f4f6] rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("card")}
+                    className={`flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-semibold transition-colors ${
+                      paymentMethod === "card"
+                        ? "bg-white text-[#006565] shadow-sm"
+                        : "text-[#3e4949] hover:text-[#006565]"
+                    }`}
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    Credit Card
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("paypal")}
+                    className={`flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-semibold transition-colors ${
+                      paymentMethod === "paypal"
+                        ? "bg-white text-[#006565] shadow-sm"
+                        : "text-[#3e4949] hover:text-[#006565]"
+                    }`}
+                  >
+                    PayPal
+                  </button>
+                </div>
+
+                {/* Payment area */}
                 <div className="w-full relative z-0">
                   {payError && (
                     <div className="text-destructive text-sm text-center mb-3 bg-destructive/10 p-2 rounded">
                       {payError}
                     </div>
                   )}
-                  {finalTotal > 0 && items.length > 0 ? (
+
+                  {items.length === 0 || finalTotal <= 0 ? (
+                    <div className="text-sm text-muted-foreground text-center py-4">
+                      Add items to your cart to continue.
+                    </div>
+                  ) : paymentMethod === "card" ? (
+                    !stripePromise ? (
+                      <div className="text-sm text-muted-foreground text-center py-4">
+                        Card payments are not configured. Please use PayPal.
+                      </div>
+                    ) : stripeLoading || !clientSecret ? (
+                      <div className="flex items-center justify-center py-10 text-sm text-[#3e4949]">
+                        Loading secure payment…
+                      </div>
+                    ) : (
+                      <Elements
+                        stripe={stripePromise}
+                        options={{
+                          clientSecret,
+                          appearance: {
+                            theme: "stripe",
+                            variables: {
+                              colorPrimary: "#006565",
+                              colorBackground: "#ffffff",
+                              colorText: "#191c1e",
+                              fontFamily: "Inter, system-ui, sans-serif",
+                              borderRadius: "8px",
+                            },
+                          },
+                        }}
+                      >
+                        <CheckoutForm amount={finalTotal} />
+                      </Elements>
+                    )
+                  ) : (
                     <PayPalScriptProvider options={paypalOptions}>
                       <PayPalButtons
                         style={{
@@ -316,10 +437,6 @@ export default function CheckoutPage() {
                         }}
                       />
                     </PayPalScriptProvider>
-                  ) : (
-                    <div className="text-sm text-muted-foreground text-center py-4">
-                      Add items to your cart to continue.
-                    </div>
                   )}
                 </div>
 

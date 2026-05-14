@@ -132,7 +132,7 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
                     onChange={(e) => setEmail(e.value.email)}
                 />
                 <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-                    <span className="text-green-600 font-medium">Important:</span> Your eBook download link will be sent to this email immediately.
+                    <span className="text-[#006565] font-medium">Important:</span> Your eBook download link will be sent to this email immediately.
                 </p>
             </div>
             <PaymentElement
@@ -156,7 +156,7 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
             <Button
                 disabled={isLoading || !stripe || !elements}
                 id="submit"
-                className="w-full h-14 text-lg font-bold bg-green-600 hover:bg-green-700 text-white mt-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
+                className="w-full h-14 text-lg font-bold bg-[#006565] hover:bg-[#008080] text-white mt-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
             >
                 {isLoading ? (
                     <>
