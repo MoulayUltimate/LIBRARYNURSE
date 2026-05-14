@@ -1,89 +1,109 @@
 "use client"
 
-import { Star, CheckCircle } from "lucide-react"
+import { Star } from "lucide-react"
+
+const reviews = [
+  {
+    initials: "SH",
+    name: "Sarah H.",
+    role: "Veterinary Student",
+    title: "Instant delivery, life saver!",
+    text: "I needed this textbook for an exam tomorrow and the download was immediate. Super smooth process!",
+  },
+  {
+    initials: "JM",
+    name: "Dr. James Milton",
+    role: "Veterinarian",
+    title: "Excellent service",
+    text: "Great selection of hard-to-find veterinary titles. The PDF quality is superior on my iPad.",
+  },
+  {
+    initials: "EC",
+    name: "Emily Chen",
+    role: "Vet Nurse",
+    title: "Smooth download experience",
+    text: "The link worked instantly, no activation needed. Bookmarked for next semester!",
+  },
+  {
+    initials: "MR",
+    name: "Michael R.",
+    role: "Verified Buyer",
+    title: "Saved me so much money",
+    text: "Textbooks are so expensive — this site is a godsend. Payment was secure and fast.",
+  },
+]
 
 export function TrustReviews() {
-    const reviews = [
-        {
-            name: "Sarah M.",
-            role: "Veterinary Student",
-            rating: 5,
-            title: "Instant delivery, life saver!",
-            text: "I needed this textbook for an exam tomorrow and the download was immediate. Super smooth process.",
-            date: "2 days ago"
-        },
-        {
-            name: "Dr. James Wilson",
-            role: "Veterinarian",
-            rating: 5,
-            title: "Excellent service",
-            text: "Great selection of hard-to-find veterinary titles. The PDF quality is perfect on my iPad.",
-            date: "1 week ago"
-        },
-        {
-            name: "Emily Chen",
-            role: "Vet Nurse",
-            rating: 5,
-            title: "Smooth download experience",
-            text: "Was a bit skeptical at first but the download link arrived instantly. Bookmarked for next semester!",
-            date: "3 weeks ago"
-        },
-        {
-            name: "Michael R.",
-            role: "Verified Buyer",
-            rating: 5,
-            title: "Saved me so much money",
-            text: "Textbooks are so expensive, this site is a goldmine. Payment was secure and easy.",
-            date: "1 month ago"
-        }
-    ]
+  return (
+    <section className="w-full bg-[#f2f4f6] py-20 border-t border-[#bdc9c8]">
+      <div className="max-w-[1280px] mx-auto px-5 md:px-16">
 
-    return (
-        <section className="bg-slate-50 py-16 border-t border-border">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-10">
-                    <h2 className="text-3xl font-bold text-foreground mb-4">Trusted by Professionals</h2>
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                        <div className="bg-[#00b67a] text-white px-2 py-1 rounded-sm text-sm font-bold flex items-center gap-1">
-                            Trustpilot <Star size={12} fill="currentColor" className="text-white fill-white" />
-                        </div>
-                        <div className="flex gap-1">
-                            {[1, 2, 3, 4, 5].map((s) => (
-                                <div key={s} className="bg-[#00b67a] p-1 rounded-sm">
-                                    <Star size={16} className="text-white fill-white" />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Rated 4.9/5 based on 1200+ reviews</p>
+        {/* Header */}
+        <div className="text-center mb-14">
+          <h2
+            className="text-3xl md:text-[32px] font-semibold text-[#191c1e] mb-4"
+            style={{ fontFamily: "var(--font-montserrat, Montserrat), sans-serif" }}
+          >
+            Trusted by Professionals
+          </h2>
+          <div className="flex items-center justify-center gap-2.5 mb-2">
+            <span className="text-sm font-bold text-green-600">Excellent</span>
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <div key={s} className="bg-[#00b67a] p-1 rounded-[2px]">
+                  <Star size={13} className="text-white fill-white" />
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {reviews.map((review, i) => (
-                        <div key={i} className="bg-white p-6 rounded-lg shadow-sm border border-slate-100 flex flex-col h-full">
-                            <div className="flex items-center gap-1 mb-3">
-                                {[...Array(5)].map((_, i) => (
-                                    <div key={i} className="bg-[#00b67a] p-0.5 rounded-[1px]">
-                                        <Star size={12} className="text-white fill-white" />
-                                    </div>
-                                ))}
-                            </div>
-                            <h3 className="font-bold text-foreground text-sm mb-2">{review.title}</h3>
-                            <p className="text-slate-600 text-sm mb-4 flex-grow leading-relaxed">"{review.text}"</p>
-                            <div className="mt-auto pt-4 border-t border-slate-100">
-                                <p className="font-bold text-sm text-foreground flex items-center gap-2">
-                                    {review.name}
-                                    <span className="text-xs font-normal text-muted-foreground bg-slate-100 px-2 py-0.5 rounded-full flex items-center gap-1">
-                                        <CheckCircle size={10} className="text-green-600" />
-                                        Verified
-                                    </span>
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-1">{review.role}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+              ))}
             </div>
-        </section>
-    )
+          </div>
+          <p className="text-sm text-[#6e7979]">4.9/5 based on 3,500+ verified reviews</p>
+        </div>
+
+        {/* Review cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {reviews.map((review, i) => (
+            <div
+              key={i}
+              className="bg-white p-6 rounded-2xl border border-[#bdc9c8]/40 flex flex-col h-full"
+              style={{ boxShadow: "0 4px 16px rgba(0, 128, 128, 0.05)" }}
+            >
+              {/* Stars */}
+              <div className="flex gap-0.5 mb-4">
+                {[...Array(5)].map((_, j) => (
+                  <Star key={j} size={14} className="text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+
+              <h3
+                className="font-semibold text-[#191c1e] text-sm mb-2"
+                style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
+              >
+                {review.title}
+              </h3>
+              <p className="text-[#3e4949] text-sm leading-relaxed flex-grow italic">
+                &ldquo;{review.text}&rdquo;
+              </p>
+
+              {/* Author */}
+              <div className="mt-5 pt-4 border-t border-[#eceef0] flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-[#008080] text-[#e3fffe] flex items-center justify-center text-xs font-bold flex-shrink-0">
+                  {review.initials}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#191c1e] flex items-center gap-1.5">
+                    {review.name}
+                    <span className="text-[10px] font-normal text-[#6e7979] bg-[#f2f4f6] px-2 py-0.5 rounded-full">
+                      Verified
+                    </span>
+                  </p>
+                  <p className="text-xs text-[#6e7979]">{review.role}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  )
 }

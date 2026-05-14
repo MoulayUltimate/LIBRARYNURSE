@@ -1,12 +1,7 @@
 "use client"
 
 import type { Product } from "@/lib/types"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { useCart } from "@/hooks/use-cart"
-import { BookOpen } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
 import Link from "next/link"
 
 interface ProductCardProps {
@@ -14,53 +9,62 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-
-
   return (
-    <Link href={`/products/${product.id}`}>
-      <Card className="group relative flex flex-col h-full overflow-hidden rounded-[1.5rem] border-none bg-white shadow-sm transition-all hover:shadow-md">
-        <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-900">
+    <Link href={`/products/${product.id}`} className="group block h-full">
+      <div
+        className="relative flex flex-col h-full bg-white rounded-xl overflow-hidden border border-[#bdc9c8]/40 transition-all duration-200 hover:border-[#bdc9c8] group-hover:shadow-[0_10px_30px_rgba(0,128,128,0.1)]"
+      >
+        {/* Cover image */}
+        <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#eceef0]">
           <Image
             src={product.image || "/placeholder.svg"}
             alt={product.title}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          <div className="absolute bottom-3 left-3 rounded-full bg-[#5d405c] px-3 py-1 text-[10px] font-medium text-white shadow-sm">
+          {/* Sale badge */}
+          <div className="absolute bottom-2 left-2 bg-[#008080] text-[#e3fffe] text-[10px] font-semibold px-2.5 py-1 rounded-full">
             Sale
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col items-center p-4 text-center">
-          <h3 className="mb-1 text-sm font-medium text-foreground leading-tight group-hover:underline decoration-primary/50 underline-offset-2" title={product.title}>
+        {/* Info */}
+        <div className="flex flex-col flex-1 p-3 gap-1.5">
+          <h3
+            className="text-xs font-semibold text-[#191c1e] leading-snug line-clamp-2 group-hover:text-[#006565] transition-colors"
+            title={product.title}
+            style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
+          >
             {product.title}
           </h3>
 
-          <p className="mb-2 text-xs text-muted-foreground line-clamp-1">
-            {product.author}
-          </p>
+          {product.author && (
+            <p className="text-[10px] text-[#6e7979] truncate">{product.author}</p>
+          )}
 
-          <div className="mb-3 flex items-center justify-center gap-2 text-[10px] text-muted-foreground">
-            <span className="bg-slate-100 px-1.5 py-0.5 rounded-md">
-              {product.pages} pgs
-            </span>
-            <span className="border border-border px-1.5 py-0.5 rounded-md">
-              {product.format}
-            </span>
+          <div className="flex items-center gap-1.5 text-[10px] text-[#6e7979]">
+            {product.pages ? (
+              <span className="bg-[#f2f4f6] px-1.5 py-0.5 rounded-md">{product.pages} pgs</span>
+            ) : null}
+            {product.format ? (
+              <span className="border border-[#bdc9c8] px-1.5 py-0.5 rounded-md">{product.format}</span>
+            ) : null}
           </div>
 
-          <div className="mt-auto flex flex-col items-center gap-0.5">
-            <span className="text-xs text-red-400 line-through decoration-red-400/50">
+          {/* Pricing — pinned to bottom */}
+          <div className="mt-auto pt-2 flex flex-col items-start gap-0.5">
+            <span className="text-[10px] text-[#ba1a1a] line-through opacity-70">
               ${(product.price * 1.25).toFixed(2)}
             </span>
-            <span className="text-lg font-bold text-slate-900">
+            <span
+              className="text-base font-bold text-[#006565]"
+              style={{ fontFamily: "var(--font-montserrat, Montserrat), sans-serif" }}
+            >
               ${product.price.toFixed(2)}
             </span>
           </div>
-
-
         </div>
-      </Card>
+      </div>
     </Link>
   )
 }

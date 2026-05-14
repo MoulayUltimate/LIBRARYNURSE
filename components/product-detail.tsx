@@ -94,7 +94,7 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
 
                         {/* Product Header */}
                         <div>
-                            <span className="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+                            <span className="inline-block bg-[#e3fffe] text-[#006565] text-xs font-semibold px-3 py-1 rounded-full mb-4">
                                 2025 BOOKS
                             </span>
                             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3 leading-tight">
@@ -106,7 +106,7 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                             <div className="flex items-center gap-2 mb-6">
                                 <div className="flex items-center gap-0.5">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} size={16} className="fill-green-500 stroke-green-500" />
+                                        <Star key={i} size={16} className="fill-yellow-400 stroke-yellow-400" />
                                     ))}
                                 </div>
                                 <span className="text-sm text-muted-foreground">12 Reviews</span>
@@ -115,14 +115,14 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                             {/* Price */}
                             <div className="mb-6">
                                 <div className="flex items-center gap-4 mb-2">
-                                    <span className="text-4xl font-bold text-green-600">
+                                    <span className="text-4xl font-bold text-[#006565]">
                                         ${product.price.toFixed(2)}
                                     </span>
                                     <span className="text-lg text-muted-foreground line-through">
                                         ${(product.price * 1.25).toFixed(2)}
                                     </span>
                                 </div>
-                                <p className="text-sm font-semibold text-green-600">Save $9.80</p>
+                                <p className="text-sm font-semibold text-[#006565]">Save {((product.price * 0.25)).toFixed(2)} off list price</p>
                             </div>
                         </div>
 

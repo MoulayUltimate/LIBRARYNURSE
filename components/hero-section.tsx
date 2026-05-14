@@ -4,49 +4,89 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
 export function HeroSection() {
-    return (
-        <div className="relative w-full min-h-[600px] md:h-[650px] bg-cover bg-center overflow-hidden flex items-center">
-            <Image
-                src="/nurse-hero-banner.png"
-                alt="Professional nursing healthcare professionals"
-                fill
-                className="object-cover"
-                priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
+  return (
+    <section className="relative w-full min-h-[600px] md:min-h-[680px] overflow-hidden flex items-center">
+      {/* Background image */}
+      <Image
+        src="/nurse-hero-banner.png"
+        alt="Professional veterinary healthcare professionals"
+        fill
+        className="object-cover"
+        priority
+      />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
 
-            <div className="relative z-10 h-full flex items-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-                <div className="max-w-2xl text-left">
-                    <div className="flex items-center gap-2 mb-6">
-                        <span className="px-3 py-1 rounded-full bg-accent/20 text-accent border border-accent/30 text-sm font-medium backdrop-blur-sm">
-                            #1 Medical Resource Library
-                        </span>
-                    </div>
-                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
-                        Empowering <span className="text-accent">Veterinary</span> & <span className="text-blue-400">Medical</span> Professionals
-                    </h1>
-                    <p className="text-lg md:text-xl text-gray-200 mb-8 font-light leading-relaxed max-w-xl">
-                        Access the world's most comprehensive collection of evidence-based veterinary and medical eBooks. Instant download, anywhere, anytime.
-                    </p>
-                    <div className="flex flex-wrap gap-4">
-                        <Button
-                            size="lg"
-                            className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground font-bold px-6 py-4 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-all"
-                            onClick={() => document.querySelector("#categories")?.scrollIntoView({ behavior: "smooth" })}
-                        >
-                            Browse Library
-                        </Button>
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            className="w-full sm:w-auto bg-white/20 hover:bg-white/30 text-white border-white/50 px-6 py-4 md:px-8 md:py-6 text-base md:text-lg backdrop-blur-md"
-                            onClick={() => document.querySelector("#new-arrivals")?.scrollIntoView({ behavior: "smooth" })}
-                        >
-                            View New Arrivals
-                        </Button>
-                    </div>
-                </div>
-            </div>
+      <div className="relative z-10 w-full max-w-[1280px] mx-auto px-5 md:px-16 py-20">
+        <div className="max-w-2xl">
+
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-[#008080]/80 backdrop-blur-sm text-[#e3fffe] border border-[#76d6d5]/40 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6">
+            #1 Clinical Reference Library
+          </div>
+
+          {/* Headline */}
+          <h1
+            className="text-4xl md:text-[52px] font-bold text-white mb-5 leading-tight drop-shadow-lg"
+            style={{ fontFamily: "var(--font-montserrat, Montserrat), sans-serif", letterSpacing: "-0.02em" }}
+          >
+            Empowering{" "}
+            <span className="text-[#76d6d5]">Veterinary</span>{" "}
+            &amp;{" "}
+            <span className="text-[#76d6d5]">Medical</span>{" "}
+            Professionals
+          </h1>
+
+          {/* Subtext */}
+          <p
+            className="text-lg md:text-xl text-white/85 mb-10 leading-relaxed max-w-xl"
+            style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
+          >
+            Access the world&apos;s most comprehensive collection of evidence-based veterinary and medical eBooks. Instant download, anywhere, anytime.
+          </p>
+
+          {/* CTA buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <button
+              onClick={() => document.querySelector("#categories")?.scrollIntoView({ behavior: "smooth" })}
+              className="inline-flex items-center justify-center gap-2 bg-[#008080] hover:brightness-110 text-[#e3fffe] font-semibold px-10 py-4 rounded-xl shadow-lg transition-all active:scale-95"
+              style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
+            >
+              Browse Library
+            </button>
+            <button
+              onClick={() => document.querySelector("#new-arrivals")?.scrollIntoView({ behavior: "smooth" })}
+              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/25 backdrop-blur-md font-semibold px-10 py-4 rounded-xl transition-all"
+              style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
+            >
+              View New Arrivals
+            </button>
+          </div>
+
+          {/* Trust signals */}
+          <div className="flex flex-wrap gap-6 text-white/75 text-sm">
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-[#76d6d5]" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              Verified Clinical Content
+            </span>
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-[#76d6d5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Instant Access
+            </span>
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-[#76d6d5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              24/7 Support
+            </span>
+          </div>
+
         </div>
-    )
+      </div>
+    </section>
+  )
 }

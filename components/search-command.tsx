@@ -50,11 +50,11 @@ export function SearchCommand() {
     return (
         <>
             <button
-                className="p-2 text-foreground hover:bg-muted rounded-lg transition-colors mr-2"
+                className="p-2.5 text-[#3e4949] hover:bg-[#f2f4f6] rounded-full transition-all duration-200"
                 onClick={() => setOpen(true)}
                 aria-label="Search products"
             >
-                <Search size={24} />
+                <Search size={22} />
             </button>
             <CommandDialog open={open} onOpenChange={setOpen}>
                 <CommandInput placeholder="Search books, authors, or categories..." />

@@ -75,19 +75,20 @@ export default async function CollectionPage({
 
     return (
         <>
-            <main className="min-h-screen bg-gray-50/50">
+            <main className="min-h-screen bg-[#f7f9fb]">
                 {/* Collection Header */}
-                <div className="bg-white border-b">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="bg-white border-b border-[#bdc9c8]" style={{ boxShadow: "0 10px 30px rgba(0,128,128,0.05)" }}>
+                    <div className="max-w-[1280px] mx-auto px-5 md:px-16 py-12">
                         <Link
                             href="/collections"
-                            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
+                            className="inline-flex items-center text-sm text-[#6e7979] hover:text-[#006565] mb-6 transition-colors"
                         >
                             <ChevronLeft className="w-4 h-4 mr-1" />
                             Back to Categories
                         </Link>
 
-                        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                        <h1 className="text-3xl md:text-4xl font-bold text-[#191c1e] mb-4"
+                            style={{ fontFamily: "var(--font-montserrat, Montserrat), sans-serif" }}>
                             {collection.name}
                         </h1>
 
@@ -108,7 +109,7 @@ export default async function CollectionPage({
                 </div>
 
                 {/* Products Grid */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="max-w-[1280px] mx-auto px-5 md:px-16 py-12">
                     {currentProducts.length > 0 ? (
                         <>
                             <ProductGrid products={currentProducts} />

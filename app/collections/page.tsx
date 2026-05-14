@@ -30,19 +30,20 @@ export default async function AllCollectionsPage() {
 
     return (
         <>
-            <main className="min-h-screen bg-gray-50/50">
-                <div className="bg-white border-b">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-                        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            <main className="min-h-screen bg-[#f7f9fb]">
+                <div className="bg-white border-b border-[#bdc9c8]" style={{ boxShadow: "0 10px 30px rgba(0,128,128,0.05)" }}>
+                    <div className="max-w-[1280px] mx-auto px-5 md:px-16 py-16 text-center">
+                        <h1 className="text-4xl md:text-5xl font-bold text-[#191c1e] mb-6"
+                            style={{ fontFamily: "var(--font-montserrat, Montserrat), sans-serif", letterSpacing: "-0.02em" }}>
                             Browse All Categories
                         </h1>
-                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                        <p className="text-lg text-[#3e4949] max-w-2xl mx-auto">
                             Explore our comprehensive library of veterinary and medical resources organized by specialty.
                         </p>
                     </div>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="max-w-[1280px] mx-auto px-5 md:px-16 py-12">
 
                     {/* All Categories Grid */}
                     <section className="mb-20">
@@ -52,7 +53,7 @@ export default async function AllCollectionsPage() {
                                 <Link
                                     key={collection.id}
                                     href={`/collections/${collection.slug}`}
-                                    className="group relative overflow-hidden rounded-xl border border-border bg-white hover:border-primary/50 transition-all duration-300 hover:shadow-md"
+                                    className="group relative overflow-hidden rounded-xl border border-[#bdc9c8]/50 bg-white hover:border-[#006565] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,128,128,0.08)]"
                                 >
                                     <div className="p-6 flex flex-col items-center text-center h-full justify-center min-h-[120px]">
                                         <div className="mb-3 p-2 rounded-full bg-primary/5 group-hover:bg-primary/10 transition-colors">

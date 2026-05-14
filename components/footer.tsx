@@ -6,98 +6,122 @@ import { usePathname } from "next/navigation"
 export function Footer() {
   const pathname = usePathname()
 
-  // Don't show footer on admin pages
   if (pathname?.startsWith("/admin")) {
     return null
   }
 
   return (
-    <footer className="bg-card border-t border-border mt-16">
-      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+    <footer className="w-full border-t border-[#bdc9c8] bg-[#e0e3e5]">
+      <div className="max-w-[1280px] mx-auto px-5 md:px-16 py-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+
           {/* Brand */}
-          <div>
-            <h3 className="text-lg font-bold text-foreground mb-4">NursLibrary</h3>
-            <p className="text-foreground/60 text-sm leading-relaxed">
+          <div className="col-span-2 md:col-span-1 space-y-4">
+            <h3
+              className="text-xl font-bold text-[#006565]"
+              style={{ fontFamily: "var(--font-montserrat, Montserrat), sans-serif" }}
+            >
+              NursLibrary
+            </h3>
+            <p className="text-sm text-[#56656e] leading-relaxed">
               Premium digital veterinary and medical eBooks for healthcare professionals worldwide.
             </p>
+            <div className="flex gap-3 pt-1">
+              <a
+                href="mailto:contact@nurslibrary.com"
+                className="text-[#006565] hover:text-[#008080] transition-colors text-sm font-medium"
+                aria-label="Email us"
+              >
+                contact@nurslibrary.com
+              </a>
+            </div>
           </div>
 
           {/* Shop */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">Shop</h4>
+          <div className="space-y-4">
+            <h4
+              className="text-sm font-bold uppercase tracking-wider text-[#191c1e]"
+              style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
+            >
+              Shop
+            </h4>
             <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-foreground/60 hover:text-primary transition-colors text-sm">
-                  All Collections
-                </Link>
-              </li>
-              <li>
-                <Link href="/cart" className="text-foreground/60 hover:text-primary transition-colors text-sm">
-                  Shopping Cart
-                </Link>
-              </li>
+              {[
+                { href: "/", label: "All Collections" },
+                { href: "/collections/best-sellers", label: "Bestsellers" },
+                { href: "/collections/todays-deals", label: "Today's Deals" },
+                { href: "/cart", label: "Shopping Cart" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-[#56656e] hover:text-[#006565] hover:underline transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Company */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">Company</h4>
+          {/* Support */}
+          <div className="space-y-4">
+            <h4
+              className="text-sm font-bold uppercase tracking-wider text-[#191c1e]"
+              style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
+            >
+              Support
+            </h4>
             <ul className="space-y-2">
-              <li>
-                <Link href="/about" className="text-foreground/60 hover:text-primary transition-colors text-sm">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-foreground/60 hover:text-primary transition-colors text-sm">
-                  Contact
-                </Link>
-              </li>
+              {[
+                { href: "/about", label: "About Us" },
+                { href: "/contact", label: "Contact" },
+                { href: "/shipping-policy", label: "Shipping Policy" },
+                { href: "/refund-policy", label: "Refund Policy" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-[#56656e] hover:text-[#006565] hover:underline transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Legal */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">Legal</h4>
+          <div className="space-y-4">
+            <h4
+              className="text-sm font-bold uppercase tracking-wider text-[#191c1e]"
+              style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
+            >
+              Legal
+            </h4>
             <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/privacy-policy"
-                  className="text-foreground/60 hover:text-primary transition-colors text-sm"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms-of-service"
-                  className="text-foreground/60 hover:text-primary transition-colors text-sm"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/refund-policy" className="text-foreground/60 hover:text-primary transition-colors text-sm">
-                  Refund Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/shipping-policy" className="text-foreground/60 hover:text-primary transition-colors text-sm">
-                  Shipping Policy
-                </Link>
-              </li>
+              {[
+                { href: "/privacy-policy", label: "Privacy Policy" },
+                { href: "/terms-of-service", label: "Terms of Service" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-[#56656e] hover:text-[#006565] hover:underline transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
+
         </div>
 
-        {/* Bottom */}
-        <div className="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-foreground/60 text-sm">&copy; 2026 NursLibrary. All rights reserved.</p>
-          <div className="text-foreground/60 text-sm mt-4 sm:mt-0 text-center sm:text-right">
-            <p>For support: contact@nurslibrary.com</p>
-            <p className="mt-2">Website: www.nurslibrary.com</p>
-          </div>
+        {/* Bottom bar */}
+        <div className="border-t border-[#bdc9c8] pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-[#6e7979]">© 2026 NursLibrary. Verified Clinical Content.</p>
+          <p className="text-sm text-[#6e7979]">www.nurslibrary.com</p>
         </div>
       </div>
     </footer>
