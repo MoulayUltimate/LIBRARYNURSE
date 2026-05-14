@@ -8,14 +8,14 @@ export function HeroSection() {
     <section className="relative w-full min-h-[600px] md:min-h-[680px] overflow-hidden flex items-center">
       {/* Background image */}
       <Image
-        src="/nurse-hero-banner.png"
-        alt="Professional veterinary healthcare professionals"
+        src="/small-animal-banner.png"
+        alt="Veterinary professional with a dog and cat in a clinic"
         fill
-        className="object-cover"
+        className="object-cover object-center"
         priority
       />
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
+      {/* Gradient overlay — darker on the left for headline legibility, soft on the right */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/20" />
 
       <div className="relative z-10 w-full max-w-[1280px] mx-auto px-5 md:px-16 py-20">
         <div className="max-w-2xl">
