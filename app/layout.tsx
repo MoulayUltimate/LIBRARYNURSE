@@ -80,6 +80,9 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
+  verification: {
+    google: "mjANdb5kgh9TNAP9cytkbMsT3t6x2Qr5mXi0ZZilHvA",
+  },
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon-32x32.png",
