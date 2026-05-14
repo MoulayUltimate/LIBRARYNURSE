@@ -12,12 +12,20 @@ import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { trackEvent } from "@/components/analytics-tracker"
 
+interface CartItem {
+    id: string | number
+    title: string
+    price: number
+    quantity: number
+}
+
 interface CheckoutFormProps {
     amount: number
+    items?: CartItem[]
     onSuccess?: () => void
 }
 
-export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
+export function CheckoutForm({ amount, items = [] }: CheckoutFormProps) {
     const stripe = useStripe()
     const elements = useElements()
 
@@ -26,62 +34,74 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        // Track checkout start
+        // Track checkout start (UI mount), but no PaymentIntent is created yet
         trackEvent("checkout_start", { amount })
     }, [amount])
 
-    useEffect(() => {
-        if (!stripe) {
-            return
+    // Create the PaymentIntent only at submit time, then confirm.
+    // This avoids polluting the Stripe dashboard with "Incomplete" intents
+    // from users who land on /checkout but never click pay.
+    async function createIntentAndConfirm(returnUrl: string) {
+        if (!stripe || !elements) {
+            return { error: { message: "Payment is still initializing. Try again." } as any }
         }
 
-        const clientSecret = new URLSearchParams(window.location.search).get(
-            "payment_intent_client_secret"
-        )
-
-        if (!clientSecret) {
-            return
+        // 1. Validate the Elements client-side first.
+        const { error: submitError } = await elements.submit()
+        if (submitError) {
+            return { error: submitError }
         }
 
-        stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-            switch (paymentIntent?.status) {
-                case "succeeded":
-                    setMessage("Payment succeeded!")
-                    break
-                case "processing":
-                    setMessage("Your payment is processing.")
-                    break
-                case "requires_payment_method":
-                    setMessage("Your payment was not successful, please try again.")
-                    break
-                default:
-                    setMessage("Something went wrong.")
-                    break
-            }
+        // 2. Ask the server for a fresh PaymentIntent.
+        const res = await fetch("/api/stripe/create-payment-intent", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                amount: Number(amount.toFixed(2)),
+                items: items.map((it) => ({
+                    id: it.id,
+                    title: it.title,
+                    price: it.price,
+                    quantity: it.quantity,
+                })),
+                email: email || null,
+            }),
         })
-    }, [stripe])
+
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({}))
+            return { error: { message: body?.error || "Could not initialize payment." } as any }
+        }
+
+        const { clientSecret } = await res.json()
+        if (!clientSecret) {
+            return { error: { message: "Missing client secret from server." } as any }
+        }
+
+        // 3. Confirm the payment with the freshly-minted secret.
+        return stripe.confirmPayment({
+            elements,
+            clientSecret,
+            confirmParams: {
+                return_url: returnUrl,
+                receipt_email: email || undefined,
+            },
+        })
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
-        if (!stripe || !elements) {
-            return
-        }
+        if (!stripe || !elements) return
 
         setIsLoading(true)
+        setMessage(null)
 
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                return_url: `${window.location.origin}/order-confirmation`,
-                receipt_email: email,
-            },
-        })
+        const result = await createIntentAndConfirm(
+            `${window.location.origin}/order-confirmation`
+        )
 
-        if (error.type === "card_error" || error.type === "validation_error") {
-            setMessage(error.message || "An unexpected error occurred.")
-        } else {
-            setMessage("An unexpected error occurred.")
+        if (result?.error) {
+            setMessage(result.error.message || "An unexpected error occurred.")
         }
 
         setIsLoading(false)
@@ -90,15 +110,12 @@ export function CheckoutForm({ amount, onSuccess }: CheckoutFormProps) {
     const onExpressCheckoutConfirm = async () => {
         if (!stripe || !elements) return
 
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                return_url: `${window.location.origin}/order-confirmation`,
-            },
-        })
+        const result = await createIntentAndConfirm(
+            `${window.location.origin}/order-confirmation`
+        )
 
-        if (error) {
-            setMessage(error.message || "An unexpected error occurred.")
+        if (result?.error) {
+            setMessage(result.error.message || "An unexpected error occurred.")
         }
     }
 

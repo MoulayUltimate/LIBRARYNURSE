@@ -39,8 +39,6 @@ export default function CheckoutPage() {
   const [couponSuccess, setCouponSuccess] = useState("")
   const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal">("card")
   const [payError, setPayError] = useState<string | null>(null)
-  const [clientSecret, setClientSecret] = useState<string | null>(null)
-  const [stripeLoading, setStripeLoading] = useState(false)
 
   const subtotal = total
   const finalTotal = subtotal - discount
@@ -50,57 +48,6 @@ export default function CheckoutPage() {
     currency: "USD",
     intent: "capture",
   }
-
-  // Fetch a Stripe PaymentIntent whenever the card path is active and the amount changes
-  useEffect(() => {
-    if (paymentMethod !== "card") return
-    if (!stripePromise) return
-    if (items.length === 0 || finalTotal <= 0) {
-      setClientSecret(null)
-      return
-    }
-
-    let cancelled = false
-    setStripeLoading(true)
-    setPayError(null)
-
-    fetch("/api/stripe/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: Number(finalTotal.toFixed(2)),
-        items: items.map((it) => ({
-          id: it.id,
-          title: it.title,
-          price: it.price,
-          quantity: it.quantity,
-        })),
-        email: null,
-      }),
-    })
-      .then(async (r) => {
-        const data = await r.json()
-        if (!r.ok) throw new Error(data?.error || "Failed to initialize payment")
-        return data
-      })
-      .then((data) => {
-        if (cancelled) return
-        setClientSecret(data.clientSecret)
-      })
-      .catch((err) => {
-        if (cancelled) return
-        console.error("Stripe init error:", err)
-        setPayError("Could not initialize card payment. Please try PayPal or refresh.")
-        setClientSecret(null)
-      })
-      .finally(() => {
-        if (!cancelled) setStripeLoading(false)
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [paymentMethod, finalTotal, items.length])
 
   const handleApplyCoupon = () => {
     if (couponCode.trim().toUpperCase() === "NURS10") {
@@ -344,15 +291,14 @@ export default function CheckoutPage() {
                       <div className="text-sm text-muted-foreground text-center py-4">
                         Card payments are not configured. Please use PayPal.
                       </div>
-                    ) : stripeLoading || !clientSecret ? (
-                      <div className="flex items-center justify-center py-10 text-sm text-[#3e4949]">
-                        Loading secure payment…
-                      </div>
                     ) : (
                       <Elements
                         stripe={stripePromise}
                         options={{
-                          clientSecret,
+                          mode: "payment",
+                          amount: Math.round(finalTotal * 100),
+                          currency: "usd",
+                          paymentMethodCreation: "manual",
                           appearance: {
                             theme: "stripe",
                             variables: {
@@ -365,7 +311,7 @@ export default function CheckoutPage() {
                           },
                         }}
                       >
-                        <CheckoutForm amount={finalTotal} />
+                        <CheckoutForm amount={finalTotal} items={items} />
                       </Elements>
                     )
                   ) : (
