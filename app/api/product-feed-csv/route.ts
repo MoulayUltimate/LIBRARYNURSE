@@ -50,10 +50,10 @@ export async function GET(req: Request) {
 }
 
 function generateProductCsv(products: any[]): string {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nurslibrary.com'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.nurslibrary.com'
 
-    // CSV Header (Facebook required fields)
-    const header = 'id,title,description,availability,condition,price,link,image_link,brand,product_type,google_product_category'
+    // CSV Header (Google Merchant required fields + shipping + identifier_exists + targeting)
+    const header = 'id,title,description,availability,condition,price,link,image_link,brand,identifier_exists,product_type,google_product_category,target_country,content_language,shipping'
 
     const rows = products.map(product => {
         const productUrl = `${baseUrl}/products/${product.id}`
@@ -65,14 +65,18 @@ function generateProductCsv(products: any[]): string {
             escapeCsv(product.id),
             escapeCsv(product.title || 'Medical eBook'),
             escapeCsv(product.description || product.title || 'Premium medical eBook for healthcare professionals'),
-            'in stock',
+            'in_stock',
             'new',
-            `${product.price?.toFixed(2) || '0.00'} USD`,
+            escapeCsv(`${product.price?.toFixed(2) || '0.00'} USD`),
             escapeCsv(productUrl),
             escapeCsv(imageUrl),
             'NursLibrary',
+            'no',
             escapeCsv(product.category || 'Medical eBooks'),
-            'Media > Books > Non-Fiction > Medical'
+            escapeCsv('Media > Books > Non-Fiction > Medical'),
+            'US',
+            'en',
+            escapeCsv('US:::Free Digital Delivery:0.00 USD')
         ].join(',')
     })
 
@@ -80,7 +84,7 @@ function generateProductCsv(products: any[]): string {
 }
 
 function generateEmptyCsv(): string {
-    return 'id,title,description,availability,condition,price,link,image_link,brand,product_type,google_product_category'
+    return 'id,title,description,availability,condition,price,link,image_link,brand,identifier_exists,product_type,google_product_category,target_country,content_language,shipping'
 }
 
 function escapeCsv(str: string): string {

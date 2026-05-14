@@ -48,7 +48,7 @@ export async function GET(req: Request) {
 }
 
 function generateProductFeed(products: any[]): string {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nurslibrary.com'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.nurslibrary.com'
 
     const items = products.map(product => {
         const productUrl = `${baseUrl}/products/${product.id}`
@@ -64,11 +64,19 @@ function generateProductFeed(products: any[]): string {
       <g:link>${escapeXml(productUrl)}</g:link>
       <g:image_link>${escapeXml(imageUrl)}</g:image_link>
       <g:price>${product.price?.toFixed(2) || '0.00'} USD</g:price>
-      <g:availability>in stock</g:availability>
+      <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>NursLibrary</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
       <g:product_type>${escapeXml(product.category || 'Medical eBooks')}</g:product_type>
       <g:google_product_category>Media &gt; Books &gt; Non-Fiction &gt; Medical</g:google_product_category>
+      <g:target_country>US</g:target_country>
+      <g:content_language>en</g:content_language>
+      <g:shipping>
+        <g:country>US</g:country>
+        <g:service>Free Digital Delivery</g:service>
+        <g:price>0.00 USD</g:price>
+      </g:shipping>
     </item>`
     }).join('\n')
 
@@ -84,7 +92,7 @@ function generateProductFeed(products: any[]): string {
 }
 
 function generateEmptyFeed(): string {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nurslibrary.com'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.nurslibrary.com'
 
     return `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
