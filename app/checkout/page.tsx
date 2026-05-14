@@ -11,7 +11,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Check, Minus, Plus, Trash2, ArrowLeft, CreditCard, ShoppingBag, Download, Mail, CheckCircle, Shield, FileText } from "lucide-react"
 import Image from "next/image"
-import { CheckoutForm } from "@/components/checkout-form"
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
+import { trackEvent } from "@/components/analytics-tracker"
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -30,15 +31,16 @@ export default function CheckoutPage() {
   const [couponError, setCouponError] = useState("")
   const [couponSuccess, setCouponSuccess] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("card")
-  const [clientSecret, setClientSecret] = useState("")
+  const [payError, setPayError] = useState<string | null>(null)
 
   const subtotal = total
   const finalTotal = subtotal - discount
 
-  // Payment intent creation moved to manual trigger
-  useEffect(() => {
-    // Only update total if needed, but don't call API automatically
-  }, [items, finalTotal])
+  const paypalOptions = {
+    clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "sb",
+    currency: "USD",
+    intent: "capture",
+  }
 
   const handleApplyCoupon = () => {
     if (couponCode.trim().toUpperCase() === "NURS10") {
@@ -106,7 +108,7 @@ export default function CheckoutPage() {
       <main className="min-h-screen bg-background py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e3fffe] text-[#006565] text-sm font-medium mb-4">
               <Check className="w-4 h-4" />
               <span>Trusted by 10,000+ Medical Professionals</span>
             </div>
@@ -203,7 +205,7 @@ export default function CheckoutPage() {
                   <span className="font-bold text-foreground text-right">Free (Digital Delivery)</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between w-full sm:max-w-xs text-sm text-green-600">
+                  <div className="flex justify-between w-full sm:max-w-xs text-sm text-[#006565]">
                     <span>Discount:</span>
                     <span>-${discount.toFixed(2)}</span>
                   </div>
@@ -234,20 +236,100 @@ export default function CheckoutPage() {
                     <Button variant="outline" onClick={handleApplyCoupon} type="button" className="h-11 px-6">Apply</Button>
                   </div>
                   {couponError && <p className="text-destructive text-xs mt-2">{couponError}</p>}
-                  {couponSuccess && <p className="text-green-600 text-xs mt-2">{couponSuccess}</p>}
+                  {couponSuccess && <p className="text-[#006565] text-xs mt-2">{couponSuccess}</p>}
                 </div>
 
 
-                {/* Simplified Payment Section for PayPal */}
-                <CheckoutForm amount={finalTotal} />
+                {/* PayPal Checkout */}
+                <div className="w-full relative z-0">
+                  {payError && (
+                    <div className="text-destructive text-sm text-center mb-3 bg-destructive/10 p-2 rounded">
+                      {payError}
+                    </div>
+                  )}
+                  {finalTotal > 0 && items.length > 0 ? (
+                    <PayPalScriptProvider options={paypalOptions}>
+                      <PayPalButtons
+                        style={{
+                          layout: "vertical",
+                          color: "gold",
+                          shape: "rect",
+                          label: "paypal",
+                          height: 48,
+                          tagline: false,
+                        }}
+                        createOrder={async () => {
+                          try {
+                            setPayError(null)
+                            const response = await fetch("/api/paypal/create-order", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                amount: finalTotal,
+                                email: null,
+                                items: items.map((it) => ({
+                                  id: it.id,
+                                  title: it.title,
+                                  price: it.price,
+                                  quantity: it.quantity,
+                                })),
+                              }),
+                            })
+                            const orderData = await response.json()
+                            if (orderData.id) {
+                              return orderData.id
+                            }
+                            throw new Error("Could not initiate PayPal checkout")
+                          } catch (err) {
+                            console.error("PayPal Create Order Error:", err)
+                            setPayError("Could not initiate checkout. Please try again.")
+                            throw err
+                          }
+                        }}
+                        onApprove={async (data) => {
+                          try {
+                            const response = await fetch("/api/paypal/capture-order", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ orderID: data.orderID }),
+                            })
+                            const orderData = await response.json()
+                            if (orderData.status === "COMPLETED") {
+                              trackEvent("purchase", {
+                                transaction_id: String(orderData.id),
+                                value: finalTotal,
+                                currency: "USD",
+                              })
+                              clearCart()
+                              router.push("/order-confirmation")
+                            } else {
+                              throw new Error("Payment not completed")
+                            }
+                          } catch (err) {
+                            console.error("PayPal Capture Error:", err)
+                            setPayError("Payment failed. Please try again.")
+                          }
+                        }}
+                        onError={(err) => {
+                          console.error("PayPal Error:", err)
+                          setPayError("An error occurred with PayPal.")
+                        }}
+                      />
+                    </PayPalScriptProvider>
+                  ) : (
+                    <div className="text-sm text-muted-foreground text-center py-4">
+                      Add items to your cart to continue.
+                    </div>
+                  )}
+                </div>
 
                 <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground mt-6 pt-6 border-t border-border">
                   <div className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    <div className="w-2 h-2 rounded-full bg-[#008080]"></div>
                     <span>256-bit SSL Secure</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    <div className="w-2 h-2 rounded-full bg-[#008080]"></div>
                     <span>Money-Back Guarantee</span>
                   </div>
                 </div>
