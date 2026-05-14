@@ -242,6 +242,21 @@ export default function CheckoutPage() {
                     />
                     <Button variant="outline" onClick={handleApplyCoupon} type="button" className="h-11 px-6">Apply</Button>
                   </div>
+                  {!couponSuccess && !couponError && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCouponCode("NURS10")
+                        setDiscount(subtotal * 0.1)
+                        setCouponError("")
+                        setCouponSuccess("Coupon applied! 10% off.")
+                      }}
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs text-[#006565] hover:text-[#008080] font-medium transition-colors"
+                    >
+                      <span className="inline-block px-1.5 py-0.5 rounded bg-[#e3fffe] border border-[#76d6d5]/50 font-mono tracking-wide">NURS10</span>
+                      <span>— tap to apply 10% off</span>
+                    </button>
+                  )}
                   {couponError && <p className="text-destructive text-xs mt-2">{couponError}</p>}
                   {couponSuccess && <p className="text-[#006565] text-xs mt-2">{couponSuccess}</p>}
                 </div>
