@@ -9,10 +9,6 @@ export const revalidate = 3600
 
 const SITE_URL = "https://www.nurslibrary.com"
 
-export async function generateStaticParams() {
-    return getAllPosts().map((p) => ({ slug: p.slug }))
-}
-
 export async function generateMetadata({
     params,
 }: {
