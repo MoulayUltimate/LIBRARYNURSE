@@ -50,6 +50,7 @@ export function Footer() {
                 { href: "/", label: "All Collections" },
                 { href: "/collections/best-sellers", label: "Bestsellers" },
                 { href: "/collections/todays-deals", label: "Today's Deals" },
+                { href: "/blog", label: "Blog" },
                 { href: "/cart", label: "Shopping Cart" },
               ].map((link) => (
                 <li key={link.href}>

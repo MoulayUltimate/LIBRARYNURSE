@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { getCollections } from "@/lib/store"
+import { getAllPosts } from "@/lib/blog"
 
 export const runtime = "edge"
 export const revalidate = 3600 // regenerate hourly
@@ -26,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticRoutes: MetadataRoute.Sitemap = [
         { url: `${SITE_URL}/`, lastModified: now, changeFrequency: "daily", priority: 1.0 },
         { url: `${SITE_URL}/collections`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+        { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
         { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
         { url: `${SITE_URL}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
         { url: `${SITE_URL}/privacy-policy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
@@ -50,5 +52,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
     }))
 
-    return [...staticRoutes, ...collectionRoutes, ...productRoutes]
+    const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((p) => ({
+        url: `${SITE_URL}/blog/${p.slug}`,
+        lastModified: new Date(p.updatedAt || p.publishedAt),
+        changeFrequency: "monthly",
+        priority: 0.7,
+    }))
+
+    return [...staticRoutes, ...collectionRoutes, ...blogRoutes, ...productRoutes]
 }
