@@ -24,7 +24,7 @@ export async function GET() {
 
 Audience: practicing nurses, veterinary nurses and technicians, veterinary surgeons, medical students, and allied healthcare professionals.
 
-Format: all eBooks are delivered as PDF for instant download after purchase. Payments are processed via Stripe and PayPal.
+Format: all eBooks are delivered as PDF for instant download after purchase. Payments are processed securely via Stripe (cards, Apple Pay, Google Pay, and Link).
 
 ## Site
 

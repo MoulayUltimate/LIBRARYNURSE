@@ -1,6 +1,6 @@
 "use client"
 
-import { PayPalExpressButton } from "@/components/paypal-express-button"
+import { ExpressBuyButton } from "@/components/express-buy-button"
 import { TrustReviews } from "@/components/trust-reviews"
 import { trackEvent } from "@/components/analytics-tracker"
 
@@ -179,9 +179,17 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                             </Button>
                         </div>
 
-                        {/* PayPal Express Checkout */}
-                        <div className="mt-8">
-                            <PayPalExpressButton product={product} quantity={quantity} />
+                        {/* Express checkout — Apple Pay / Google Pay / Link */}
+                        <div className="mt-6">
+                            <div className="relative mb-3">
+                                <div className="absolute inset-0 flex items-center">
+                                    <span className="w-full border-t border-border" />
+                                </div>
+                                <div className="relative flex justify-center text-[11px] uppercase tracking-wider">
+                                    <span className="bg-background px-2 text-muted-foreground">Or fast checkout</span>
+                                </div>
+                            </div>
+                            <ExpressBuyButton product={product} quantity={quantity} />
                         </div>
 
                         {/* Extended Metadata Section - Accordion Style */}

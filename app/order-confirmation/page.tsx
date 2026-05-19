@@ -17,14 +17,12 @@ function OrderConfirmationContent() {
     const paymentIntentId = searchParams.get("payment_intent")
     const redirectStatus = searchParams.get("redirect_status")
 
-    // PayPal flow: capture happens before redirect; just show success
+    // Stripe flow: a PaymentIntent param is always present after a real redirect.
     if (!paymentIntentId) {
-      setStatus("success")
-      setOrderId("ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase())
+      setStatus("error")
       return
     }
 
-    // Stripe flow: verify the PaymentIntent server-side and persist the order
     if (redirectStatus && redirectStatus !== "succeeded") {
       setStatus("error")
       return
