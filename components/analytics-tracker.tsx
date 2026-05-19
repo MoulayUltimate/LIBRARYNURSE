@@ -97,12 +97,45 @@ export function AnalyticsTracker() {
     return null
 }
 
+// Google Ads conversion IDs/labels. Centralized so we can swap labels per event.
+const GOOGLE_ADS_CONVERSIONS: Record<string, { send_to: string; value: number; currency: string }> = {
+    add_to_cart: {
+        send_to: "AW-18117687691/68ZsCKTvgLAcEIvzl79D",
+        value: 1.0,
+        currency: "EUR",
+    },
+}
+
+// Fire a Google Ads conversion event via the shared gtag.js loaded in the
+// GoogleAnalytics component. No-ops if gtag isn't ready yet.
+function fireGoogleAdsConversion(eventType: string, metadata?: any) {
+    try {
+        const cfg = GOOGLE_ADS_CONVERSIONS[eventType]
+        if (!cfg) return
+        const gtag = (typeof window !== "undefined" && (window as any).gtag) as
+            | ((...args: any[]) => void)
+            | undefined
+        if (typeof gtag !== "function") return
+        gtag("event", "conversion", {
+            send_to: cfg.send_to,
+            value: typeof metadata?.value === "number" ? metadata.value : cfg.value,
+            currency: cfg.currency,
+            transaction_id: metadata?.transaction_id,
+        })
+    } catch (e) {
+        console.error("Google Ads conversion error", e)
+    }
+}
+
 // Utility function to track custom events
 export async function trackEvent(eventType: string, metadata?: any) {
     // Don't track if on admin route
     if (typeof window !== 'undefined' && window.location.pathname.startsWith("/admin")) {
         return
     }
+
+    // Google Ads conversion (Add to basket, etc.)
+    fireGoogleAdsConversion(eventType, metadata)
 
     // Facebook Pixel Tracking
     const trackPixel = () => {
