@@ -25,7 +25,7 @@ export function CartSummary() {
         </div>
         <div className="flex justify-between text-foreground">
           <span>Shipping</span>
-          <span>Free (Digital Delivery)</span>
+          <span>Calculated at checkout</span>
         </div>
         <div className="border-t border-border pt-2 flex justify-between font-bold text-lg">
           <span>Total</span>

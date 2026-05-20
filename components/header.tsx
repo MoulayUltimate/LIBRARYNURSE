@@ -87,7 +87,7 @@ export function Header() {
 
           <div className="mt-auto pt-8 border-t border-[#bdc9c8]">
             <p className="text-xs text-[#6e7979]">
-              © 2026 NursLibrary. Premium Veterinary eBooks.
+              © 2026 Nurs Library. Veterinary &amp; nursing reference books.
             </p>
           </div>
         </div>

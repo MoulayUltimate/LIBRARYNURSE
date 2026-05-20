@@ -76,7 +76,7 @@ export default function CheckoutPage() {
           >
             Your cart is empty
           </h1>
-          <p className="text-[#3e4949] mb-8">Find your next eBook in the library.</p>
+          <p className="text-[#3e4949] mb-8">Browse our catalogue of veterinary and nursing reference books.</p>
           <Link href="/">
             <Button className="bg-[#006565] hover:bg-[#008080] text-white h-12 px-8 rounded-full font-semibold">
               Browse the library
@@ -122,7 +122,7 @@ export default function CheckoutPage() {
             className="text-3xl md:text-4xl font-bold text-[#191c1e] leading-tight"
             style={{ fontFamily: "var(--font-montserrat, Montserrat), sans-serif" }}
           >
-            One step away from your eBooks.
+            One step away from your books.
           </h1>
         </div>
 
@@ -207,8 +207,8 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Step
                   icon={<Zap className="w-5 h-5" />}
-                  title="Instant download"
-                  body="Your PDF is ready the moment payment clears — no waiting."
+                  title="Bonus PDF today"
+                  body="Your digital PDF copy is emailed the moment payment clears."
                 />
                 <Step
                   icon={<Mail className="w-5 h-5" />}
@@ -280,7 +280,7 @@ export default function CheckoutPage() {
                         <h3 className="text-sm font-semibold text-[#191c1e] line-clamp-2 leading-snug">
                           {item.title}
                         </h3>
-                        <p className="text-xs text-[#56656e] mt-0.5">PDF eBook · Instant access</p>
+                        <p className="text-xs text-[#56656e] mt-0.5">Physical book + Bonus PDF</p>
                         <div className="flex items-center justify-between mt-2">
                           <div className="flex items-center border border-[#bdc9c8] rounded-md">
                             <button
@@ -444,7 +444,7 @@ export default function CheckoutPage() {
                     30-day money-back guarantee
                   </h3>
                   <p className="text-xs text-[#56656e] leading-relaxed">
-                    If your eBook isn't a fit, just email us within 30 days and we'll refund every cent.
+                    Not satisfied with your book? Return it within 30 days for a full refund — free return shipping included.
                   </p>
                 </div>
               </div>

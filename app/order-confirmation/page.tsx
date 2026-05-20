@@ -92,22 +92,18 @@ function OrderConfirmationContent() {
         <p className="text-lg font-semibold text-primary mb-6">Order ID: {orderId}</p>
       </Card>
 
-      {/* Download Section */}
+      {/* What's next section */}
       <Card className="p-6 mb-8">
         <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
           <Download size={20} />
-          Your eBooks
+          Your bonus digital PDF
         </h2>
         <p className="text-muted-foreground mb-6">
-          Your purchased eBooks are ready for download. You'll receive an email with download links and access
-          instructions.
+          A secure PDF download link has been sent to the email on your order — you can start reading right away while your physical book is being prepared for dispatch.
         </p>
         <div className="space-y-3">
           <Button className="w-full" size="lg">
-            Download All Files
-          </Button>
-          <Button variant="outline" className="w-full bg-transparent" size="lg">
-            View in Library
+            Download PDF Copy
           </Button>
         </div>
       </Card>
@@ -119,7 +115,7 @@ function OrderConfirmationContent() {
           <div>
             <p className="font-semibold">Confirmation email sent</p>
             <p className="text-sm text-muted-foreground">
-              Check your email for order details and download instructions
+              Check your inbox for your order details, PDF download link, and shipping tracking once your book dispatches.
             </p>
           </div>
         </div>
@@ -127,19 +123,19 @@ function OrderConfirmationContent() {
 
       {/* Next Steps */}
       <Card className="p-6">
-        <h2 className="text-xl font-bold text-foreground mb-4">Next Steps</h2>
+        <h2 className="text-xl font-bold text-foreground mb-4">What happens next</h2>
         <ol className="space-y-3 text-foreground">
           <li className="flex gap-3">
             <span className="font-bold text-primary">1</span>
-            <span>Check your email for confirmation and download links</span>
+            <span>Check your email — your bonus PDF download link is already there.</span>
           </li>
           <li className="flex gap-3">
             <span className="font-bold text-primary">2</span>
-            <span>Download your eBooks in PDF format</span>
+            <span>We prepare and ship your physical book within 1–2 business days.</span>
           </li>
           <li className="flex gap-3">
             <span className="font-bold text-primary">3</span>
-            <span>Access your library anytime from your account</span>
+            <span>You receive a shipping confirmation with a tracking number. US delivery: 4–12 business days.</span>
           </li>
         </ol>
 

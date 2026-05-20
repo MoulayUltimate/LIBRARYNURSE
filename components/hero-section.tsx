@@ -42,7 +42,7 @@ export function HeroSection() {
             className="text-lg md:text-xl text-white/85 mb-10 leading-relaxed max-w-xl"
             style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
           >
-            Access the world&apos;s most comprehensive collection of evidence-based veterinary and medical eBooks. Instant download, anywhere, anytime.
+            Real, printed veterinary and medical reference books shipped to your door — with a complimentary digital PDF copy so you can start reading the day you order.
           </p>
 
           {/* CTA buttons */}
@@ -75,7 +75,7 @@ export function HeroSection() {
               <svg className="w-4 h-4 text-[#76d6d5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              Instant Access
+              Physical Book + Digital PDF
             </span>
             <span className="flex items-center gap-2">
               <svg className="w-4 h-4 text-[#76d6d5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

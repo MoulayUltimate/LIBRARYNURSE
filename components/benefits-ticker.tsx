@@ -1,14 +1,14 @@
 "use client"
 
 const benefits = [
-  { icon: "💬", label: "24/7 Support" },
-  { icon: "⚡", label: "Instant Delivery" },
-  { icon: "⭐", label: "Largest Selection" },
-  { icon: "🏷️", label: "Unbeatable Prices" },
-  { icon: "🔒", label: "Secure Payment" },
-  { icon: "📥", label: "Instant Download" },
+  { icon: "📦", label: "Physical Book Shipped" },
+  { icon: "📄", label: "Bonus Digital PDF" },
+  { icon: "🚚", label: "$19.55 Flat US Shipping" },
+  { icon: "🕓", label: "4–12 Day Delivery" },
+  { icon: "↩️", label: "Free 30-Day Returns" },
+  { icon: "🔒", label: "Secure Stripe Checkout" },
   { icon: "✅", label: "Verified Content" },
-  { icon: "🌍", label: "Global Community" },
+  { icon: "💬", label: "Real Human Support" },
 ]
 
 export function BenefitsTicker() {

@@ -17,9 +17,9 @@ import type { Metadata } from "next"
 export const runtime = "edge"
 
 export const metadata: Metadata = {
-    title: "Premium Veterinary & Medical eBooks — Instant Download",
+    title: "Veterinary & Nursing Reference Books — Shipped with Bonus PDF",
     description:
-        "Browse 500+ evidence-based veterinary and medical eBooks. Instant PDF download, verified clinical content, and unbeatable prices. Shop by specialty: surgery, pharmacology, dermatology, anatomy, and more.",
+        "Browse 500+ evidence-based veterinary and nursing reference books. Real, printed books shipped across the US with a complimentary digital PDF copy. Shop by specialty: surgery, pharmacology, dermatology, anatomy, and more.",
     alternates: { canonical: "/" },
 }
 
@@ -62,20 +62,20 @@ export default async function StorePage() {
 
     const faqs = [
         {
-            q: "How do I access my purchased eBooks?",
-            a: "After purchase, you'll receive a download link via email instantly. Download and access on any PDF-compatible device.",
+            q: "Do I receive a real, physical book?",
+            a: "Yes. Every order ships a printed, physical book to your US address. You also get a complimentary digital PDF copy by email so you can start reading immediately while your parcel is in transit.",
         },
         {
-            q: "Can I use eBooks for continuing education credits?",
-            a: "Many eBooks can support professional development. Check your nursing board requirements and our Terms of Service for licensing details.",
+            q: "How much is shipping and how long does it take?",
+            a: "We ship across the United States at a flat rate of $19.55 USD. Estimated delivery is 4 to 12 business days from dispatch (1–2 business days handling time).",
         },
         {
-            q: "What devices can I use to read the eBooks?",
-            a: "eBooks are PDF files compatible with all devices: tablets, phones, computers, and e-readers. Read online or offline.",
+            q: "Can I return my book?",
+            a: "Yes — within 30 days of delivery. Return shipping is free for all US customers. Full details in our Refund Policy.",
         },
         {
-            q: "Is there a money-back guarantee?",
-            a: "Yes! We offer a 30-day refund guarantee. Contact support if you're not satisfied. Full details in our Refund Policy.",
+            q: "How does the digital PDF work?",
+            a: "Immediately after payment, we email you a secure download link to the PDF copy of your book. The link stays valid for 30 days. The PDF reads on any phone, tablet, or computer.",
         },
     ]
 
@@ -231,7 +231,7 @@ export default async function StorePage() {
                                 Trusted by Veterinary Professionals Worldwide
                             </h2>
                             <p className="text-base text-[#3e4949] mb-10 leading-relaxed">
-                                NursLibrary is dedicated to providing the highest quality educational resources for the veterinary and medical community. Our curated library ensures you have access to the latest evidence-based practices and clinical guidelines.
+                                Nurs Library is dedicated to bringing high-quality nursing and veterinary reference books — the real, printed ones — within reach of every student and clinician. Every order ships a physical book and includes a complimentary digital PDF so you can start reading the day you order.
                             </p>
 
                             <div className="space-y-6">
@@ -239,20 +239,20 @@ export default async function StorePage() {
                                     {
                                         icon: <Download className="w-5 h-5 text-[#006565]" />,
                                         bg: "bg-[#e3fffe]",
-                                        title: "Instant Digital Delivery",
-                                        desc: "Get immediate access to your eBooks upon purchase. No waiting for shipping.",
+                                        title: "Physical Book Shipped",
+                                        desc: "Real, printed book delivered to your US address. $19.55 flat-rate shipping · 4–12 business days.",
                                     },
                                     {
                                         icon: <Globe className="w-5 h-5 text-[#006565]" />,
                                         bg: "bg-[#d3e2ed]",
-                                        title: "Accessible Anywhere",
-                                        desc: "Read on any device — laptop, tablet, or phone. Perfect for busy professionals.",
+                                        title: "Bonus Digital PDF",
+                                        desc: "Instant PDF copy by email so you can start reading while your shipment is on the way.",
                                     },
                                     {
                                         icon: <Award className="w-5 h-5 text-[#006565]" />,
                                         bg: "bg-[#ffd9e2]",
-                                        title: "Premium Quality",
-                                        desc: "High-resolution PDFs with searchable text and clear illustrations.",
+                                        title: "30-Day Free Returns",
+                                        desc: "Not satisfied? Return your book within 30 days — return shipping is on us.",
                                     },
                                 ].map((item, i) => (
                                     <div key={i} className="flex gap-4">
@@ -286,7 +286,7 @@ export default async function StorePage() {
                                         {"★★★★★"}
                                     </div>
                                     <p className="text-[#191c1e] font-medium italic text-sm mb-3 leading-relaxed">
-                                        &ldquo;An incredible resource for my veterinary studies. Quality is outstanding and instant download is a lifesaver.&rdquo;
+                                        &ldquo;The book arrived in perfect condition and I had the PDF in my inbox before the parcel even left the warehouse. Brilliant service.&rdquo;
                                     </p>
                                     <div className="flex items-center gap-3">
                                         <div className="w-9 h-9 rounded-full bg-[#008080] text-[#e3fffe] flex items-center justify-center font-bold text-sm">
@@ -303,22 +303,22 @@ export default async function StorePage() {
                     </div>
                 </section>
 
-                {/* eBook Formats */}
+                {/* Book + Bonus PDF */}
                 <section className="py-20 border-t border-[#bdc9c8]">
                     <div className="grid md:grid-cols-2 gap-16 items-center">
                         <div className="relative h-[480px] rounded-[2rem] overflow-hidden shadow-2xl order-2 md:order-1">
                             <Image
                                 src="/ebook-formats.png"
-                                alt="Veterinarian using device to read eBook"
+                                alt="Veterinary professional reading their printed reference book with a tablet PDF beside it"
                                 fill
                                 className="object-cover"
                             />
                             {/* Floating device badge */}
                             <div className="absolute bottom-6 right-6 bg-white p-4 rounded-2xl shadow-xl hidden md:flex items-center gap-3">
-                                <span className="text-2xl">📱</span>
+                                <span className="text-2xl">📦</span>
                                 <div>
-                                    <p className="font-bold text-[#191c1e] text-sm">Device Agnostic</p>
-                                    <p className="text-xs text-[#6e7979]">Read anywhere</p>
+                                    <p className="font-bold text-[#191c1e] text-sm">Two Formats</p>
+                                    <p className="text-xs text-[#6e7979]">Print + PDF</p>
                                 </div>
                             </div>
                         </div>
@@ -329,24 +329,24 @@ export default async function StorePage() {
                                     className="text-[#006565] font-bold text-xs uppercase tracking-widest"
                                     style={{ fontFamily: "var(--font-inter, Inter), sans-serif" }}
                                 >
-                                    eBook Formats
+                                    Print + Bonus PDF
                                 </span>
                             </div>
                             <h2
                                 className="text-4xl md:text-[48px] font-bold text-[#191c1e] mb-6 leading-tight"
                                 style={{ fontFamily: "var(--font-montserrat, Montserrat), sans-serif", letterSpacing: "-0.02em" }}
                             >
-                                Explore our flexible eBook solutions
+                                A real book, with a digital copy on the side
                             </h2>
                             <p className="text-base text-[#3e4949] mb-8 leading-relaxed">
-                                One purchase unlocks all formats: EPUB, EPUB3, and PDF. Download instantly — no activation needed. Read on any device with full search, copy, paste, and print functionality.
+                                Every Nurs Library order ships a printed reference book to your US address — and bundles a complimentary digital PDF copy so you can start reading the day you order. One purchase, two formats, no extra cost.
                             </p>
                             <div className="grid grid-cols-2 gap-4 mb-8">
                                 {[
-                                    { icon: "⬇️", title: "Instant Download", desc: "Get your files immediately." },
-                                    { icon: "💻", title: "Universal Access", desc: "iPad, Kindle, PC compatible." },
-                                    { icon: "🖨️", title: "Printable Files", desc: "High-res PDFs for printing." },
-                                    { icon: "🏆", title: "Premium Quality", desc: "Searchable text & illustrations." },
+                                    { icon: "📦", title: "Printed Book Shipped", desc: "Delivered to your US address." },
+                                    { icon: "📄", title: "Bonus PDF Copy", desc: "Emailed instantly on payment." },
+                                    { icon: "🚚", title: "4–12 Day Delivery", desc: "$19.55 flat-rate US shipping." },
+                                    { icon: "↩️", title: "30-Day Free Returns", desc: "Return shipping is on us." },
                                 ].map((feat, i) => (
                                     <div key={i} className="flex items-start gap-3">
                                         <span className="text-lg">{feat.icon}</span>

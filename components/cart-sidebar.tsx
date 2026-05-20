@@ -108,7 +108,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span className="text-foreground">Free (Digital Delivery)</span>
+                  <span className="text-foreground">Calculated at checkout</span>
                 </div>
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>

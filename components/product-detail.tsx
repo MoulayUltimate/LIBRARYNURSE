@@ -25,6 +25,7 @@ import {
     FileText,
     Users,
     ChevronDown,
+    Package,
 } from "lucide-react"
 
 interface ProductDetailProps {
@@ -139,14 +140,14 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                                 <Zap size={20} className="text-primary" />
                                 <div>
                                     <p className="text-xs text-muted-foreground">Format</p>
-                                    <p className="text-sm font-semibold">{product.format || 'PDF'}</p>
+                                    <p className="text-sm font-semibold">Print + PDF</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Download size={20} className="text-primary" />
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Access</p>
-                                    <p className="text-sm font-semibold">Instant</p>
+                                    <p className="text-xs text-muted-foreground">Shipping</p>
+                                    <p className="text-sm font-semibold">4–12 days</p>
                                 </div>
                             </div>
                         </div>
@@ -275,8 +276,8 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                             <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
                                 <Clock size={18} className="text-primary flex-shrink-0" />
                                 <div>
-                                    <p className="font-semibold text-xs text-foreground">Instant Access</p>
-                                    <p className="text-xs text-muted-foreground">Download Now</p>
+                                    <p className="font-semibold text-xs text-foreground">Ships in 1–2 days</p>
+                                    <p className="text-xs text-muted-foreground">+ Bonus PDF Today</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
@@ -309,44 +310,52 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
 
                         {/* How You Receive Section */}
                         <div className="pt-6 border-t border-border mt-6">
-                            <h3 className="font-semibold text-foreground mb-4 text-base">How You Receive Your Product</h3>
+                            <h3 className="font-semibold text-foreground mb-4 text-base">How you receive your book</h3>
                             <div className="grid grid-cols-1 gap-4">
-                                {/* Digital Download */}
+                                {/* Physical Book Shipped */}
+                                <Card className="p-4 border-2 border-primary/20 hover:border-primary transition-colors">
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <Package className="text-primary" size={20} />
+                                        </div>
+                                        <h3 className="text-base font-bold text-foreground">Physical Book Shipped</h3>
+                                    </div>
+                                    <ul className="space-y-2">
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle size={16} className="text-accent flex-shrink-0 mt-0.5" />
+                                            <span className="text-xs text-foreground">Real, printed book delivered to your US address</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle size={16} className="text-accent flex-shrink-0 mt-0.5" />
+                                            <span className="text-xs text-foreground">$19.55 flat-rate shipping · 4–12 business days</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle size={16} className="text-accent flex-shrink-0 mt-0.5" />
+                                            <span className="text-xs text-foreground">Tracking number emailed when your parcel ships</span>
+                                        </li>
+                                    </ul>
+                                </Card>
+
+                                {/* Bonus Digital PDF */}
                                 <Card className="p-4 border-2 border-primary/20 hover:border-primary transition-colors">
                                     <div className="flex items-center gap-3 mb-3">
                                         <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                                             <Download className="text-primary" size={20} />
                                         </div>
-                                        <h3 className="text-base font-bold text-foreground">Instant Digital Download</h3>
+                                        <h3 className="text-base font-bold text-foreground">Bonus Digital PDF Copy</h3>
                                     </div>
                                     <ul className="space-y-2">
                                         <li className="flex items-start gap-2">
                                             <CheckCircle size={16} className="text-accent flex-shrink-0 mt-0.5" />
-                                            <span className="text-xs text-foreground">Download your eBook immediately after purchase</span>
+                                            <span className="text-xs text-foreground">Complimentary PDF emailed immediately after payment</span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <CheckCircle size={16} className="text-accent flex-shrink-0 mt-0.5" />
-                                            <span className="text-xs text-foreground">PDF format compatible with all devices</span>
-                                        </li>
-                                    </ul>
-                                </Card>
-
-                                {/* Email Delivery */}
-                                <Card className="p-4 border-2 border-primary/20 hover:border-primary transition-colors">
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                                            <Mail className="text-primary" size={20} />
-                                        </div>
-                                        <h3 className="text-base font-bold text-foreground">Email Delivery</h3>
-                                    </div>
-                                    <ul className="space-y-2">
-                                        <li className="flex items-start gap-2">
-                                            <CheckCircle size={16} className="text-accent flex-shrink-0 mt-0.5" />
-                                            <span className="text-xs text-foreground">Download link sent to your email within minutes</span>
+                                            <span className="text-xs text-foreground">Start reading while your book is on the way</span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <CheckCircle size={16} className="text-accent flex-shrink-0 mt-0.5" />
-                                            <span className="text-xs text-foreground">Confirmation email with order details</span>
+                                            <span className="text-xs text-foreground">Compatible with any phone, tablet, or computer</span>
                                         </li>
                                     </ul>
                                 </Card>
@@ -410,48 +419,42 @@ export function ProductDetail({ product, suggestedProducts }: ProductDetailProps
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-4">
                             <div>
-                                <h4 className="font-bold text-foreground mb-1 text-sm">How do I access my eBook?</h4>
+                                <h4 className="font-bold text-foreground mb-1 text-sm">Is this a real, physical book?</h4>
                                 <p className="text-muted-foreground text-sm">
-                                    Once you complete your purchase, you'll receive a download link immediately on the order confirmation
-                                    page and via email. Click the link to download your PDF file.
+                                    Yes. Every order ships a real, printed book to your US address. You also receive a complimentary digital PDF copy by email so you can start reading while your parcel is on the way.
                                 </p>
                             </div>
                             <div>
-                                <h4 className="font-bold text-foreground mb-1 text-sm">Can I read on my phone or tablet?</h4>
+                                <h4 className="font-bold text-foreground mb-1 text-sm">How much is shipping and how long does it take?</h4>
                                 <p className="text-muted-foreground text-sm">
-                                    Yes! Our PDF eBooks are compatible with all devices including smartphones, tablets, laptops, and
-                                    desktop computers. Use any PDF reader app.
+                                    Flat-rate $19.55 USD shipping across the United States. Orders process in 1–2 business days and arrive within 4–12 business days from dispatch.
                                 </p>
                             </div>
                             <div>
-                                <h4 className="font-bold text-foreground mb-1 text-sm">What if I don't receive my email?</h4>
+                                <h4 className="font-bold text-foreground mb-1 text-sm">How does the digital PDF work?</h4>
                                 <p className="text-muted-foreground text-sm">
-                                    Check your spam folder first. If you still don't receive it, contact our support team at
-                                    contact@nurslibrary.com with your order details.
+                                    Immediately after payment we email a secure PDF download link. Valid for 30 days, works on any phone, tablet, or computer — no special app required.
                                 </p>
                             </div>
                         </div>
 
                         <div className="space-y-4">
                             <div>
-                                <h4 className="font-bold text-foreground mb-1 text-sm">Can I share the eBook?</h4>
+                                <h4 className="font-bold text-foreground mb-1 text-sm">What if my book arrives damaged?</h4>
                                 <p className="text-muted-foreground text-sm">
-                                    Our eBooks are for personal use only. Sharing or distributing without permission violates our terms of
-                                    service and copyright.
+                                    Email Contact@nurslibrary.com within 7 days with photos and we will send a free replacement.
                                 </p>
                             </div>
                             <div>
-                                <h4 className="font-bold text-foreground mb-1 text-sm">What's your refund policy?</h4>
+                                <h4 className="font-bold text-foreground mb-1 text-sm">What's your return policy?</h4>
                                 <p className="text-muted-foreground text-sm">
-                                    We offer a 30-day money-back guarantee if you're not satisfied with your purchase. Please refer to our
-                                    refund policy page for complete details.
+                                    30-day money-back guarantee on physical books. Return shipping is free for all US customers. See our Refund Policy for full details.
                                 </p>
                             </div>
                             <div>
-                                <h4 className="font-bold text-foreground mb-1 text-sm">Is there a physical copy?</h4>
+                                <h4 className="font-bold text-foreground mb-1 text-sm">Can I share my PDF copy?</h4>
                                 <p className="text-muted-foreground text-sm">
-                                    NursLibrary specializes in digital eBooks. All products are delivered as PDF files for instant access
-                                    and convenience.
+                                    The PDF is licensed for personal, non-commercial use only. Sharing or redistributing it violates our Terms of Service and copyright law.
                                 </p>
                             </div>
                         </div>
