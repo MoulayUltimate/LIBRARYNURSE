@@ -27,7 +27,7 @@ async function getProducts() {
     try {
         const db = process.env.DB as any
         if (!db) return []
-        const { results } = await db.prepare("SELECT * FROM Products").all()
+        const { results } = await db.prepare("SELECT * FROM Products WHERE draft IS NULL OR draft = 0").all()
         return results.map((p: any) => ({
             ...p,
             collections: p.collections ? JSON.parse(p.collections) : [],

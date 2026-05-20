@@ -27,7 +27,7 @@ async function getProducts(slug: string) {
         // Use LIKE for simple JSON array matching: ["slug1", "slug2"]
         // We search for "slug" (with quotes) to ensure exact match
         console.log(`[DEBUG] Fetching products for slug: ${slug}`)
-        const query = "SELECT * FROM Products WHERE collections LIKE ?"
+        const query = "SELECT * FROM Products WHERE collections LIKE ? AND (draft IS NULL OR draft = 0)"
         console.log(`[DEBUG] Query: ${query} with param %"${slug}"%`)
 
         const { results } = await db.prepare(query).bind(`%"${slug}"%`).all()

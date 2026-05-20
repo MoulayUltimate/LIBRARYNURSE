@@ -1,0 +1,38 @@
+-- Add draft column to Products (0 = live, 1 = hidden/draft)
+ALTER TABLE Products ADD COLUMN draft INTEGER NOT NULL DEFAULT 0;
+
+-- Mark the 30 GMC-disapproved products as draft.
+-- Reason: GMC "Digital books not supported" — these titles contained
+-- digital/ebook signals (E-Book, Kindle, PDF+ in title or GMC category).
+UPDATE Products SET draft = 1 WHERE id IN (
+  '10717742825775',
+  '10738851709231',
+  '10758699548975',
+  '10740790395183',
+  '10717739024687',
+  '10717816586543',
+  '10766161969455',
+  '10749373251887',
+  '10717797089583',
+  '10749125886255',
+  '10717685285167',
+  '10766373847343',
+  '10740886798639',
+  '10740880376111',
+  '10731307237679',
+  '10720970080559',
+  '10816828473647',
+  '10732507070767',
+  '10739959136559',
+  '10750051385647',
+  '10732262064431',
+  '10720930595119',
+  '10749168943407',
+  '10717789847855',
+  '10720953106735',
+  '10717724836143',
+  '10816827425071',
+  '10717800726831',
+  '10816828571951',
+  '10738491719983'
+);

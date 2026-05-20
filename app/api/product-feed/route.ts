@@ -23,7 +23,7 @@ export async function GET(req: Request) {
 
         // Fetch all products from database
         const { results: products } = await db.prepare(
-            "SELECT id, title, description, price, image, category FROM Products WHERE price > 0 ORDER BY created_at DESC"
+            "SELECT id, title, description, price, image, category FROM Products WHERE price > 0 AND (draft IS NULL OR draft = 0) ORDER BY created_at DESC"
         ).all()
 
         // Generate XML feed

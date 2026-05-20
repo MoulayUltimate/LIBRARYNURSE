@@ -12,7 +12,7 @@ async function getAllProducts(): Promise<{ id: string; updated_at?: string }[]> 
         const db = process.env.DB as any
         if (!db) return []
         const { results } = await db
-            .prepare("SELECT id, updated_at FROM Products")
+            .prepare("SELECT id, updated_at FROM Products WHERE draft IS NULL OR draft = 0")
             .all()
         return (results || []) as { id: string; updated_at?: string }[]
     } catch (err) {
