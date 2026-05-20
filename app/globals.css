@@ -230,3 +230,43 @@
   border-radius: 0 0.5rem 0.5rem 0;
   font-style: italic;
 }
+
+/* Legal/policy page prose */
+.legal-prose {
+  color: #3e4949;
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.legal-prose p {
+  margin-bottom: 0.875rem;
+}
+.legal-prose ul {
+  margin: 0.5rem 0 1rem 0;
+  padding-left: 1.25rem;
+  list-style: none;
+}
+.legal-prose ul li {
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: 0.4rem;
+}
+.legal-prose ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background-color: #006565;
+}
+.legal-prose strong { color: #191c1e; font-weight: 600; }
+.legal-prose a {
+  color: #006565;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(0,101,101,0.35);
+}
+.legal-prose a:hover { color: #008080; text-decoration-color: #008080; }

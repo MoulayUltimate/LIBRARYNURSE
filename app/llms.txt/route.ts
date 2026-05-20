@@ -18,20 +18,23 @@ export async function GET() {
         .map((p) => `- [${p.title}](${SITE_URL}/blog/${p.slug}): ${p.description}`)
         .join("\n")
 
-    const body = `# NursLibrary
+    const body = `# Nurs Library
 
-> NursLibrary is a digital store and editorial resource for veterinary and medical professionals. We sell instant-download eBooks covering surgery, pharmacology, anesthesia, dermatology, internal medicine, emergency medicine, radiology, dentistry, ophthalmology, animal behavior, epidemiology, and physical exam, and we publish evidence-based clinical articles for nurses and veterinary nurses.
+> Nurs Library (nurslibrary.com) is an online retailer of nursing and veterinary reference books for students, new graduates, and working clinicians. Every order ships a physical book to a United States address and includes complimentary instant digital PDF access so customers can begin reading while their parcel is in transit. The site also publishes evidence-based clinical articles for nurses and veterinary nurses.
 
 Audience: practicing nurses, veterinary nurses and technicians, veterinary surgeons, medical students, and allied healthcare professionals.
 
-Format: all eBooks are delivered as PDF for instant download after purchase. Payments are processed securely via Stripe (cards, Apple Pay, Google Pay, and Link).
+Fulfillment: physical books shipped to the United States via flat-rate $19.55 USD shipping (4–12 business days transit after 1–2 business days handling). Bundled digital PDF access delivered to the customer's email immediately on payment confirmation. Payments processed securely via Stripe (cards, Apple Pay, Google Pay, and Link).
+
+Business: Nurs Library, 7P64+R6J Abu Dhabi, Abu Dhabi 20000, United Arab Emirates. Contact: Contact@nurslibrary.com.
 
 ## Site
 
-- [Home / shop](${SITE_URL}/): Browse the full eBook catalog
+- [Home / shop](${SITE_URL}/): Browse the full book catalog
 - [Collections](${SITE_URL}/collections): Curated category pages (surgery, pharmacology, anesthesia, etc.)
 - [About](${SITE_URL}/about): Mission and editorial standards
-- [Contact](${SITE_URL}/contact): Customer support and editorial inquiries
+- [Contact](${SITE_URL}/contact): Customer support
+- [FAQ](${SITE_URL}/faq): Common questions about ordering, shipping, and returns
 
 ## Blog
 
@@ -41,8 +44,8 @@ ${blogList}
 
 ## Policies
 
-- [Shipping policy](${SITE_URL}/shipping-policy): Digital delivery terms
-- [Refund policy](${SITE_URL}/refund-policy)
+- [Shipping policy](${SITE_URL}/shipping-policy): US shipping, $19.55 flat, 4–12 day delivery
+- [Refund policy](${SITE_URL}/refund-policy): 30-day money-back guarantee, free return shipping
 - [Privacy policy](${SITE_URL}/privacy-policy)
 - [Terms of service](${SITE_URL}/terms-of-service)
 

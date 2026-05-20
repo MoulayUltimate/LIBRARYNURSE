@@ -24,15 +24,20 @@ export function Footer() {
               NursLibrary
             </h3>
             <p className="text-sm text-[#56656e] leading-relaxed">
-              Premium digital veterinary and medical eBooks for healthcare professionals worldwide.
+              Nursing and veterinary reference books shipped across the United States — with bundled digital PDF access.
             </p>
+            <address className="not-italic text-xs text-[#56656e] leading-relaxed pt-1">
+              <strong className="text-[#191c1e]">Nurs Library</strong><br />
+              7P64+R6J Abu Dhabi<br />
+              Abu Dhabi 20000, UAE
+            </address>
             <div className="flex gap-3 pt-1">
               <a
-                href="mailto:contact@nurslibrary.com"
+                href="mailto:Contact@nurslibrary.com"
                 className="text-[#006565] hover:text-[#008080] transition-colors text-sm font-medium"
                 aria-label="Email us"
               >
-                contact@nurslibrary.com
+                Contact@nurslibrary.com
               </a>
             </div>
           </div>
@@ -77,6 +82,7 @@ export function Footer() {
               {[
                 { href: "/about", label: "About Us" },
                 { href: "/contact", label: "Contact" },
+                { href: "/faq", label: "FAQ" },
                 { href: "/shipping-policy", label: "Shipping Policy" },
                 { href: "/refund-policy", label: "Refund Policy" },
               ].map((link) => (
@@ -121,7 +127,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-[#bdc9c8] pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-[#6e7979]">© 2026 NursLibrary. Verified Clinical Content.</p>
+          <p className="text-sm text-[#6e7979]">© 2026 Nurs Library. All rights reserved.</p>
           <p className="text-sm text-[#6e7979]">www.nurslibrary.com</p>
         </div>
       </div>

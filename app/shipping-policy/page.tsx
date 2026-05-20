@@ -1,76 +1,104 @@
+import type { Metadata } from "next"
+import { LegalPage, Section } from "@/components/legal-page"
 
-export const metadata = {
-    title: "Shipping Policy - NursLibrary",
-    description: "Information about our digital delivery policy for eBooks.",
+export const metadata: Metadata = {
+    title: "Shipping & Delivery Policy",
+    description:
+        "NursLibrary shipping policy: $19.55 flat-rate shipping to the United States, 4–12 business-day delivery, full tracking, and instant digital PDF access while you wait.",
+    alternates: { canonical: "/shipping-policy" },
 }
 
-export default function ShippingPolicy() {
+export default function ShippingPolicyPage() {
     return (
-        <>
-            <main className="min-h-screen bg-gradient-to-b from-background to-background/50">
-                <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-                    <div className="prose prose-invert max-w-none">
-                        <h1 className="text-4xl font-bold mb-8 text-foreground">Shipping Policy</h1>
+        <LegalPage
+            title="Shipping & Delivery"
+            subtitle="Physical books shipped across the United States, with instant digital PDF access while you wait."
+            lastUpdated="May 15, 2026"
+        >
+            <Section title="1. What you receive">
+                <p>Every order from NursLibrary includes:</p>
+                <ul>
+                    <li>A <strong>physical book</strong> shipped to your United States delivery address.</li>
+                    <li><strong>Instant digital PDF access</strong>, so you can start reading immediately while your shipment is on the way.</li>
+                </ul>
+                <p>
+                    Both formats are included in the listed price — there is no additional charge for the digital copy.
+                </p>
+            </Section>
 
-                        <p className="text-lg text-foreground/80 mb-6">
-                            <strong>Last Updated: January 2026</strong>
-                        </p>
+            <Section title="2. Where we ship">
+                <p>
+                    We currently ship to the <strong>United States</strong> only (all 50 states, including Alaska and Hawaii). If you are outside the United States and would like to order, please email us before placing an order so we can confirm whether we can deliver to your country.
+                </p>
+            </Section>
 
-                        <section className="mb-8">
-                            <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">1. Digital Delivery Only</h2>
-                            <p className="text-foreground/80 mb-4">
-                                NursLibrary is a digital-only marketplace. We do not sell or ship physical products. All products available on our website are digital downloads (eBooks).
-                            </p>
-                        </section>
+            <Section title="3. Shipping cost">
+                <p>
+                    A flat shipping rate of <strong>$19.55 USD</strong> applies to all orders shipped within the United States. This is shown clearly at checkout and added to your order total.
+                </p>
+                <p>
+                    Where a promotional free-shipping offer applies, it will be displayed on the relevant product page and reflected in your cart total.
+                </p>
+            </Section>
 
-                        <section className="mb-8">
-                            <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">2. Delivery Method</h2>
-                            <p className="text-foreground/80 mb-4">
-                                Upon successful payment, you will receive your eBook(s) via the following methods:
-                            </p>
-                            <ul className="list-disc list-inside text-foreground/80 mb-4 space-y-2">
-                                <li><strong>Instant Download:</strong> A download link will be available immediately on the order confirmation page.</li>
-                                <li><strong>Email Delivery:</strong> An email containing the download link(s) will be sent to the email address provided during checkout. Please check your spam/junk folder if you do not see it in your inbox.</li>
-                            </ul>
-                        </section>
+            <Section title="4. Processing times">
+                <p>
+                    Orders are processed within <strong>1–2 business days</strong> of payment confirmation. Orders placed on weekends or US public holidays are processed on the next business day.
+                </p>
+                <p>
+                    You will receive an order-confirmation email immediately after purchase, followed by a shipping-confirmation email with tracking once the parcel leaves our fulfillment center.
+                </p>
+            </Section>
 
-                        <section className="mb-8">
-                            <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">3. Delivery Time</h2>
-                            <p className="text-foreground/80 mb-4">
-                                Delivery is instant. You should receive your download links within minutes of purchase. If you experience any delays, please contact our support team.
-                            </p>
-                        </section>
+            <Section title="5. Delivery timeframe">
+                <p>
+                    Estimated delivery time for United States orders is <strong>4 to 12 business days</strong> from the date of dispatch, depending on destination ZIP code and carrier load.
+                </p>
+                <p>
+                    These are courier estimates and may be affected by weather, peak-season volume, or other carrier delays beyond our control.
+                </p>
+            </Section>
 
-                        <section className="mb-8">
-                            <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">4. Download Limits</h2>
-                            <p className="text-foreground/80 mb-4">
-                                Your purchase includes lifetime access to the eBook. You can download the file multiple times for your personal use on different devices.
-                            </p>
-                        </section>
+            <Section title="6. Order tracking">
+                <p>
+                    Every shipment is dispatched with a tracking number. You will receive a tracking link by email as soon as the parcel is collected by the carrier. If you have not received tracking information within 3 business days of your order, please contact us.
+                </p>
+            </Section>
 
-                        <section className="mb-8">
-                            <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">5. Troubleshooting</h2>
-                            <p className="text-foreground/80 mb-4">
-                                If you encounter any issues with downloading or opening your file:
-                            </p>
-                            <ul className="list-disc list-inside text-foreground/80 mb-4 space-y-2">
-                                <li>Ensure you have a stable internet connection.</li>
-                                <li>Check that your device has a PDF reader installed.</li>
-                                <li>Contact us if the download link is broken or expired.</li>
-                            </ul>
-                        </section>
+            <Section title="7. Taxes">
+                <p>
+                    Any sales tax that applies to your order is calculated and displayed at checkout based on your shipping address.
+                </p>
+            </Section>
 
-                        <section className="mb-8">
-                            <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">6. Contact Us</h2>
-                            <p className="text-foreground/80">
-                                If you haven't received your eBook or need assistance, please contact us:
-                                <br />
-                                <strong>Email:</strong> contact@nurslibrary.com
-                            </p>
-                        </section>
-                    </div>
-                </div>
-            </main>
-        </>
+            <Section title="8. Lost, stolen, or damaged shipments">
+                <p>
+                    If your tracking shows delivery but the parcel did not arrive, please check with neighbours and your local carrier first. If the parcel is not located within 5 business days, contact us and we will open a carrier claim on your behalf.
+                </p>
+                <p>
+                    Books that arrive damaged are replaced at no cost — please email us within 7 days of delivery with photographs of the damaged item and packaging.
+                </p>
+            </Section>
+
+            <Section title="9. Incorrect addresses">
+                <p>
+                    Please double-check your delivery address at checkout. Orders shipped to an incorrect address provided by the buyer are not eligible for free replacement. We can re-ship to the corrected address once the original parcel is returned to us; the buyer is responsible for reshipping costs.
+                </p>
+            </Section>
+
+            <Section title="10. Digital PDF access">
+                <p>
+                    Your digital PDF is available immediately after payment and is sent to the email address on your order. The download link remains valid for 30 days. If you lose access, contact us and we will re-issue a fresh link at no charge.
+                </p>
+            </Section>
+
+            <Section title="11. Contact">
+                <p>
+                    Shipping questions:<br />
+                    Email: <a href="mailto:contact@nurslibrary.com">contact@nurslibrary.com</a><br />
+                    Response time: within 1 business day, Monday–Friday.
+                </p>
+            </Section>
+        </LegalPage>
     )
 }

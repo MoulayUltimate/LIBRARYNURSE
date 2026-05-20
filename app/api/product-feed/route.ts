@@ -59,33 +59,38 @@ function generateProductFeed(products: any[]): string {
         return `
     <item>
       <g:id>${escapeXml(product.id)}</g:id>
-      <g:title>${escapeXml(product.title || 'Medical eBook')}</g:title>
-      <g:description>${escapeXml(product.description || product.title || 'Premium medical eBook for healthcare professionals')}</g:description>
+      <g:title>${escapeXml(product.title || 'Nursing Reference Book')}</g:title>
+      <g:description>${escapeXml(product.description || product.title || 'Premium nursing and veterinary reference book for healthcare professionals. Physical book shipped with bundled digital PDF access.')}</g:description>
       <g:link>${escapeXml(productUrl)}</g:link>
       <g:image_link>${escapeXml(imageUrl)}</g:image_link>
       <g:price>${product.price?.toFixed(2) || '0.00'} USD</g:price>
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
-      <g:brand>NursLibrary</g:brand>
+      <g:brand>Nurs Library</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:product_type>${escapeXml(product.category || 'Medical eBooks')}</g:product_type>
-      <g:google_product_category>Media &gt; Books &gt; Non-Fiction &gt; Medical</g:google_product_category>
+      <g:product_type>${escapeXml(product.category || 'Books > Medical & Nursing Reference')}</g:product_type>
+      <g:google_product_category>Media &gt; Books</g:google_product_category>
       <g:target_country>US</g:target_country>
       <g:content_language>en</g:content_language>
       <g:shipping>
         <g:country>US</g:country>
-        <g:service>Free Digital Delivery</g:service>
-        <g:price>0.00 USD</g:price>
+        <g:service>Standard</g:service>
+        <g:price>19.55 USD</g:price>
+        <g:min_handling_time>1</g:min_handling_time>
+        <g:max_handling_time>2</g:max_handling_time>
+        <g:min_transit_time>4</g:min_transit_time>
+        <g:max_transit_time>12</g:max_transit_time>
       </g:shipping>
+      <g:shipping_weight>0.6 kg</g:shipping_weight>
     </item>`
     }).join('\n')
 
     return `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
   <channel>
-    <title>NursLibrary Product Catalog</title>
+    <title>Nurs Library Product Catalog</title>
     <link>${baseUrl}</link>
-    <description>Premium medical and veterinary eBooks for healthcare professionals</description>
+    <description>Nursing and veterinary reference books shipped across the United States, with bundled digital PDF access.</description>
     ${items}
   </channel>
 </rss>`
@@ -97,9 +102,9 @@ function generateEmptyFeed(): string {
     return `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
   <channel>
-    <title>NursLibrary Product Catalog</title>
+    <title>Nurs Library Product Catalog</title>
     <link>${baseUrl}</link>
-    <description>Premium medical and veterinary eBooks for healthcare professionals</description>
+    <description>Nursing and veterinary reference books shipped across the United States, with bundled digital PDF access.</description>
   </channel>
 </rss>`
 }

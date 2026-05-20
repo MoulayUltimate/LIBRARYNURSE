@@ -63,20 +63,20 @@ function generateProductCsv(products: any[]): string {
 
         return [
             escapeCsv(product.id),
-            escapeCsv(product.title || 'Medical eBook'),
-            escapeCsv(product.description || product.title || 'Premium medical eBook for healthcare professionals'),
+            escapeCsv(product.title || 'Nursing Reference Book'),
+            escapeCsv(product.description || product.title || 'Premium nursing and veterinary reference book for healthcare professionals. Physical book shipped with bundled digital PDF access.'),
             'in_stock',
             'new',
             escapeCsv(`${product.price?.toFixed(2) || '0.00'} USD`),
             escapeCsv(productUrl),
             escapeCsv(imageUrl),
-            'NursLibrary',
+            'Nurs Library',
             'no',
-            escapeCsv(product.category || 'Medical eBooks'),
-            escapeCsv('Media > Books > Non-Fiction > Medical'),
+            escapeCsv(product.category || 'Books > Medical & Nursing Reference'),
+            escapeCsv('Media > Books'),
             'US',
             'en',
-            escapeCsv('US:::Free Digital Delivery:0.00 USD')
+            escapeCsv('US:::Standard:19.55 USD')
         ].join(',')
     })
 

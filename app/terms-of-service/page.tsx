@@ -1,103 +1,138 @@
-export const metadata = {
-  title: "Terms of Service - NursLibrary",
-  description: "The terms and conditions for using NursLibrary and purchasing our nursing eBooks.",
+import type { Metadata } from "next"
+import { LegalPage, Section } from "@/components/legal-page"
+
+export const metadata: Metadata = {
+    title: "Terms of Service",
+    description:
+        "NursLibrary terms of service: governing law, eligible purchasers, physical book + bundled digital PDF licence, pricing, taxes, returns, and intellectual property.",
+    alternates: { canonical: "/terms-of-service" },
 }
 
-import { Footer } from "@/components/footer"
+export default function TermsOfServicePage() {
+    return (
+        <LegalPage
+            title="Terms of Service"
+            subtitle="The agreement between you and NursLibrary for purchases made through nurslibrary.com."
+            lastUpdated="May 15, 2026"
+        >
+            <Section title="1. Acceptance of terms">
+                <p>
+                    By accessing nurslibrary.com or placing an order, you agree to these Terms of Service. If you do not agree, please do not use the site.
+                </p>
+            </Section>
 
-export default function TermsOfService() {
-  return (
-    <>
-      <main className="min-h-screen bg-gradient-to-b from-background to-background/50">
-        <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-          <div className="prose prose-invert max-w-none">
-            <h1 className="text-4xl font-bold mb-8 text-foreground">Terms of Service</h1>
+            <Section title="2. Who we are">
+                <p>
+                    Nurs Library (trading as NursLibrary) is an online retailer of nursing and veterinary medical reference books. Every order includes a <strong>physical book shipped to your delivery address</strong> together with <strong>instant digital PDF access</strong> so you can begin reading while your parcel is in transit.
+                </p>
+                <p>
+                    <strong>Registered business details:</strong><br />
+                    Nurs Library<br />
+                    7P64+R6J Abu Dhabi, Abu Dhabi 20000<br />
+                    United Arab Emirates<br />
+                    Email: <a href="mailto:Contact@nurslibrary.com">Contact@nurslibrary.com</a>
+                </p>
+            </Section>
 
-            <p className="text-lg text-foreground/80 mb-6">
-              <strong>Last Updated: January 2026</strong>
-            </p>
+            <Section title="3. Eligibility">
+                <p>
+                    You must be at least 18 years old (or the age of majority in your jurisdiction) to place an order. Our products are intended for adult students and licensed healthcare professionals.
+                </p>
+            </Section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">1. Agreement to Terms</h2>
-              <p className="text-foreground/80 mb-4">
-                By accessing and using NursLibrary ("Website"), you accept and agree to be bound by the terms and
-                provision of this agreement. If you do not agree to abide by the above, please do not use this service.
-              </p>
-            </section>
+            <Section title="4. Products and orders">
+                <ul>
+                    <li>Product descriptions, page counts, and edition information are kept as accurate as possible.</li>
+                    <li>Cover images are representative; minor design differences may occur between editions.</li>
+                    <li>We reserve the right to limit order quantities or refuse any order at our discretion.</li>
+                    <li>An order is accepted only when we send the order-confirmation email and successfully charge payment.</li>
+                </ul>
+            </Section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">2. Use License</h2>
-              <p className="text-foreground/80 mb-4">
-                Permission is granted to temporarily download one copy of the materials (information or software) on
-                NursLibrary for personal, non-commercial transitory viewing only. This is the grant of a license, not a
-                transfer of title, and under this license you may not:
-              </p>
-              <ul className="list-disc list-inside text-foreground/80 mb-4 space-y-2">
-                <li>Modifying or copying the materials</li>
-                <li>Using the materials for any commercial purpose or for any public display</li>
-                <li>Attempting to decompile or reverse engineer any software contained on the Website</li>
-                <li>Removing any copyright or other proprietary notations from the materials</li>
-                <li>Transferring the materials to another person or "mirroring" the materials on any other server</li>
-              </ul>
-            </section>
+            <Section title="5. Pricing, taxes, and payment">
+                <p>
+                    Prices are shown in the currency displayed at checkout and are exclusive of taxes and shipping unless stated otherwise. Final taxes (where applicable) and shipping are calculated at checkout.
+                </p>
+                <p>
+                    Payments are processed securely by Stripe. We do not store full card numbers. By submitting payment, you authorise us to charge the order total to your selected payment method.
+                </p>
+            </Section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">3. Disclaimer</h2>
-              <p className="text-foreground/80 mb-4">
-                The materials on NursLibrary are provided on an 'as is' basis. NursLibrary makes no warranties,
-                expressed or implied, and hereby disclaims and negates all other warranties including, without
-                limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or
-                non-infringement of intellectual property or other violation of rights.
-              </p>
-            </section>
+            <Section title="6. Shipping and delivery">
+                <p>
+                    We ship physical books worldwide. Processing usually takes 1–2 business days; transit times depend on destination. See our <a href="/shipping-policy">Shipping Policy</a> for full details.
+                </p>
+            </Section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">4. Limitations</h2>
-              <p className="text-foreground/80 mb-4">
-                In no event shall NursLibrary or its suppliers be liable for any damages (including, without
-                limitation, damages for loss of data or profit, or due to business interruption) arising out of the use
-                or inability to use the materials on NursLibrary, even if NursLibrary or an authorized representative
-                has been notified orally or in writing of the possibility of such damage.
-              </p>
-            </section>
+            <Section title="7. Returns and refunds">
+                <p>
+                    Physical books may be returned within 30 days of delivery, subject to the conditions in our <a href="/refund-policy">Refund &amp; Returns Policy</a>. The bundled digital PDF is provided as a complimentary in-addition format and is not separately refundable once accessed.
+                </p>
+            </Section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">5. Accuracy of Materials</h2>
-              <p className="text-foreground/80 mb-4">
-                The materials appearing on NursLibrary could include technical, typographical, or photographic errors.
-                NursLibrary does not warrant that any of the materials on our website are accurate, complete, or
-                current. NursLibrary may make changes to the materials contained on our website at any time without
-                notice.
-              </p>
-            </section>
+            <Section title="8. Intellectual property and licence">
+                <p>
+                    All books, PDFs, and content on this site are protected by copyright and other intellectual-property laws. We grant you a non-exclusive, non-transferable licence to read your purchased book and PDF for personal, educational use.
+                </p>
+                <p>You may not:</p>
+                <ul>
+                    <li>Resell, redistribute, or upload the PDF to any file-sharing platform.</li>
+                    <li>Remove copyright notices or DRM where applied.</li>
+                    <li>Modify or create derivative works for redistribution.</li>
+                    <li>Use the materials for any commercial purpose beyond your personal practice or study.</li>
+                </ul>
+                <p>
+                    Breach of this licence may result in termination of access and legal action.
+                </p>
+            </Section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">6. Links</h2>
-              <p className="text-foreground/80 mb-4">
-                NursLibrary has not reviewed all of the sites linked to its website and is not responsible for the
-                contents of any such linked site. The inclusion of any link does not imply endorsement by NursLibrary
-                of the site. Use of any such linked website is at the user's own risk.
-              </p>
-            </section>
+            <Section title="9. Acceptable use of the website">
+                <p>You agree not to:</p>
+                <ul>
+                    <li>Attempt to gain unauthorised access to the site, servers, or other users&apos; accounts.</li>
+                    <li>Use the site to transmit malware, spam, or unlawful content.</li>
+                    <li>Use automated scrapers or bots to harvest content or pricing data.</li>
+                    <li>Interfere with the normal operation of the site.</li>
+                </ul>
+            </Section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">7. Modifications</h2>
-              <p className="text-foreground/80 mb-4">
-                NursLibrary may revise these terms of service for our website at any time without notice. By using this
-                website, you are agreeing to be bound by the then current version of these terms of service.
-              </p>
-            </section>
+            <Section title="10. Medical disclaimer">
+                <p>
+                    Our books are educational reference works and are not a substitute for professional medical advice, diagnosis, or treatment. Always follow your institution&apos;s protocols and consult qualified clinicians for individual patient decisions. NursLibrary is not liable for clinical decisions made on the basis of the content of any book sold.
+                </p>
+            </Section>
 
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">8. Governing Law</h2>
-              <p className="text-foreground/80">
-                These terms and conditions are governed by and construed in accordance with the laws of the United
-                States, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
-              </p>
-            </section>
-          </div>
-        </div>
-      </main>
-    </>
-  )
+            <Section title="11. Limitation of liability">
+                <p>
+                    To the maximum extent permitted by law, NursLibrary&apos;s aggregate liability for any claim arising out of or related to your order is limited to the amount you paid for that order. We are not liable for indirect, incidental, consequential, or punitive damages.
+                </p>
+            </Section>
+
+            <Section title="12. Indemnification">
+                <p>
+                    You agree to indemnify and hold NursLibrary harmless from any claim arising out of your breach of these Terms, your misuse of our content, or your violation of any law or third-party right.
+                </p>
+            </Section>
+
+            <Section title="13. Changes to the Terms">
+                <p>
+                    We may update these Terms at any time. The &quot;Last updated&quot; date shows the current version. Continued use of the site after a change constitutes acceptance.
+                </p>
+            </Section>
+
+            <Section title="14. Governing law">
+                <p>
+                    These Terms are governed by the laws of the United States, without regard to conflict-of-law principles. Disputes will be resolved in the courts of competent jurisdiction in the United States.
+                </p>
+            </Section>
+
+            <Section title="15. Contact">
+                <p>
+                    Questions about these Terms:<br />
+                    Email: <a href="mailto:Contact@nurslibrary.com">Contact@nurslibrary.com</a><br />
+                    Response time: within 1 business day, Monday–Friday.
+                </p>
+            </Section>
+        </LegalPage>
+    )
 }
