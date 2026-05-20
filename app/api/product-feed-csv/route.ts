@@ -2,11 +2,18 @@ import { NextResponse } from "next/server"
 
 export const runtime = "edge"
 
-/**
- * Facebook Product Catalog Feed API - CSV Format
- * Returns product data in Facebook-compatible CSV format
- * Alternative to XML feed
- */
+// Products excluded from the GMC feed — same list as XML feed.
+// Reason: GMC "Digital books not supported" disapproval.
+const EXCLUDED_PRODUCT_IDS = new Set([
+    '10717742825775','10738851709231','10758699548975','10740790395183',
+    '10717739024687','10717816586543','10766161969455','10749373251887',
+    '10717797089583','10749125886255','10717685285167','10766373847343',
+    '10740886798639','10740880376111','10731307237679','10720970080559',
+    '10816828473647','10732507070767','10739959136559','10750051385647',
+    '10732262064431','10720930595119','10749168943407','10717789847855',
+    '10720953106735','10717724836143','10816827425071','10717800726831',
+    '10816828571951','10738491719983',
+])
 export async function GET(req: Request) {
     try {
         const db = process.env.DB as any
@@ -27,8 +34,11 @@ export async function GET(req: Request) {
             "SELECT id, title, description, price, image, category FROM Products WHERE price > 0 AND (draft IS NULL OR draft = 0) ORDER BY created_at DESC"
         ).all()
 
+        // Filter out permanently excluded products (GMC disapprovals)
+        const filtered = (products || []).filter((p: any) => !EXCLUDED_PRODUCT_IDS.has(String(p.id)))
+
         // Generate CSV feed
-        const csv = generateProductCsv(products || [])
+        const csv = generateProductCsv(filtered)
 
         return new NextResponse(csv, {
             headers: {
