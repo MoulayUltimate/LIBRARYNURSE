@@ -5,12 +5,26 @@ import {
     PaymentElement,
     LinkAuthenticationElement,
     ExpressCheckoutElement,
+    AddressElement,
     useStripe,
     useElements
 } from "@stripe/react-stripe-js"
 import { Button } from "@/components/ui/button"
-import { Loader2 } from "lucide-react"
+import { Loader2, Truck } from "lucide-react"
 import { trackEvent } from "@/components/analytics-tracker"
+
+interface ShippingAddressValue {
+    name: string
+    phone?: string
+    address: {
+        line1: string
+        line2?: string | null
+        city: string
+        state: string
+        postal_code: string
+        country: string
+    }
+}
 
 interface CartItem {
     id: string | number
@@ -30,6 +44,8 @@ export function CheckoutForm({ amount, items = [] }: CheckoutFormProps) {
     const elements = useElements()
 
     const [email, setEmail] = useState('')
+    const [shipping, setShipping] = useState<ShippingAddressValue | null>(null)
+    const [shippingComplete, setShippingComplete] = useState(false)
     const [message, setMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -52,6 +68,17 @@ export function CheckoutForm({ amount, items = [] }: CheckoutFormProps) {
             return { error: submitError }
         }
 
+        // 1b. Pull the shipping address from the AddressElement.
+        const addressElement = elements.getElement("address")
+        let shippingValue: ShippingAddressValue | null = shipping
+        if (addressElement) {
+            const { complete, value } = await addressElement.getValue()
+            if (!complete) {
+                return { error: { message: "Please complete your shipping address so we can deliver your book." } as any }
+            }
+            shippingValue = value as ShippingAddressValue
+        }
+
         // 2. Ask the server for a fresh PaymentIntent.
         const res = await fetch("/api/stripe/create-payment-intent", {
             method: "POST",
@@ -65,6 +92,7 @@ export function CheckoutForm({ amount, items = [] }: CheckoutFormProps) {
                     quantity: it.quantity,
                 })),
                 email: email || null,
+                shipping: shippingValue,
             }),
         })
 
@@ -149,9 +177,39 @@ export function CheckoutForm({ amount, items = [] }: CheckoutFormProps) {
                     onChange={(e) => setEmail(e.value.email)}
                 />
                 <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-                    <span className="text-[#006565] font-medium">Important:</span> Your eBook download link will be sent to this email immediately.
+                    <span className="text-[#006565] font-medium">Important:</span> Your order confirmation and bonus PDF link will be sent to this email.
                 </p>
             </div>
+
+            {/* Shipping Address — required because we ship a physical book */}
+            <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm font-semibold text-[#191c1e]">
+                    <Truck className="w-4 h-4 text-[#006565]" />
+                    <span>Shipping address</span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                    We ship a physical book to this address. US delivery in 4–12 business days.
+                </p>
+                <AddressElement
+                    id="address-element"
+                    options={{
+                        mode: "shipping",
+                        allowedCountries: ["US"],
+                        fields: { phone: "always" },
+                        validation: { phone: { required: "always" } },
+                        display: { name: "full" },
+                    }}
+                    onChange={(e) => {
+                        setShippingComplete(e.complete)
+                        if (e.complete) {
+                            setShipping(e.value as ShippingAddressValue)
+                        } else {
+                            setShipping(null)
+                        }
+                    }}
+                />
+            </div>
+
             <PaymentElement
                 id="payment-element"
                 options={{
@@ -171,7 +229,7 @@ export function CheckoutForm({ amount, items = [] }: CheckoutFormProps) {
             )}
 
             <Button
-                disabled={isLoading || !stripe || !elements}
+                disabled={isLoading || !stripe || !elements || !shippingComplete}
                 id="submit"
                 className="w-full h-14 text-lg font-bold bg-[#006565] hover:bg-[#008080] text-white mt-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
             >
@@ -182,11 +240,14 @@ export function CheckoutForm({ amount, items = [] }: CheckoutFormProps) {
                     </>
                 ) : (
                     <div className="flex items-center justify-center gap-2">
-                        <span>Pay & Download Instantly</span>
+                        <span>Place order</span>
                         <span className="bg-white/20 px-2 py-0.5 rounded text-sm">${amount.toFixed(2)}</span>
                     </div>
                 )}
             </Button>
+            <p className="text-xs text-center text-muted-foreground -mt-2">
+                Your physical book ships in 1–2 business days. US delivery in 4–12 days.
+            </p>
         </form>
     )
 }
