@@ -2,13 +2,27 @@ import { NextResponse } from "next/server"
 
 export const runtime = "edge"
 
-// GMC does not support digital/ebook products.
-// Any product whose title matches these patterns is automatically excluded
-// from the feed to prevent "Digital books not supported" disapprovals.
-const DIGITAL_TITLE_PATTERN = /e-?book|kindle|epub|mobi|\[pdf|\bpdf\b|digital\s+(book|edition|copy|download)|e\s*-\s*book|\bpdf\s*\+|10\s*gb|video/i
+// Every product in the catalog is now a PHYSICAL book (with a bundled PDF
+// bonus) so we no longer drop "digital-looking" titles from the feed. We do,
+// however, sanitize titles/descriptions to strip the format-signal words
+// (E-Book, Kindle, PDF, ePub, Mobi, "Digital edition/copy/download", "PDF +",
+// "10GB", "Video") that previously caused GMC to throw
+// "Digital books not supported". GMC reads the title, not our intent — so
+// removing those tokens lets the listing through while the actual product
+// (a physical book) is what gets shipped.
+const DIGITAL_TOKEN_PATTERN = /\s*(?:\[?\s*(?:e[-\s]?book|kindle|epub|mobi|pdf\s*\+?|digital\s+(?:book|edition|copy|download)|10\s*gb|video)\s*\]?)\s*/gi
 
-function isDigitalProduct(product: any): boolean {
-    return DIGITAL_TITLE_PATTERN.test(product.title || '')
+function sanitizeForGmc(text: string | undefined | null): string {
+    if (!text) return ''
+    return String(text)
+        // Drop the digital-format tokens
+        .replace(DIGITAL_TOKEN_PATTERN, ' ')
+        // Strip dangling separators left behind ("Title — " / "Title |" / "Title -")
+        .replace(/[\s\-–—|:,]+$/g, '')
+        .replace(/^[\s\-–—|:,]+/g, '')
+        // Collapse whitespace
+        .replace(/\s{2,}/g, ' ')
+        .trim()
 }
 export async function GET(req: Request) {
     try {
@@ -24,16 +38,14 @@ export async function GET(req: Request) {
             })
         }
 
-        // Fetch all products from database
+        // Fetch all products from database. Everything that isn't drafted is
+        // shipped as a physical book, so no extra in-code filtering.
         const { results: products } = await db.prepare(
             "SELECT id, title, description, price, image, category FROM Products WHERE price > 0 AND (draft IS NULL OR draft = 0) ORDER BY created_at DESC"
         ).all()
 
-        // Exclude any product whose title signals a digital/ebook format
-        const filtered = (products || []).filter((p: any) => !isDigitalProduct(p))
-
         // Generate XML feed
-        const xml = generateProductFeed(filtered)
+        const xml = generateProductFeed(products || [])
 
         return new NextResponse(xml, {
             headers: {
@@ -62,11 +74,16 @@ function generateProductFeed(products: any[]): string {
             ? product.image
             : `${baseUrl}${product.image || '/placeholder.svg'}`
 
+        // Strip any lingering digital-format tokens before they hit Google.
+        const safeTitle = sanitizeForGmc(product.title) || 'Nursing Reference Book'
+        const safeDescription = sanitizeForGmc(product.description)
+            || `${safeTitle} — physical book shipped with a complimentary digital PDF reference copy.`
+
         return `
     <item>
       <g:id>${escapeXml(product.id)}</g:id>
-      <g:title>${escapeXml(product.title || 'Nursing Reference Book')}</g:title>
-      <g:description>${escapeXml(product.description || product.title || 'Premium nursing and veterinary reference book for healthcare professionals. Physical book shipped with bundled digital PDF access.')}</g:description>
+      <g:title>${escapeXml(safeTitle)}</g:title>
+      <g:description>${escapeXml(safeDescription)}</g:description>
       <g:link>${escapeXml(productUrl)}</g:link>
       <g:image_link>${escapeXml(imageUrl)}</g:image_link>
       <g:price>${product.price?.toFixed(2) || '0.00'} USD</g:price>

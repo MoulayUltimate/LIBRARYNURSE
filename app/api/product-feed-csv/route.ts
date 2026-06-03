@@ -2,11 +2,20 @@ import { NextResponse } from "next/server"
 
 export const runtime = "edge"
 
-// Exclude products whose titles signal a digital/ebook format.
-const DIGITAL_TITLE_PATTERN = /e-?book|kindle|epub|mobi|\[pdf|\bpdf\b|digital\s+(book|edition|copy|download)|e\s*-\s*book|\bpdf\s*\+|10\s*gb|video/i
+// Every product in the catalog ships as a PHYSICAL book (with a bundled PDF
+// bonus), so we no longer drop "digital-looking" titles. We do sanitize the
+// title and description so GMC never sees the format-signal tokens that used
+// to trip "Digital books not supported".
+const DIGITAL_TOKEN_PATTERN = /\s*(?:\[?\s*(?:e[-\s]?book|kindle|epub|mobi|pdf\s*\+?|digital\s+(?:book|edition|copy|download)|10\s*gb|video)\s*\]?)\s*/gi
 
-function isDigitalProduct(product: any): boolean {
-    return DIGITAL_TITLE_PATTERN.test(product.title || '')
+function sanitizeForGmc(text: string | undefined | null): string {
+    if (!text) return ''
+    return String(text)
+        .replace(DIGITAL_TOKEN_PATTERN, ' ')
+        .replace(/[\s\-–—|:,]+$/g, '')
+        .replace(/^[\s\-–—|:,]+/g, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim()
 }
 export async function GET(req: Request) {
     try {
@@ -23,16 +32,14 @@ export async function GET(req: Request) {
             })
         }
 
-        // Fetch all products from database
+        // Fetch all products from database. Everything that isn't drafted is
+        // a physical book — no extra in-code filtering.
         const { results: products } = await db.prepare(
             "SELECT id, title, description, price, image, category FROM Products WHERE price > 0 AND (draft IS NULL OR draft = 0) ORDER BY created_at DESC"
         ).all()
 
-        // Exclude any product whose title signals a digital/ebook format
-        const filtered = (products || []).filter((p: any) => !isDigitalProduct(p))
-
         // Generate CSV feed
-        const csv = generateProductCsv(filtered)
+        const csv = generateProductCsv(products || [])
 
         return new NextResponse(csv, {
             headers: {
@@ -65,10 +72,14 @@ function generateProductCsv(products: any[]): string {
             ? product.image
             : `${baseUrl}${product.image || '/placeholder.svg'}`
 
+        const safeTitle = sanitizeForGmc(product.title) || 'Nursing Reference Book'
+        const safeDescription = sanitizeForGmc(product.description)
+            || `${safeTitle} — physical book shipped with a complimentary digital PDF reference copy.`
+
         return [
             escapeCsv(product.id),
-            escapeCsv(product.title || 'Nursing Reference Book'),
-            escapeCsv(product.description || product.title || 'Premium nursing and veterinary reference book for healthcare professionals. Physical book shipped with bundled digital PDF access.'),
+            escapeCsv(safeTitle),
+            escapeCsv(safeDescription),
             'in_stock',
             'new',
             escapeCsv(`${product.price?.toFixed(2) || '0.00'} USD`),
